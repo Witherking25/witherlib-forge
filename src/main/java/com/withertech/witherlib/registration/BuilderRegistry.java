@@ -27,12 +27,32 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+/**
+ * The type Builder registry.
+ *
+ * @param <T> the type parameter
+ */
 public class BuilderRegistry<T extends IForgeRegistryEntry<T>>
 {
+    /**
+     * The Modid.
+     */
     protected final String MODID;
+    /**
+     * The Registry.
+     */
     protected final DeferredRegister<T> REGISTRY;
+    /**
+     * The Entries.
+     */
     protected final Map<String, RegistryObject<T>> ENTRIES;
 
+    /**
+     * Instantiates a new Builder registry.
+     *
+     * @param builder the builder
+     * @param bus     the bus
+     */
     protected BuilderRegistry(Builder<T> builder, IEventBus bus)
     {
         MODID = builder.modid;
@@ -41,11 +61,52 @@ public class BuilderRegistry<T extends IForgeRegistryEntry<T>>
         REGISTRY.register(bus);
     }
 
+    /**
+     * Gets modid.
+     *
+     * @return the modid
+     */
+    public String getMODID()
+    {
+        return MODID;
+    }
+
+    /**
+     * Gets registry.
+     *
+     * @return the registry
+     */
+    public DeferredRegister<T> getREGISTRY()
+    {
+        return REGISTRY;
+    }
+
+    /**
+     * Gets entries.
+     *
+     * @return the entries
+     */
+    public Map<String, RegistryObject<T>> getENTRIES()
+    {
+        return ENTRIES;
+    }
+
+    /**
+     * Get registry object.
+     *
+     * @param key the key
+     * @return the registry object
+     */
     public RegistryObject<T> get(String key)
     {
         return ENTRIES.get(key);
     }
 
+    /**
+     * The type Builder.
+     *
+     * @param <T> the type parameter
+     */
     public static class Builder<T extends IForgeRegistryEntry<T>>
     {
         private final String modid;
@@ -58,17 +119,38 @@ public class BuilderRegistry<T extends IForgeRegistryEntry<T>>
             REGISTRY = DeferredRegister.create(registry, modid);
         }
 
-        public static <T extends IForgeRegistryEntry<T>> Builder<T> create(String modid, Class<T> registry)
+        /**
+         * Create builder.
+         *
+         * @param <T>   the type parameter
+         * @param modid the modid
+         * @param type  the type
+         * @return the builder
+         */
+        public static <T extends IForgeRegistryEntry<T>> Builder<T> create(String modid, Class<T> type)
         {
-            return new Builder<>(modid, registry);
+            return new Builder<>(modid, type);
         }
 
+        /**
+         * Add builder.
+         *
+         * @param name     the name
+         * @param supplier the supplier
+         * @return the builder
+         */
         public Builder<T> add(String name, Supplier<T> supplier)
         {
             ENTRIES.put(name, REGISTRY.register(name, supplier));
             return this;
         }
 
+        /**
+         * Build builder registry.
+         *
+         * @param bus the bus
+         * @return the builder registry
+         */
         public BuilderRegistry<T> build(IEventBus bus)
         {
             return new BuilderRegistry<>(this, bus);

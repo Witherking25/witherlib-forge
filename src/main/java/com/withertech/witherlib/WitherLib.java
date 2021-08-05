@@ -34,18 +34,36 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 
+/**
+ * The type Wither lib.
+ */
 @Mod(WitherLib.MODID)
 public class WitherLib
 {
     public static final String MODID = "witherlib";
+    /**
+     * The constant LOGGER.
+     */
     public static final Logger LOGGER = LogManager.getLogger();
 
 
+    /**
+     * The constant TEST_TAB.
+     */
     public static ItemGroup TEST_TAB;
+    /**
+     * The Blocks.
+     */
     public static BuilderRegistry<Block> BLOCKS;
+    /**
+     * The Items.
+     */
     public static BuilderRegistry<Item> ITEMS;
 
 
+    /**
+     * Instantiates a new Wither lib.
+     */
     public WitherLib()
     {
         MinecraftForge.EVENT_BUS.register(this);

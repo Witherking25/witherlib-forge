@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 
 public class BuilderTabRegistry
 {
-    private final Map<String, Supplier<ItemGroup>> ITEM_GROUPS;
+    private final Map<String, ItemGroup> ITEM_GROUPS;
 
     public BuilderTabRegistry(Builder builder)
     {
@@ -35,7 +35,7 @@ public class BuilderTabRegistry
 
     public ItemGroup getTab(String key)
     {
-        return ITEM_GROUPS.get(key).get();
+        return ITEM_GROUPS.get(key);
     }
 
     public boolean containsKey(String key)
@@ -47,7 +47,7 @@ public class BuilderTabRegistry
     {
         private final String MODID;
 
-        private final Map<String, Supplier<ItemGroup>> ITEM_GROUPS = new HashMap<>();
+        private final Map<String, ItemGroup> ITEM_GROUPS = new HashMap<>();
 
         private Builder(ModData mod)
         {
@@ -59,7 +59,7 @@ public class BuilderTabRegistry
             return new Builder(mod);
         }
 
-        public Builder addGroup(String name, Supplier<ItemGroup> group)
+        public Builder addGroup(String name, ItemGroup group)
         {
             ITEM_GROUPS.put(name, group);
             return this;

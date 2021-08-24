@@ -18,7 +18,7 @@
 
 package com.withertech.witherlib.registration;
 
-import com.withertech.witherlib.block.BaseBlock;
+import com.withertech.witherlib.block.BaseTileBlock;
 import com.withertech.witherlib.block.BaseTileEntity;
 import com.withertech.witherlib.gui.GuiTile;
 import com.withertech.witherlib.gui.TileEntityBaseContainer;
@@ -80,12 +80,17 @@ public class TypedRegKey<X>
         return Objects.hash(type, id);
     }
 
-    public static <X extends BaseBlock> TypedRegKey<RegistryObject<X>> block(String id, Class<X> clazz)
+    public static <X extends Block> TypedRegKey<RegistryObject<X>> block(String id, Class<X> clazz)
     {
         return new TypedRegKey<>(id, castClass(TypedRegKey.class));
     }
 
     public static <X extends Item> TypedRegKey<RegistryObject<X>> item(String id, Class<X> clazz)
+    {
+        return new TypedRegKey<>(id, castClass(TypedRegKey.class));
+    }
+
+    public static <X extends BaseTileBlock> TypedRegKey<RegistryObject<X>> tileBlock(String id, Class<X> clazz)
     {
         return new TypedRegKey<>(id, castClass(TypedRegKey.class));
     }
@@ -100,12 +105,12 @@ public class TypedRegKey<X>
         return new TypedRegKey<>(id, castClass(TypedRegKey.class));
     }
 
-    public static <X extends GuiTile<B, T, C, S, R>, B extends BaseBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> TypedGuiKey<X, B, T, C, S, R> gui(String id, Class<X> clazz)
+    public static <X extends GuiTile<B, T, C, S, R>, B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> TypedGuiKey<X, B, T, C, S, R> gui(String id, Class<X> clazz)
     {
         return new TypedGuiKey<>(id, castClass(TypedRegKey.class));
     }
 
-    public static class TypedGuiKey<X extends GuiTile<B, T, C, S, R>, B extends BaseBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> extends TypedRegKey<X>
+    public static class TypedGuiKey<X extends GuiTile<B, T, C, S, R>, B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> extends TypedRegKey<X>
     {
         private TypedGuiKey(String id, Class<X> type)
         {

@@ -18,19 +18,18 @@
 
 package com.withertech.witherlib.gui;
 
-import com.withertech.witherlib.block.BaseBlock;
+import com.withertech.witherlib.block.BaseTileBlock;
 import com.withertech.witherlib.block.BaseTileEntity;
 import net.minecraft.client.gui.ScreenManager.IScreenFactory;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 
 import java.util.function.Function;
 
-public abstract class GuiTile<B extends BaseBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<? super T>>
+public abstract class GuiTile<B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<? super T>>
 {
     protected final RegistryObject<B> block = registerBlock();
 

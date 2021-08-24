@@ -34,11 +34,11 @@ import java.util.List;
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
-public abstract class BaseBlock extends ContainerBlock
+public abstract class BaseTileBlock extends ContainerBlock
 {
     private final boolean saveTileData;
 
-    public BaseBlock(boolean saveTileData, Properties properties)
+    public BaseTileBlock(boolean saveTileData, Properties properties)
     {
         super(properties);
         this.saveTileData = saveTileData;

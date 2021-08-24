@@ -35,7 +35,7 @@ public class TestGuiTile extends GuiTile<TestBlock, TestTileEntity, TestContaine
     @Override
     protected RegistryObject<TestBlock> registerBlock()
     {
-        return WitherLib.INSTANCE.REGISTRY.getBlock(TypedRegKey.block("test", TestBlock.class));
+        return WitherLib.INSTANCE.REGISTRY.getBlock(TypedRegKey.tileBlock("test", TestBlock.class));
     }
 
     @Override

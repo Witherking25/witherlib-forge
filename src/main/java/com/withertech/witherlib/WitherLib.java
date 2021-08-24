@@ -19,7 +19,6 @@
 package com.withertech.witherlib;
 
 import com.withertech.witherlib.block.*;
-import com.withertech.witherlib.gui.GuiTile;
 import com.withertech.witherlib.gui.TestGuiTile;
 import com.withertech.witherlib.registration.*;
 import com.withertech.witherlib.util.SyncVariable;
@@ -64,7 +63,7 @@ public class WitherLib extends BuilderMod
     protected BuilderForgeRegistry<Block> registerBlocks()
     {
         return BuilderForgeRegistry.builder(MOD, ForgeRegistries.BLOCKS)
-                .add(TypedRegKey.block("test", TestBlock.class), () -> new TestBlock(true, AbstractBlock.Properties.of(Material.STONE)))
+                .add(TypedRegKey.tileBlock("test", TestBlock.class), () -> new TestBlock(true, AbstractBlock.Properties.of(Material.STONE)))
                 .build();
     }
 
@@ -80,7 +79,7 @@ public class WitherLib extends BuilderMod
     protected BuilderForgeRegistry<TileEntityType<?>> registerTiles()
     {
         return BuilderForgeRegistry.builder(MOD, ForgeRegistries.TILE_ENTITIES)
-                .add(TypedRegKey.tile("test", TestTileEntity.class), () -> TileEntityType.Builder.of(TestTileEntity::new, INSTANCE.REGISTRY.getBlock(TypedRegKey.block("test", BaseBlock.class)).get()).build(null))
+                .add(TypedRegKey.tile("test", TestTileEntity.class), () -> TileEntityType.Builder.of(TestTileEntity::new, INSTANCE.REGISTRY.getBlock(TypedRegKey.block("test", BaseTileBlock.class)).get()).build(null))
                 .build();
     }
 

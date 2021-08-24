@@ -18,7 +18,7 @@
 
 package com.withertech.witherlib.registration;
 
-import com.withertech.witherlib.block.BaseBlock;
+import com.withertech.witherlib.block.BaseTileBlock;
 import com.withertech.witherlib.block.BaseTileEntity;
 import com.withertech.witherlib.gui.GuiTile;
 import com.withertech.witherlib.gui.TileEntityBaseContainer;
@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class BuilderGuiTileRegistry
 {
-    private final Map<TypedGuiKey<? extends GuiTile<? extends BaseBlock, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, GuiTile<?, ?, ?, ?, ?>> GUI_TILES;
+    private final Map<TypedGuiKey<? extends GuiTile<? extends BaseTileBlock, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, GuiTile<?, ?, ?, ?, ?>> GUI_TILES;
 
     private BuilderGuiTileRegistry(Builder builder)
     {
@@ -43,12 +43,12 @@ public class BuilderGuiTileRegistry
         return new Builder();
     }
 
-    public <B extends BaseBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> GuiTile<B, T, C, S, R> get(TypedGuiKey<GuiTile<B, T, C, S, R>, B, T, C, S, R> key)
+    public <B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> GuiTile<B, T, C, S, R> get(TypedGuiKey<GuiTile<B, T, C, S, R>, B, T, C, S, R> key)
     {
         return key.getType().cast(GUI_TILES.get(key));
     }
 
-    public Map<TypedGuiKey<? extends GuiTile<? extends BaseBlock, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, GuiTile<?, ?, ?, ?, ?>> getGUIS()
+    public Map<TypedGuiKey<? extends GuiTile<? extends BaseTileBlock, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, GuiTile<?, ?, ?, ?, ?>> getGUIS()
     {
         return GUI_TILES;
     }
@@ -58,7 +58,7 @@ public class BuilderGuiTileRegistry
         private final Map<TypedGuiKey<? extends GuiTile<?, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, GuiTile<?, ?, ?, ?, ?>> GUI_TILES = new HashMap<>();
 
         public
-        <B extends BaseBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>>
+        <B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>>
         Builder add(
                 TypedGuiKey<? extends GuiTile<B, T, C, S, R>, B, T, C, S, R> id,
                 GuiTile<B, T, C, S, R> gui

@@ -20,25 +20,33 @@ package com.withertech.witherlib.registration;
 
 import com.mojang.datafixers.util.Pair;
 import com.withertech.witherlib.WitherLib;
+import com.withertech.witherlib.block.TestContainer;
+import com.withertech.witherlib.block.TestScreen;
 import com.withertech.witherlib.data.*;
+import com.withertech.witherlib.gui.GuiTile;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.loot.LootParameterSet;
 import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootTable;
 import net.minecraft.tags.ITag;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
@@ -55,9 +63,13 @@ public class ModRegistry
 {
     public final ModData MOD;
 
-    public final Supplier<BuilderForgeRegistry<Block>> BLOCKS;
+    public final Supplier<BuilderForgeRegistry< Block>> BLOCKS;
 
     public final Supplier<BuilderForgeRegistry<Item>> ITEMS;
+
+    public final Supplier<BuilderForgeRegistry<TileEntityType<?>>> TILES;
+
+    public final Supplier<BuilderForgeRegistry<ContainerType<?>>> CONTAINERS;
 
     public final Supplier<BuilderForgeRegistry<Fluid>> FLUIDS;
 
@@ -73,22 +85,29 @@ public class ModRegistry
 
     public final Supplier<BuilderTabRegistry> TABS;
 
+    public final Supplier<BuilderGuiTileRegistry> GUIS;
+
     public ModRegistry(
             ModData mod,
-            Supplier<BuilderForgeRegistry<Block>> blocks,
+            Supplier<BuilderForgeRegistry< Block>> blocks,
             Supplier<BuilderForgeRegistry<Item>> items,
+            Supplier<BuilderForgeRegistry<TileEntityType<?>>> tiles,
+            Supplier<BuilderForgeRegistry<ContainerType<?>>> containers,
             Supplier<BuilderForgeRegistry<Fluid>> fluids,
             Supplier<BuilderForgeRegistry<EntityType<?>>> entities,
             Supplier<BuilderEntityAttributeRegistry> entity_attributes,
             Supplier<BuilderEntityRendererRegistry> entity_renderers,
             Supplier<BuilderDataGenerator> data_generator,
             Supplier<BuilderTagRegistry> tags,
-            Supplier<BuilderTabRegistry> tabs
+            Supplier<BuilderTabRegistry> tabs,
+            Supplier<BuilderGuiTileRegistry> guis
     )
     {
         MOD = mod;
         BLOCKS = blocks;
         ITEMS = items;
+        TILES = tiles;
+        CONTAINERS = containers;
         FLUIDS = fluids;
         ENTITIES = entities;
         ENTITY_ATTRIBUTES = entity_attributes;
@@ -96,6 +115,8 @@ public class ModRegistry
         DATA_GENERATOR = data_generator;
         TAGS = tags;
         TABS = tabs;
+        GUIS = guis;
+
         MOD.MOD_EVENT_BUS.addListener(this::onGatherData);
         MOD.MOD_EVENT_BUS.addListener(this::onClientSetup);
         MOD.MOD_EVENT_BUS.addListener(this::onEntityAttributeCreation);
@@ -108,13 +129,17 @@ public class ModRegistry
         BLOCKS.get().register(MOD.MOD_EVENT_BUS);
         WitherLib.LOGGER.info("Registering Items for " + MOD.MODID);
         ITEMS.get().register(MOD.MOD_EVENT_BUS);
+        WitherLib.LOGGER.info("Registering Tiles for " + MOD.MODID);
+        TILES.get().register(MOD.MOD_EVENT_BUS);
+        WitherLib.LOGGER.info("Registering Containers for " + MOD.MODID);
+        CONTAINERS.get().register(MOD.MOD_EVENT_BUS);
         WitherLib.LOGGER.info("Registering Fluids for " + MOD.MODID);
         FLUIDS.get().register(MOD.MOD_EVENT_BUS);
         WitherLib.LOGGER.info("Registering Entities for " + MOD.MODID);
         ENTITIES.get().register(MOD.MOD_EVENT_BUS);
     }
 
-    public RegistryObject<Block> getBlock(String key)
+    public <T extends Block> RegistryObject<T> getBlock(TypedRegKey<RegistryObject<T>> key)
     {
         return BLOCKS.get().get(key);
     }
@@ -124,7 +149,7 @@ public class ModRegistry
         return TAGS.get().getBlock(key);
     }
 
-    public RegistryObject<Item> getItem(String key)
+    public <T extends Item> RegistryObject<T> getItem(TypedRegKey<RegistryObject<T>> key)
     {
         return ITEMS.get().get(key);
     }
@@ -134,7 +159,17 @@ public class ModRegistry
         return TAGS.get().getItem(key);
     }
 
-    public RegistryObject<Fluid> getFluid(String key)
+    public <T extends TileEntity> RegistryObject<TileEntityType<T>> getTile(TypedRegKey<RegistryObject<TileEntityType<T>>> key)
+    {
+        return TILES.get().get(key);
+    }
+
+    public <T extends Container> RegistryObject<ContainerType<T>> getContainer(TypedRegKey<RegistryObject<ContainerType<T>>> key)
+    {
+        return CONTAINERS.get().get(key);
+    }
+
+    public <T extends Fluid> RegistryObject<T> getFluid(TypedRegKey<RegistryObject<T>> key)
     {
         return FLUIDS.get().get(key);
     }
@@ -144,7 +179,7 @@ public class ModRegistry
         return TAGS.get().getFluid(key);
     }
 
-    public RegistryObject<EntityType<?>> getEntity(String key)
+    public <T extends Entity> RegistryObject<EntityType<T>> getEntity(TypedRegKey<RegistryObject<EntityType<T>>> key)
     {
         return ENTITIES.get().get(key);
     }
@@ -158,20 +193,39 @@ public class ModRegistry
     {
         ENTITIES.get().getENTRIES().forEach((key, entityTypeRegistryObject) ->
         {
-            if (ENTITY_RENDERERS.get().containsKey(key))
+            if (ENTITY_RENDERERS.get().containsKey(key.getId()))
             {
-                RenderingRegistry.registerEntityRenderingHandler((EntityType<? extends Entity>) entityTypeRegistryObject.get(), (IRenderFactory<? super Entity>) ENTITY_RENDERERS.get().getEntity(key));
+                RenderingRegistry.registerEntityRenderingHandler( entityTypeRegistryObject.get(), ENTITY_RENDERERS.get().getEntity(key.getId()));
             }
         });
+        GUIS.get().getGUIS().forEach((key, guiTile) ->
+        {
+
+            if (guiTile.getTer() != null)
+            {
+                bindTileEntityRenderer(guiTile);
+            }
+            registerScreen(guiTile);
+        });
+    }
+
+    private void bindTileEntityRenderer(GuiTile gui)
+    {
+        ClientRegistry.bindTileEntityRenderer((TileEntityType<? extends TileEntity>) gui.getTile().get(), gui.getTer());
+    }
+
+    private void registerScreen(GuiTile gui)
+    {
+        ScreenManager.register((ContainerType<? extends Container>) gui.getContainer().get(), gui.getScreen());
     }
 
     public void onEntityAttributeCreation(EntityAttributeCreationEvent event)
     {
         ENTITIES.get().getENTRIES().forEach((key, entityTypeRegistryObject) ->
         {
-            if (ENTITY_ATTRIBUTES.get().containsKey(key))
+            if (ENTITY_ATTRIBUTES.get().containsKey(key.getId()))
             {
-                event.put((EntityType<? extends LivingEntity>) entityTypeRegistryObject.get(), ENTITY_ATTRIBUTES.get().getEntity(key).build());
+                event.put((EntityType<? extends LivingEntity>) entityTypeRegistryObject.get(), ENTITY_ATTRIBUTES.get().getEntity(key.getId()).build());
             }
         });
     }

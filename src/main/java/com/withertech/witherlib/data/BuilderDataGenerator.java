@@ -163,6 +163,11 @@ public class BuilderDataGenerator
         return LANGS.isEmpty();
     }
 
+    public static Builder builder(ModData mod)
+    {
+        return new Builder(mod);
+    }
+
     public static class Builder
     {
         private final ModData MOD;
@@ -181,11 +186,6 @@ public class BuilderDataGenerator
         private Builder(ModData mod)
         {
             MOD = mod;
-        }
-
-        public static Builder create(ModData mod)
-        {
-            return new Builder(mod);
         }
 
         public Builder addBlockState(Consumer<BuilderBlockStateProvider> generator)

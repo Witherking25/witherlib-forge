@@ -22,15 +22,21 @@ import com.withertech.witherlib.data.BuilderDataGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public abstract class BuilderMod
 {
-    public ModRegistry REGISTRY;
-    public ModData MOD;
+    public final ModRegistry REGISTRY;
+    public final ModData MOD;
 
     private BuilderForgeRegistry<Block> BLOCKS;
     private BuilderForgeRegistry<Item> ITEMS;
+    private BuilderForgeRegistry<TileEntityType<?>> TILES;
+    private BuilderForgeRegistry<ContainerType<?>> CONTAINERS;
     private BuilderForgeRegistry<Fluid> FLUIDS;
     private BuilderForgeRegistry<EntityType<?>> ENTITIES;
 
@@ -40,6 +46,8 @@ public abstract class BuilderMod
     private BuilderTagRegistry TAGS;
     private BuilderTabRegistry TABS;
 
+    private BuilderGuiTileRegistry GUIS;
+
     protected BuilderMod(ModData mod)
     {
         MOD = mod;
@@ -48,19 +56,25 @@ public abstract class BuilderMod
                         MOD,
                         this::getBlocks,
                         this::getItems,
+                        this::getTiles,
+                        this::getContainers,
                         this::getFluids,
                         this::getEntities,
                         this::getEntityAttributes,
                         this::getEntityRenderers,
                         this::getDataGenerators,
                         this::getTags,
-                        this::getTabs
+                        this::getTabs,
+                        this::getGuis
                 );
     }
 
-    protected abstract BuilderForgeRegistry<Block> registerBlocks();
+    protected BuilderForgeRegistry<Block> registerBlocks()
+    {
+        return BuilderForgeRegistry.builder(MOD, ForgeRegistries.BLOCKS).build();
+    }
 
-    protected BuilderForgeRegistry<Block> getBlocks()
+    protected final BuilderForgeRegistry<Block> getBlocks()
     {
         if (BLOCKS == null)
         {
@@ -69,9 +83,12 @@ public abstract class BuilderMod
         return BLOCKS;
     }
 
-    protected abstract BuilderForgeRegistry<Item> registerItems();
+    protected BuilderForgeRegistry<Item> registerItems()
+    {
+        return BuilderForgeRegistry.builder(MOD, ForgeRegistries.ITEMS).build();
+    }
 
-    protected BuilderForgeRegistry<Item> getItems()
+    protected final BuilderForgeRegistry<Item> getItems()
     {
         if (ITEMS == null)
         {
@@ -80,9 +97,40 @@ public abstract class BuilderMod
         return ITEMS;
     }
 
-    protected abstract BuilderForgeRegistry<Fluid> registerFluids();
+    protected BuilderForgeRegistry<TileEntityType<?>> registerTiles()
+    {
+        return BuilderForgeRegistry.builder(MOD, ForgeRegistries.TILE_ENTITIES).build();
+    }
 
-    protected BuilderForgeRegistry<Fluid> getFluids()
+    protected final BuilderForgeRegistry<TileEntityType<?>> getTiles()
+    {
+        if (TILES == null)
+        {
+            TILES = registerTiles();
+        }
+        return TILES;
+    }
+
+    protected BuilderForgeRegistry<ContainerType<?>> registerContainers()
+    {
+        return BuilderForgeRegistry.builder(MOD, ForgeRegistries.CONTAINERS).build();
+    }
+
+    protected final BuilderForgeRegistry<ContainerType<?>> getContainers()
+    {
+        if (CONTAINERS == null)
+        {
+            CONTAINERS = registerContainers();
+        }
+        return CONTAINERS;
+    }
+
+    protected BuilderForgeRegistry<Fluid> registerFluids()
+    {
+        return BuilderForgeRegistry.builder(MOD, ForgeRegistries.FLUIDS).build();
+    }
+
+    protected final BuilderForgeRegistry<Fluid> getFluids()
     {
         if (FLUIDS == null)
         {
@@ -91,9 +139,12 @@ public abstract class BuilderMod
         return FLUIDS;
     }
 
-    protected abstract BuilderForgeRegistry<EntityType<?>> registerEntities();
+    protected BuilderForgeRegistry<EntityType<?>> registerEntities()
+    {
+        return BuilderForgeRegistry.builder(MOD, ForgeRegistries.ENTITIES).build();
+    }
 
-    protected BuilderForgeRegistry<EntityType<?>> getEntities()
+    protected final BuilderForgeRegistry<EntityType<?>> getEntities()
     {
         if (ENTITIES == null)
         {
@@ -102,9 +153,12 @@ public abstract class BuilderMod
         return ENTITIES;
     }
 
-    protected abstract BuilderEntityAttributeRegistry registerEntityAttributes();
+    protected BuilderEntityAttributeRegistry registerEntityAttributes()
+    {
+        return BuilderEntityAttributeRegistry.builder().build();
+    }
 
-    protected BuilderEntityAttributeRegistry getEntityAttributes()
+    protected final BuilderEntityAttributeRegistry getEntityAttributes()
     {
         if (ENTITY_ATTRIBUTES == null)
         {
@@ -113,9 +167,12 @@ public abstract class BuilderMod
         return ENTITY_ATTRIBUTES;
     }
 
-    protected abstract BuilderEntityRendererRegistry registerEntityRenderers();
+    protected BuilderEntityRendererRegistry registerEntityRenderers()
+    {
+        return BuilderEntityRendererRegistry.builder().build();
+    }
 
-    protected BuilderEntityRendererRegistry getEntityRenderers()
+    protected final BuilderEntityRendererRegistry getEntityRenderers()
     {
         if (ENTITY_RENDERERS == null)
         {
@@ -124,9 +181,12 @@ public abstract class BuilderMod
         return ENTITY_RENDERERS;
     }
 
-    protected abstract BuilderDataGenerator registerDataGenerators();
+    protected BuilderDataGenerator registerDataGenerators()
+    {
+        return BuilderDataGenerator.builder(MOD).build();
+    }
 
-    protected BuilderDataGenerator getDataGenerators()
+    protected final BuilderDataGenerator getDataGenerators()
     {
         if (DATA_GENERATORS == null)
         {
@@ -135,9 +195,12 @@ public abstract class BuilderMod
         return DATA_GENERATORS;
     }
 
-    protected abstract BuilderTagRegistry registerTags();
+    protected BuilderTagRegistry registerTags()
+    {
+        return BuilderTagRegistry.builder(MOD).build();
+    }
 
-    protected BuilderTagRegistry getTags()
+    protected final BuilderTagRegistry getTags()
     {
         if (TAGS == null)
         {
@@ -146,14 +209,31 @@ public abstract class BuilderMod
         return TAGS;
     }
 
-    protected abstract BuilderTabRegistry registerTabs();
+    protected BuilderTabRegistry registerTabs()
+    {
+        return BuilderTabRegistry.builder().build();
+    }
 
-    protected BuilderTabRegistry getTabs()
+    protected final BuilderTabRegistry getTabs()
     {
         if (TABS == null)
         {
             TABS = registerTabs();
         }
         return TABS;
+    }
+
+    protected BuilderGuiTileRegistry registerGuis()
+    {
+        return BuilderGuiTileRegistry.builder().build();
+    }
+
+    protected final BuilderGuiTileRegistry getGuis()
+    {
+        if (GUIS == null)
+        {
+            GUIS = registerGuis();
+        }
+        return GUIS;
     }
 }

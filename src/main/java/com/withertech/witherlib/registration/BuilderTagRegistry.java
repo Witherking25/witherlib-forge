@@ -36,7 +36,7 @@ public class BuilderTagRegistry
     private final Map<String, ITag.INamedTag<Item>> ITEMS;
     private final Map<String, ITag.INamedTag<Fluid>> FLUIDS;
 
-    public BuilderTagRegistry(Builder builder)
+    private BuilderTagRegistry(Builder builder)
     {
         BLOCKS = builder.BLOCKS;
         ITEMS = builder.ITEMS;
@@ -58,6 +58,11 @@ public class BuilderTagRegistry
         return FLUIDS.get(key);
     }
 
+    public static Builder builder(ModData mod)
+    {
+        return new Builder(mod);
+    }
+
     public static class Builder
     {
         private final String MODID;
@@ -69,11 +74,6 @@ public class BuilderTagRegistry
         private Builder(ModData mod)
         {
             MODID = mod.MODID;
-        }
-
-        public static Builder create(ModData mod)
-        {
-            return new Builder(mod);
         }
 
         public Builder addBlock(String name)

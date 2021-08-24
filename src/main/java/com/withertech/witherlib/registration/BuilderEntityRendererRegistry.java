@@ -26,14 +26,14 @@ import java.util.Map;
 
 public class BuilderEntityRendererRegistry
 {
-    private final Map<String, IRenderFactory<?>> ENTITIES;
+    private final Map<String, IRenderFactory<? super Entity>> ENTITIES;
 
-    public BuilderEntityRendererRegistry(Builder builder)
+    private BuilderEntityRendererRegistry(Builder builder)
     {
         ENTITIES = builder.ENTITIES;
     }
 
-    public IRenderFactory<?> getEntity(String key)
+    public IRenderFactory<? super Entity> getEntity(String key)
     {
         return ENTITIES.get(key);
     }
@@ -43,23 +43,22 @@ public class BuilderEntityRendererRegistry
         return ENTITIES.containsKey(key);
     }
 
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
+
     public static class Builder
     {
-        private final String MODID;
+        private final Map<String, IRenderFactory<? super Entity>> ENTITIES = new HashMap<>();
 
-        private final Map<String, IRenderFactory<?>> ENTITIES = new HashMap<>();
-
-        private Builder(ModData mod)
+        private Builder()
         {
-            MODID = mod.MODID;
+
         }
 
-        public static Builder create(ModData mod)
-        {
-            return new Builder(mod);
-        }
-
-        public <T extends Entity> Builder addEntity(String name, IRenderFactory<T> renderer)
+        public Builder addEntity(String name, IRenderFactory<? super Entity> renderer)
         {
             ENTITIES.put(name, renderer);
             return this;

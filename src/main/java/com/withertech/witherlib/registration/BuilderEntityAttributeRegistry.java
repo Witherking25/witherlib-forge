@@ -28,7 +28,7 @@ public class BuilderEntityAttributeRegistry
 {
     private final Map<String, Supplier<AttributeModifierMap.MutableAttribute>> ENTITIES;
 
-    public BuilderEntityAttributeRegistry(Builder builder)
+    private BuilderEntityAttributeRegistry(Builder builder)
     {
         ENTITIES = builder.ENTITIES;
     }
@@ -43,20 +43,18 @@ public class BuilderEntityAttributeRegistry
         return ENTITIES.containsKey(key);
     }
 
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
     public static class Builder
     {
-        private final String MODID;
-
         private final Map<String, Supplier<AttributeModifierMap.MutableAttribute>> ENTITIES = new HashMap<>();
 
-        private Builder(ModData mod)
+        private Builder()
         {
-            MODID = mod.MODID;
-        }
 
-        public static Builder create(ModData mod)
-        {
-            return new Builder(mod);
         }
 
         public Builder addEntity(String name, Supplier<AttributeModifierMap.MutableAttribute> attributes)

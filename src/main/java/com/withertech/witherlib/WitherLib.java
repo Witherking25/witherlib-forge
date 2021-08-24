@@ -18,15 +18,23 @@
 
 package com.withertech.witherlib;
 
-import com.withertech.witherlib.data.BuilderDataGenerator;
+import com.withertech.witherlib.block.*;
+import com.withertech.witherlib.gui.GuiTile;
+import com.withertech.witherlib.gui.TestGuiTile;
 import com.withertech.witherlib.registration.*;
+import com.withertech.witherlib.util.SyncVariable;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
+import net.minecraft.block.material.Material;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,60 +52,54 @@ public class WitherLib extends BuilderMod
         super(new ModData(MODID, FMLJavaModLoadingContext.get().getModEventBus()));
         INSTANCE = this;
         MinecraftForge.EVENT_BUS.register(this);
+        SyncVariable.Helper.registerSerializer(ItemStackHandler.class, compoundNBT ->
+        {
+            ItemStackHandler itemStackHandler = new ItemStackHandler();
+            itemStackHandler.deserializeNBT(compoundNBT);
+            return itemStackHandler;
+        }, (compoundNBT, itemStackHandler) -> itemStackHandler.deserializeNBT(compoundNBT));
     }
-
 
     @Override
     protected BuilderForgeRegistry<Block> registerBlocks()
     {
-        return BuilderForgeRegistry.Builder.create(MOD, ForgeRegistries.BLOCKS).build();
+        return BuilderForgeRegistry.builder(MOD, ForgeRegistries.BLOCKS)
+                .add(TypedRegKey.block("test", TestBlock.class), () -> new TestBlock(true, AbstractBlock.Properties.of(Material.STONE)))
+                .build();
     }
 
     @Override
     protected BuilderForgeRegistry<Item> registerItems()
     {
-        return BuilderForgeRegistry.Builder.create(MOD, ForgeRegistries.ITEMS).build();
+        return BuilderForgeRegistry.builder(MOD, ForgeRegistries.ITEMS)
+                .add(TypedRegKey.item("test", BlockItem.class), () -> new BlockItem(INSTANCE.REGISTRY.getBlock(TypedRegKey.block("test", TestBlock.class)).get(), new Item.Properties()))
+                .build();
     }
 
     @Override
-    protected BuilderForgeRegistry<Fluid> registerFluids()
+    protected BuilderForgeRegistry<TileEntityType<?>> registerTiles()
     {
-        return BuilderForgeRegistry.Builder.create(MOD, ForgeRegistries.FLUIDS).build();
+        return BuilderForgeRegistry.builder(MOD, ForgeRegistries.TILE_ENTITIES)
+                .add(TypedRegKey.tile("test", TestTileEntity.class), () -> TileEntityType.Builder.of(TestTileEntity::new, INSTANCE.REGISTRY.getBlock(TypedRegKey.block("test", BaseBlock.class)).get()).build(null))
+                .build();
     }
 
     @Override
-    protected BuilderForgeRegistry<EntityType<?>> registerEntities()
+    protected BuilderForgeRegistry<ContainerType<?>> registerContainers()
     {
-        return BuilderForgeRegistry.Builder.create(MOD, ForgeRegistries.ENTITIES).build();
+        return BuilderForgeRegistry.builder(MOD, ForgeRegistries.CONTAINERS)
+                .add(TypedRegKey.container("test", TestContainer.class), () -> IForgeContainerType.create((windowId, inv, data) -> new TestContainer(windowId, inv.player, data.readBlockPos())))
+                .build();
     }
 
     @Override
-    protected BuilderEntityAttributeRegistry registerEntityAttributes()
+    protected BuilderGuiTileRegistry registerGuis()
     {
-        return BuilderEntityAttributeRegistry.Builder.create(MOD).build();
-    }
-
-    @Override
-    protected BuilderEntityRendererRegistry registerEntityRenderers()
-    {
-        return BuilderEntityRendererRegistry.Builder.create(MOD).build();
-    }
-
-    @Override
-    protected BuilderDataGenerator registerDataGenerators()
-    {
-        return BuilderDataGenerator.Builder.create(MOD).build();
-    }
-
-    @Override
-    protected BuilderTagRegistry registerTags()
-    {
-        return BuilderTagRegistry.Builder.create(MOD).build();
-    }
-
-    @Override
-    protected BuilderTabRegistry registerTabs()
-    {
-        return BuilderTabRegistry.Builder.create(MOD).build();
+        return BuilderGuiTileRegistry.builder()
+                .add(
+                        TypedRegKey.gui("test", TestGuiTile.class),
+                        new TestGuiTile()
+                )
+                .build();
     }
 }

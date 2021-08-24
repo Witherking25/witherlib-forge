@@ -32,7 +32,7 @@ public class BuilderForgeRegistry<T extends IForgeRegistryEntry<T>>
 {
     protected final ModData MOD;
     protected final DeferredRegister<T> REGISTRY;
-    protected final Map<String, RegistryObject<T>> ENTRIES;
+    protected final Map<TypedRegKey<?>, RegistryObject<T>> ENTRIES;
 
     protected BuilderForgeRegistry(Builder<T> builder)
     {
@@ -51,21 +51,31 @@ public class BuilderForgeRegistry<T extends IForgeRegistryEntry<T>>
         return REGISTRY;
     }
 
-    public Map<String, RegistryObject<T>> getENTRIES()
+    public Map<TypedRegKey<?>, RegistryObject<T>> getENTRIES()
     {
         return ENTRIES;
     }
 
-    public RegistryObject<T> get(String key)
+    public <S extends T> RegistryObject<S> get(TypedRegKey<RegistryObject<S>> key)
     {
-        return ENTRIES.get(key);
+        return (RegistryObject<S>) ENTRIES.get(key);
+    }
+
+    public static <T extends IForgeRegistryEntry<T>> Builder<T> builder(ModData mod, Class<T> type)
+    {
+        return new Builder<>(mod, type);
+    }
+
+    public static <T extends IForgeRegistryEntry<T>> Builder<T> builder(ModData mod, IForgeRegistry<T> type)
+    {
+        return new Builder<>(mod, type);
     }
 
     public static class Builder<T extends IForgeRegistryEntry<T>>
     {
         private final ModData mod;
         private final DeferredRegister<T> REGISTRY;
-        private final Map<String, RegistryObject<T>> ENTRIES = new HashMap<>();
+        private final Map<TypedRegKey<?>, RegistryObject<T>> ENTRIES = new HashMap<>();
 
         private Builder(ModData mod, Class<T> registry)
         {
@@ -79,19 +89,11 @@ public class BuilderForgeRegistry<T extends IForgeRegistryEntry<T>>
             REGISTRY = DeferredRegister.create(registry, mod.MODID);
         }
 
-        public static <T extends IForgeRegistryEntry<T>> Builder<T> create(ModData mod, Class<T> type)
-        {
-            return new Builder<>(mod, type);
-        }
 
-        public static <T extends IForgeRegistryEntry<T>> Builder<T> create(ModData mod, IForgeRegistry<T> type)
-        {
-            return new Builder<>(mod, type);
-        }
 
-        public Builder<T> add(String name, Supplier<T> supplier)
+        public <S extends T> Builder<T> add(TypedRegKey<RegistryObject<S>> key, Supplier<S> supplier)
         {
-            ENTRIES.put(name, REGISTRY.register(name, supplier));
+            ENTRIES.put(key, REGISTRY.register(key.getId(), supplier));
             return this;
         }
 

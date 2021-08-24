@@ -22,13 +22,12 @@ import net.minecraft.item.ItemGroup;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class BuilderTabRegistry
 {
     private final Map<String, ItemGroup> ITEM_GROUPS;
 
-    public BuilderTabRegistry(Builder builder)
+    private BuilderTabRegistry(Builder builder)
     {
         ITEM_GROUPS = builder.ITEM_GROUPS;
     }
@@ -43,20 +42,18 @@ public class BuilderTabRegistry
         return ITEM_GROUPS.containsKey(key);
     }
 
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
     public static class Builder
     {
-        private final String MODID;
-
         private final Map<String, ItemGroup> ITEM_GROUPS = new HashMap<>();
 
-        private Builder(ModData mod)
+        private Builder()
         {
-            MODID = mod.MODID;
-        }
 
-        public static Builder create(ModData mod)
-        {
-            return new Builder(mod);
         }
 
         public Builder addGroup(String name, ItemGroup group)

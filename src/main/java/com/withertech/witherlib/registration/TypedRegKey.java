@@ -25,6 +25,7 @@ import com.withertech.witherlib.gui.TileEntityBaseContainer;
 import com.withertech.witherlib.gui.TileEntityBaseContainerScreen;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
@@ -86,6 +87,11 @@ public class TypedRegKey<X>
     }
 
     public static <X extends Item> TypedRegKey<RegistryObject<X>> item(String id, Class<X> clazz)
+    {
+        return new TypedRegKey<>(id, castClass(TypedRegKey.class));
+    }
+
+    public static <X extends Fluid> TypedRegKey<RegistryObject<X>> fluid(String id, Class<X> clazz)
     {
         return new TypedRegKey<>(id, castClass(TypedRegKey.class));
     }

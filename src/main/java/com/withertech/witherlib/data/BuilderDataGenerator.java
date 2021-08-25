@@ -63,6 +63,11 @@ public class BuilderDataGenerator
         LANGS = builder.LANGS;
     }
 
+    public static Builder builder(ModData mod)
+    {
+        return new Builder(mod);
+    }
+
     public void forEachBlockStates(Consumer<? super Consumer<BuilderBlockStateProvider>> action)
     {
         BLOCK_STATES.forEach(action);
@@ -161,11 +166,6 @@ public class BuilderDataGenerator
     public boolean isLangsEmpty()
     {
         return LANGS.isEmpty();
-    }
-
-    public static Builder builder(ModData mod)
-    {
-        return new Builder(mod);
     }
 
     public static class Builder

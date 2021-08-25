@@ -19,11 +19,11 @@
 package com.withertech.witherlib.registration;
 
 import com.withertech.witherlib.block.BaseTileBlock;
-import com.withertech.witherlib.block.BaseTileEntity;
-import com.withertech.witherlib.gui.GuiTile;
 import com.withertech.witherlib.gui.TileEntityBaseContainer;
 import com.withertech.witherlib.gui.TileEntityBaseContainerScreen;
+import com.withertech.witherlib.gui.TileGui;
 import com.withertech.witherlib.registration.TypedRegKey.TypedGuiKey;
+import com.withertech.witherlib.tile.BaseTileEntity;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 
 import java.util.HashMap;
@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class BuilderGuiTileRegistry
 {
-    private final Map<TypedGuiKey<? extends GuiTile<? extends BaseTileBlock, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, GuiTile<?, ?, ?, ?, ?>> GUI_TILES;
+    private final Map<TypedGuiKey<? extends TileGui<? extends BaseTileBlock, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, TileGui<?, ?, ?, ?, ?>> GUI_TILES;
 
     private BuilderGuiTileRegistry(Builder builder)
     {
@@ -43,28 +43,27 @@ public class BuilderGuiTileRegistry
         return new Builder();
     }
 
-    public <B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> GuiTile<B, T, C, S, R> get(TypedGuiKey<GuiTile<B, T, C, S, R>, B, T, C, S, R> key)
+    public <B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> TileGui<B, T, C, S, R> get(TypedGuiKey<TileGui<B, T, C, S, R>, B, T, C, S, R> key)
     {
-        return key.getType().cast(GUI_TILES.get(key));
+        return (TileGui<B, T, C, S, R>) GUI_TILES.get(key);
     }
 
-    public Map<TypedGuiKey<? extends GuiTile<? extends BaseTileBlock, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, GuiTile<?, ?, ?, ?, ?>> getGUIS()
+    public Map<TypedGuiKey<? extends TileGui<? extends BaseTileBlock, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, TileGui<?, ?, ?, ?, ?>> getGUIS()
     {
         return GUI_TILES;
     }
 
     public static class Builder
     {
-        private final Map<TypedGuiKey<? extends GuiTile<?, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, GuiTile<?, ?, ?, ?, ?>> GUI_TILES = new HashMap<>();
+        private final Map<TypedGuiKey<? extends TileGui<?, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, TileGui<?, ?, ?, ?, ?>> GUI_TILES = new HashMap<>();
 
-        public
-        <B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>>
+        public <B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>>
         Builder add(
-                TypedGuiKey<? extends GuiTile<B, T, C, S, R>, B, T, C, S, R> id,
-                GuiTile<B, T, C, S, R> gui
+                TypedGuiKey<? extends TileGui<B, T, C, S, R>, B, T, C, S, R> id,
+                TileGui<B, T, C, S, R> tileGui
         )
         {
-            GUI_TILES.put(id, gui);
+            GUI_TILES.put(id, tileGui);
             return this;
         }
 
@@ -73,6 +72,6 @@ public class BuilderGuiTileRegistry
             return new BuilderGuiTileRegistry(this);
         }
 
-        
+
     }
 }

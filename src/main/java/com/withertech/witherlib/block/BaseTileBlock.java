@@ -1,7 +1,6 @@
 package com.withertech.witherlib.block;
 
-import com.withertech.witherlib.util.TextComponents;
-import net.minecraft.block.Block;
+import com.withertech.witherlib.tile.BaseTileEntity;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
@@ -28,7 +27,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -54,33 +52,29 @@ public abstract class BaseTileBlock extends ContainerBlock
 
     public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult)
     {
-        if (world.isClientSide) return ActionResultType.SUCCESS; // on client side, don't do anything
-
-        INamedContainerProvider namedContainerProvider = this.getMenuProvider(state, world, pos);
-        if (namedContainerProvider != null)
+        if (!world.isClientSide)
         {
-            if (!(player instanceof ServerPlayerEntity))
-                return ActionResultType.FAIL;  // should always be true, but just in case...
             NetworkHooks.openGui((ServerPlayerEntity) player, new INamedContainerProvider()
             {
                 @Override
                 public ITextComponent getDisplayName()
                 {
-                    return TextComponents.empty().get();
+                    return BaseTileBlock.this.getDisplayName();
                 }
 
                 @Override
                 public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player)
                 {
-                    return createGui(id, player, pos);
+                    return BaseTileBlock.this.createMenu(id, player, pos);
                 }
             }, pos);
-            // (packetBuffer)->{} is just a do-nothing because we have no extra data to send
         }
-        return ActionResultType.SUCCESS;
+        return ActionResultType.CONSUME;
     }
 
-    protected abstract Container createGui(int id, PlayerEntity player, BlockPos pos);
+    protected abstract Container createMenu(int id, PlayerEntity player, BlockPos pos);
+
+    protected abstract ITextComponent getDisplayName();
 
     @Override
     public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)

@@ -32,6 +32,7 @@ public class PacketChannel
      */
     private final HashMap<Class<? extends BasePacket>, Boolean> packet_to_queued = new HashMap<>();
     private int index = 0;
+
     private PacketChannel(String modid, String name)
     {
         this.channel = NetworkRegistry.newSimpleChannel(new ResourceLocation(modid, name), () -> "1", "1"::equals, "1"::equals);

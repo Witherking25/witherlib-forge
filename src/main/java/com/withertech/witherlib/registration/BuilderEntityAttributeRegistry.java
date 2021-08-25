@@ -33,6 +33,11 @@ public class BuilderEntityAttributeRegistry
         ENTITIES = builder.ENTITIES;
     }
 
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
     public AttributeModifierMap.MutableAttribute getEntity(String key)
     {
         return ENTITIES.get(key).get();
@@ -41,11 +46,6 @@ public class BuilderEntityAttributeRegistry
     public boolean containsKey(String key)
     {
         return ENTITIES.containsKey(key);
-    }
-
-    public static Builder builder()
-    {
-        return new Builder();
     }
 
     public static class Builder

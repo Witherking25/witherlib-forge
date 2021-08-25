@@ -26,14 +26,19 @@ import java.util.Map;
 
 public class BuilderEntityRendererRegistry
 {
-    private final Map<String, IRenderFactory<? super Entity>> ENTITIES;
+    private final Map<String, IRenderFactory<?>> ENTITIES;
 
     private BuilderEntityRendererRegistry(Builder builder)
     {
         ENTITIES = builder.ENTITIES;
     }
 
-    public IRenderFactory<? super Entity> getEntity(String key)
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
+    public IRenderFactory<?> getEntity(String key)
     {
         return ENTITIES.get(key);
     }
@@ -43,22 +48,16 @@ public class BuilderEntityRendererRegistry
         return ENTITIES.containsKey(key);
     }
 
-    public static Builder builder()
-    {
-        return new Builder();
-    }
-
-
     public static class Builder
     {
-        private final Map<String, IRenderFactory<? super Entity>> ENTITIES = new HashMap<>();
+        private final Map<String, IRenderFactory<?>> ENTITIES = new HashMap<>();
 
         private Builder()
         {
 
         }
 
-        public Builder addEntity(String name, IRenderFactory<? super Entity> renderer)
+        public <T extends Entity> Builder addEntity(String name, IRenderFactory<T> renderer)
         {
             ENTITIES.put(name, renderer);
             return this;

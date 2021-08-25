@@ -41,6 +41,16 @@ public class BuilderForgeRegistry<T extends IForgeRegistryEntry<T>>
         ENTRIES = builder.ENTRIES;
     }
 
+    public static <T extends IForgeRegistryEntry<T>> Builder<T> builder(ModData mod, Class<T> type)
+    {
+        return new Builder<>(mod, type);
+    }
+
+    public static <T extends IForgeRegistryEntry<T>> Builder<T> builder(ModData mod, IForgeRegistry<T> type)
+    {
+        return new Builder<>(mod, type);
+    }
+
     public void register(IEventBus bus)
     {
         REGISTRY.register(bus);
@@ -61,16 +71,6 @@ public class BuilderForgeRegistry<T extends IForgeRegistryEntry<T>>
         return (RegistryObject<S>) ENTRIES.get(key);
     }
 
-    public static <T extends IForgeRegistryEntry<T>> Builder<T> builder(ModData mod, Class<T> type)
-    {
-        return new Builder<>(mod, type);
-    }
-
-    public static <T extends IForgeRegistryEntry<T>> Builder<T> builder(ModData mod, IForgeRegistry<T> type)
-    {
-        return new Builder<>(mod, type);
-    }
-
     public static class Builder<T extends IForgeRegistryEntry<T>>
     {
         private final ModData mod;
@@ -88,7 +88,6 @@ public class BuilderForgeRegistry<T extends IForgeRegistryEntry<T>>
             this.mod = mod;
             REGISTRY = DeferredRegister.create(registry, mod.MODID);
         }
-
 
 
         public <S extends T> Builder<T> add(TypedRegKey<RegistryObject<S>> key, Supplier<S> supplier)

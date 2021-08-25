@@ -32,6 +32,11 @@ public class BuilderTabRegistry
         ITEM_GROUPS = builder.ITEM_GROUPS;
     }
 
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
     public ItemGroup getTab(String key)
     {
         return ITEM_GROUPS.get(key);
@@ -40,11 +45,6 @@ public class BuilderTabRegistry
     public boolean containsKey(String key)
     {
         return ITEM_GROUPS.containsKey(key);
-    }
-
-    public static Builder builder()
-    {
-        return new Builder();
     }
 
     public static class Builder

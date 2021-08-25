@@ -19,12 +19,15 @@
 package com.withertech.witherlib.registration;
 
 import com.withertech.witherlib.block.BaseTileBlock;
-import com.withertech.witherlib.block.BaseTileEntity;
-import com.withertech.witherlib.gui.GuiTile;
 import com.withertech.witherlib.gui.TileEntityBaseContainer;
 import com.withertech.witherlib.gui.TileEntityBaseContainerScreen;
+import com.withertech.witherlib.gui.TileGui;
+import com.withertech.witherlib.tile.BaseTileEntity;
+import com.withertech.witherlib.util.ClassUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
@@ -44,6 +47,46 @@ public class TypedRegKey<X>
         this.type = type;
     }
 
+    public static <X extends Block> TypedRegKey<RegistryObject<X>> block(String id, Class<X> clazz)
+    {
+        return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
+    }
+
+    public static <X extends Item> TypedRegKey<RegistryObject<X>> item(String id, Class<X> clazz)
+    {
+        return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
+    }
+
+    public static <X extends Fluid> TypedRegKey<RegistryObject<X>> fluid(String id, Class<X> clazz)
+    {
+        return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
+    }
+
+    public static <X extends Entity> TypedRegKey<RegistryObject<EntityType<X>>> entity(String id, Class<X> clazz)
+    {
+        return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
+    }
+
+    public static <X extends BaseTileBlock> TypedRegKey<RegistryObject<X>> tileBlock(String id, Class<X> clazz)
+    {
+        return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
+    }
+
+    public static <X extends BaseTileEntity> TypedRegKey<RegistryObject<TileEntityType<X>>> tile(String id, Class<X> clazz)
+    {
+        return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
+    }
+
+    public static <X extends TileEntityBaseContainer<?>> TypedRegKey<RegistryObject<ContainerType<X>>> container(String id, Class<X> clazz)
+    {
+        return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
+    }
+
+    public static <X extends TileGui<B, T, C, S, R>, B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> TypedGuiKey<X, B, T, C, S, R> gui(String id, Class<X> clazz)
+    {
+        return new TypedGuiKey<>(id, ClassUtil.castClass(TypedRegKey.class));
+    }
+
     public Class<X> getType()
     {
         return type;
@@ -52,12 +95,6 @@ public class TypedRegKey<X>
     public String getId()
     {
         return id;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <X> Class<X> castClass(Class<?> clazz)
-    {
-        return (Class<X>) clazz;
     }
 
     @Override
@@ -81,42 +118,7 @@ public class TypedRegKey<X>
         return Objects.hash(type, id);
     }
 
-    public static <X extends Block> TypedRegKey<RegistryObject<X>> block(String id, Class<X> clazz)
-    {
-        return new TypedRegKey<>(id, castClass(TypedRegKey.class));
-    }
-
-    public static <X extends Item> TypedRegKey<RegistryObject<X>> item(String id, Class<X> clazz)
-    {
-        return new TypedRegKey<>(id, castClass(TypedRegKey.class));
-    }
-
-    public static <X extends Fluid> TypedRegKey<RegistryObject<X>> fluid(String id, Class<X> clazz)
-    {
-        return new TypedRegKey<>(id, castClass(TypedRegKey.class));
-    }
-
-    public static <X extends BaseTileBlock> TypedRegKey<RegistryObject<X>> tileBlock(String id, Class<X> clazz)
-    {
-        return new TypedRegKey<>(id, castClass(TypedRegKey.class));
-    }
-
-    public static <X extends BaseTileEntity> TypedRegKey<RegistryObject<TileEntityType<X>>> tile(String id, Class<X> clazz)
-    {
-        return new TypedRegKey<>(id, castClass(TypedRegKey.class));
-    }
-
-    public static <X extends TileEntityBaseContainer<?>> TypedRegKey<RegistryObject<ContainerType<X>>> container(String id, Class<X> clazz)
-    {
-        return new TypedRegKey<>(id, castClass(TypedRegKey.class));
-    }
-
-    public static <X extends GuiTile<B, T, C, S, R>, B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> TypedGuiKey<X, B, T, C, S, R> gui(String id, Class<X> clazz)
-    {
-        return new TypedGuiKey<>(id, castClass(TypedRegKey.class));
-    }
-
-    public static class TypedGuiKey<X extends GuiTile<B, T, C, S, R>, B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> extends TypedRegKey<X>
+    public static class TypedGuiKey<X extends TileGui<B, T, C, S, R>, B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> extends TypedRegKey<X>
     {
         private TypedGuiKey(String id, Class<X> type)
         {

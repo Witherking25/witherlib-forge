@@ -2,6 +2,8 @@ package com.withertech.witherlib.util;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.util.LazyOptional;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
@@ -104,6 +106,7 @@ public @interface SyncVariable
          * @param obj  The object with SyncVariable fields.
          * @param tags The NBT to read values from.
          */
+        @SuppressWarnings("unchecked")
         public static void readSyncVars(Object obj, CompoundNBT tags)
         {
             // Try to read from NBT for fields marked with SyncVariable.
@@ -120,55 +123,63 @@ public @interface SyncVariable
                             // Set fields accessible if necessary.
 
                             //noinspection deprecation
-							if (!field.isAccessible())
-							{
-								field.setAccessible(true);
-							}
+                            if (!field.isAccessible())
+                            {
+                                field.setAccessible(true);
+                            }
                             String name = sync.name();
 
                             //noinspection ChainOfInstanceofChecks
-							if (field.getType() == int.class)
-							{
-								field.setInt(obj, tags.getInt(name));
-							}
-							else if (field.getType() == float.class)
-							{
-								field.setFloat(obj, tags.getFloat(name));
-							}
-							else if (field.getType() == String.class)
-							{
-								field.set(obj, tags.getString(name));
-							}
-							else if (field.getType() == boolean.class)
-							{
-								field.setBoolean(obj, tags.getBoolean(name));
-							}
-							else if (field.getType() == double.class)
-							{
-								field.setDouble(obj, tags.getDouble(name));
-							}
-							else if (field.getType() == long.class)
-							{
-								field.setLong(obj, tags.getLong(name));
-							}
-							else if (field.getType() == short.class)
-							{
-								field.setShort(obj, tags.getShort(name));
-							}
-							else if (field.getType() == byte.class)
-							{
-								field.setByte(obj, tags.getByte(name));
-							}
-							else if (SERIALIZERS.containsKey(field.getType()))
-							{
-								NBTSerializer serializer = SERIALIZERS.get(field.getType());
-								CompoundNBT compound = tags.getCompound(name);
-								field.set(obj, serializer.read(compound));
-							}
-							else
-							{
-								throw new IllegalArgumentException("Don't know how to read type " + field.getType() + " from NBT!");
-							}
+                            if (field.getType() == int.class)
+                            {
+                                field.setInt(obj, tags.getInt(name));
+                            }
+                            else if (field.getType() == float.class)
+                            {
+                                field.setFloat(obj, tags.getFloat(name));
+                            }
+                            else if (field.getType() == String.class)
+                            {
+                                field.set(obj, tags.getString(name));
+                            }
+                            else if (field.getType() == boolean.class)
+                            {
+                                field.setBoolean(obj, tags.getBoolean(name));
+                            }
+                            else if (field.getType() == double.class)
+                            {
+                                field.setDouble(obj, tags.getDouble(name));
+                            }
+                            else if (field.getType() == long.class)
+                            {
+                                field.setLong(obj, tags.getLong(name));
+                            }
+                            else if (field.getType() == short.class)
+                            {
+                                field.setShort(obj, tags.getShort(name));
+                            }
+                            else if (field.getType() == byte.class)
+                            {
+                                field.setByte(obj, tags.getByte(name));
+                            }
+                            else if (field.getType() == ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class))
+                            {
+                                ((LazyOptional<INBTSerializable<CompoundNBT>>) field.get(obj)).ifPresent(compoundNBTINBTSerializable -> compoundNBTINBTSerializable.deserializeNBT(tags.getCompound(name)));
+                            }
+                            else if (field.getType() == ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class))
+                            {
+                                ((INBTSerializable<CompoundNBT>) field.get(obj)).deserializeNBT(tags.getCompound(name));
+                            }
+                            else if (SERIALIZERS.containsKey(field.getType()))
+                            {
+                                NBTSerializer serializer = SERIALIZERS.get(field.getType());
+                                CompoundNBT compound = tags.getCompound(name);
+                                field.set(obj, serializer.read(compound));
+                            }
+                            else
+                            {
+                                throw new IllegalArgumentException("Don't know how to read type " + field.getType() + " from NBT!");
+                            }
                         } catch (IllegalAccessException | IllegalArgumentException ex)
                         {
                             ex.printStackTrace();
@@ -207,56 +218,66 @@ public @interface SyncVariable
                             try
                             {
                                 // Set fields accessible if necessary.
-								if (!field.isAccessible())
-								{
-									field.setAccessible(true);
-								}
+                                if (!field.isAccessible())
+                                {
+                                    field.setAccessible(true);
+                                }
                                 String name = sync.name();
 
                                 //noinspection ChainOfInstanceofChecks
-								if (field.getType() == int.class)
-								{
-									tags.putInt(name, field.getInt(obj));
-								}
-								else if (field.getType() == float.class)
-								{
-									tags.putFloat(name, field.getFloat(obj));
-								}
-								else if (field.getType() == String.class)
-								{
-									tags.putString(name, (String) field.get(obj));
-								}
-								else if (field.getType() == boolean.class)
-								{
-									tags.putBoolean(name, field.getBoolean(obj));
-								}
-								else if (field.getType() == double.class)
-								{
-									tags.putDouble(name, field.getDouble(obj));
-								}
-								else if (field.getType() == long.class)
-								{
-									tags.putLong(name, field.getLong(obj));
-								}
-								else if (field.getType() == short.class)
-								{
-									tags.putShort(name, field.getShort(obj));
-								}
-								else if (field.getType() == byte.class)
-								{
-									tags.putByte(name, field.getByte(obj));
-								}
-								else if (SERIALIZERS.containsKey(field.getType()))
-								{
-									CompoundNBT compound = new CompoundNBT();
-									NBTSerializer serializer = SERIALIZERS.get(field.getType());
-									serializer.write(compound, field.get(obj));
-									tags.put(name, compound);
-								}
-								else
-								{
-									throw new IllegalArgumentException("Don't know how to write type " + field.getType() + " to NBT!");
-								}
+                                if (field.getType() == int.class)
+                                {
+                                    tags.putInt(name, field.getInt(obj));
+                                }
+                                else if (field.getType() == float.class)
+                                {
+                                    tags.putFloat(name, field.getFloat(obj));
+                                }
+                                else if (field.getType() == String.class)
+                                {
+                                    tags.putString(name, (String) field.get(obj));
+                                }
+                                else if (field.getType() == boolean.class)
+                                {
+                                    tags.putBoolean(name, field.getBoolean(obj));
+                                }
+                                else if (field.getType() == double.class)
+                                {
+                                    tags.putDouble(name, field.getDouble(obj));
+                                }
+                                else if (field.getType() == long.class)
+                                {
+                                    tags.putLong(name, field.getLong(obj));
+                                }
+                                else if (field.getType() == short.class)
+                                {
+                                    tags.putShort(name, field.getShort(obj));
+                                }
+                                else if (field.getType() == byte.class)
+                                {
+                                    tags.putByte(name, field.getByte(obj));
+                                }
+                                else if (field.getType() == ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class))
+                                {
+                                    ((LazyOptional<INBTSerializable<CompoundNBT>>) field.get(obj)).ifPresent(compoundNBTINBTSerializable ->
+                                            tags.put(name, compoundNBTINBTSerializable.serializeNBT()));
+                                }
+                                else if (field.getType() == ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class))
+                                {
+                                    tags.put(name, ((INBTSerializable<CompoundNBT>) field.get(obj)).serializeNBT());
+                                }
+
+                                else if (SERIALIZERS.containsKey(field.getType()))
+                                {
+                                    CompoundNBT compound = new CompoundNBT();
+                                    NBTSerializer serializer = SERIALIZERS.get(field.getType());
+                                    serializer.write(compound, field.get(obj));
+                                    tags.put(name, compound);
+                                }
+                                else
+                                {
+                                    throw new IllegalArgumentException("Don't know how to write type " + field.getType() + " to NBT!");
+                                }
                             } catch (IllegalAccessException | IllegalArgumentException ex)
                             {
                                 ex.printStackTrace();

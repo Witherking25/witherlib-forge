@@ -20,10 +20,8 @@ package com.withertech.witherlib.registration;
 
 import com.mojang.datafixers.util.Pair;
 import com.withertech.witherlib.WitherLib;
-import com.withertech.witherlib.block.TestContainer;
-import com.withertech.witherlib.block.TestScreen;
 import com.withertech.witherlib.data.*;
-import com.withertech.witherlib.gui.GuiTile;
+import com.withertech.witherlib.gui.TileGui;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.data.DataGenerator;
@@ -47,6 +45,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
@@ -63,7 +62,7 @@ public class ModRegistry
 {
     public final ModData MOD;
 
-    public final Supplier<BuilderForgeRegistry< Block>> BLOCKS;
+    public final Supplier<BuilderForgeRegistry<Block>> BLOCKS;
 
     public final Supplier<BuilderForgeRegistry<Item>> ITEMS;
 
@@ -89,7 +88,7 @@ public class ModRegistry
 
     public ModRegistry(
             ModData mod,
-            Supplier<BuilderForgeRegistry< Block>> blocks,
+            Supplier<BuilderForgeRegistry<Block>> blocks,
             Supplier<BuilderForgeRegistry<Item>> items,
             Supplier<BuilderForgeRegistry<TileEntityType<?>>> tiles,
             Supplier<BuilderForgeRegistry<ContainerType<?>>> containers,
@@ -195,28 +194,27 @@ public class ModRegistry
         {
             if (ENTITY_RENDERERS.get().containsKey(key.getId()))
             {
-                RenderingRegistry.registerEntityRenderingHandler( entityTypeRegistryObject.get(), ENTITY_RENDERERS.get().getEntity(key.getId()));
+                RenderingRegistry.registerEntityRenderingHandler((EntityType<? extends Entity>) entityTypeRegistryObject.get(), (IRenderFactory<? super Entity>) ENTITY_RENDERERS.get().getEntity(key.getId()));
             }
         });
-        GUIS.get().getGUIS().forEach((key, guiTile) ->
+        GUIS.get().getGUIS().forEach((key, tileGui) ->
         {
-
-            if (guiTile.getTer() != null)
+            if (tileGui.getTer() != null)
             {
-                bindTileEntityRenderer(guiTile);
+                bindTileEntityRenderer(tileGui);
             }
-            registerScreen(guiTile);
+            registerScreen(tileGui);
         });
     }
 
-    private void bindTileEntityRenderer(GuiTile gui)
+    private void bindTileEntityRenderer(TileGui tileGui)
     {
-        ClientRegistry.bindTileEntityRenderer((TileEntityType<? extends TileEntity>) gui.getTile().get(), gui.getTer());
+        ClientRegistry.bindTileEntityRenderer((TileEntityType<? extends TileEntity>) tileGui.getTile().get(), tileGui.getTer());
     }
 
-    private void registerScreen(GuiTile gui)
+    private void registerScreen(TileGui tileGui)
     {
-        ScreenManager.register((ContainerType<? extends Container>) gui.getContainer().get(), gui.getScreen());
+        ScreenManager.register((ContainerType<? extends Container>) tileGui.getContainer().get(), tileGui.getScreen());
     }
 
     public void onEntityAttributeCreation(EntityAttributeCreationEvent event)

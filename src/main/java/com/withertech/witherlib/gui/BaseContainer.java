@@ -23,7 +23,6 @@ public abstract class BaseContainer extends Container
     }
 
 
-
     /**
      * Adds slots to the container by calling {@link #addSlots(PlayerEntity)}.
      */

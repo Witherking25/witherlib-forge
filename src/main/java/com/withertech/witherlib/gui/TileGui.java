@@ -19,7 +19,7 @@
 package com.withertech.witherlib.gui;
 
 import com.withertech.witherlib.block.BaseTileBlock;
-import com.withertech.witherlib.block.BaseTileEntity;
+import com.withertech.witherlib.tile.BaseTileEntity;
 import net.minecraft.client.gui.ScreenManager.IScreenFactory;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -27,11 +27,16 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 
+import javax.annotation.Nullable;
 import java.util.function.Function;
 
-public abstract class GuiTile<B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<? super T>>
+public abstract class TileGui<B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<? super T>>
 {
     protected final RegistryObject<B> block = registerBlock();
+    protected final RegistryObject<TileEntityType<T>> tile = registerTile();
+    protected final RegistryObject<ContainerType<C>> container = registerContainer();
+    protected final IScreenFactory<C, S> screen = registerScreen();
+    protected final Function<? super TileEntityRendererDispatcher, R> ter = registerTer();
 
     protected abstract RegistryObject<B> registerBlock();
 
@@ -40,16 +45,12 @@ public abstract class GuiTile<B extends BaseTileBlock, T extends BaseTileEntity,
         return block;
     }
 
-    protected final RegistryObject<TileEntityType<T>> tile = registerTile();
-
     protected abstract RegistryObject<TileEntityType<T>> registerTile();
 
     public final RegistryObject<TileEntityType<T>> getTile()
     {
         return tile;
     }
-
-    protected final RegistryObject<ContainerType<C>> container = registerContainer();
 
     protected abstract RegistryObject<ContainerType<C>> registerContainer();
 
@@ -58,8 +59,6 @@ public abstract class GuiTile<B extends BaseTileBlock, T extends BaseTileEntity,
         return container;
     }
 
-    protected final IScreenFactory<C, S> screen = registerScreen();
-
     protected abstract IScreenFactory<C, S> registerScreen();
 
     public final IScreenFactory<C, S> getScreen()
@@ -67,10 +66,10 @@ public abstract class GuiTile<B extends BaseTileBlock, T extends BaseTileEntity,
         return screen;
     }
 
-    protected final Function<? super TileEntityRendererDispatcher, R> ter = registerTer();
-
+    @Nullable
     protected abstract Function<? super TileEntityRendererDispatcher, R> registerTer();
 
+    @Nullable
     public final Function<? super TileEntityRendererDispatcher, R> getTer()
     {
         return ter;

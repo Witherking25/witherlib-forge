@@ -43,6 +43,11 @@ public class BuilderTagRegistry
         FLUIDS = builder.FLUIDS;
     }
 
+    public static Builder builder(ModData mod)
+    {
+        return new Builder(mod);
+    }
+
     public ITag.INamedTag<Block> getBlock(String key)
     {
         return BLOCKS.get(key);
@@ -56,11 +61,6 @@ public class BuilderTagRegistry
     public ITag.INamedTag<Fluid> getFluid(String key)
     {
         return FLUIDS.get(key);
-    }
-
-    public static Builder builder(ModData mod)
-    {
-        return new Builder(mod);
     }
 
     public static class Builder

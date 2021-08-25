@@ -25,7 +25,7 @@ import java.util.List;
 public abstract class BaseContainerScreen<T extends BaseContainer> extends ContainerScreen<T>
 {
 
-    private static final ResourceLocation SLOT_TEXTURE = new ResourceLocation(WitherLib.MODID, "textures/gui/slot.png");
+    private static final ResourceLocation SLOT_TEXTURE = WitherLib.INSTANCE.MOD.modLocation("textures/gui/slot.png");
     /**
      * Have this because it replaced my variable name with an srg name for some reason
      **/

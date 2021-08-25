@@ -18,6 +18,7 @@
 
 package com.withertech.witherlib.tile;
 
+import com.withertech.witherlib.nbt.SerializableEnergyStorage;
 import com.withertech.witherlib.util.SyncVariable;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -25,13 +26,15 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.items.ItemStackHandler;
 
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
 public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEntity
 {
-
     private boolean dataChanged = false;
 
     public BaseTileEntity(TileEntityType<?> tileEntityTypeIn)

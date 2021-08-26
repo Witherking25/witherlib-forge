@@ -1,3 +1,21 @@
+/*
+ * witherlib-forge
+ * Copyright (C) 2021 WitherTech
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.withertech.witherlib.block;
 
 import com.withertech.witherlib.tile.BaseTileEntity;
@@ -33,7 +51,7 @@ import java.util.List;
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
-public abstract class BaseTileBlock extends ContainerBlock
+public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends ContainerBlock
 {
     private final boolean saveTileData;
 
@@ -51,20 +69,24 @@ public abstract class BaseTileBlock extends ContainerBlock
     }
 
 
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult)
+    @SuppressWarnings("deprecation")
+    @Override
+    @Nonnull
+    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult)
     {
         if (!world.isClientSide)
         {
             NetworkHooks.openGui((ServerPlayerEntity) player, new INamedContainerProvider()
             {
+                @Nonnull
                 @Override
                 public ITextComponent getDisplayName()
                 {
-                    return BaseTileBlock.this.getDisplayName();
+                    return BaseTileBlock.this.getDisplayName((T) world.getBlockEntity(pos));
                 }
 
                 @Override
-                public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player)
+                public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity player)
                 {
                     return BaseTileBlock.this.createMenu(id, player, pos);
                 }
@@ -75,10 +97,10 @@ public abstract class BaseTileBlock extends ContainerBlock
 
     protected abstract Container createMenu(int id, PlayerEntity player, BlockPos pos);
 
-    protected abstract ITextComponent getDisplayName();
+    protected abstract ITextComponent getDisplayName(T tile);
 
     @Override
-    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, LivingEntity placer, @Nonnull ItemStack stack)
     {
         if (!this.saveTileData)
         {
@@ -99,8 +121,10 @@ public abstract class BaseTileBlock extends ContainerBlock
         }
     }
 
+    @SuppressWarnings("deprecation")
+    @Nonnull
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+    public List<ItemStack> getDrops(@Nonnull BlockState state, @Nonnull LootContext.Builder builder)
     {
         List<ItemStack> items = super.getDrops(state, builder);
 

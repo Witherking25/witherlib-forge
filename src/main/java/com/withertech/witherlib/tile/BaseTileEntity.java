@@ -30,6 +30,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
@@ -37,7 +39,7 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
 {
     private boolean dataChanged = false;
 
-    public BaseTileEntity(TileEntityType<?> tileEntityTypeIn)
+    public BaseTileEntity(TileEntityType<T> tileEntityTypeIn)
     {
         super(tileEntityTypeIn);
     }
@@ -49,6 +51,7 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
     {
         this.dataChanged = true;
         this.setChanged();
+        assert this.level != null;
         this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 2 | 4);
     }
 
@@ -96,8 +99,9 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
         SyncVariable.Helper.readSyncVars(this, tag);
     }
 
+    @Nonnull
     @Override
-    public CompoundNBT save(CompoundNBT compound)
+    public CompoundNBT save(@Nonnull CompoundNBT compound)
     {
         super.save(compound);
         CompoundNBT data = this.writeData();
@@ -109,12 +113,13 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt)
+    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt)
     {
         super.load(state, nbt);
         this.readData(nbt.getCompound("data"));
     }
 
+    @Nonnull
     @Override
     public CompoundNBT getUpdateTag()
     {

@@ -30,7 +30,7 @@ import net.minecraftforge.fml.RegistryObject;
 import javax.annotation.Nullable;
 import java.util.function.Function;
 
-public abstract class TileGui<B extends BaseTileBlock, T extends BaseTileEntity, C extends TileEntityBaseContainer<T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<? super T>>
+public abstract class TileGui<B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<? super T>>
 {
     protected final RegistryObject<B> block = registerBlock();
     protected final RegistryObject<TileEntityType<T>> tile = registerTile();

@@ -19,6 +19,7 @@
 package com.withertech.witherlib.registration;
 
 import com.withertech.witherlib.data.BuilderDataGenerator;
+import com.withertech.witherlib.network.PacketChannel;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
@@ -26,6 +27,9 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 public abstract class BuilderMod
 {
@@ -38,14 +42,14 @@ public abstract class BuilderMod
     private BuilderForgeRegistry<ContainerType<?>> CONTAINERS;
     private BuilderForgeRegistry<Fluid> FLUIDS;
     private BuilderForgeRegistry<EntityType<?>> ENTITIES;
-
     private BuilderEntityAttributeRegistry ENTITY_ATTRIBUTES;
     private BuilderEntityRendererRegistry ENTITY_RENDERERS;
     private BuilderDataGenerator DATA_GENERATORS;
     private BuilderTagRegistry TAGS;
     private BuilderTabRegistry TABS;
 
-    private BuilderGuiTileRegistry GUIS;
+    private BuilderGuiRegistry GUIS;
+    private BuilderNetworkRegistry NETS;
 
     protected BuilderMod(ModData mod)
     {
@@ -64,9 +68,10 @@ public abstract class BuilderMod
                         this::getDataGenerators,
                         this::getTags,
                         this::getTabs,
-                        this::getGuis
-                );
+                        this::getGuis,
+                        this::getNets);
     }
+
 
     protected BuilderForgeRegistry<Block> registerBlocks()
     {
@@ -222,17 +227,31 @@ public abstract class BuilderMod
         return TABS;
     }
 
-    protected BuilderGuiTileRegistry registerGuis()
+    protected BuilderGuiRegistry registerGuis()
     {
-        return BuilderGuiTileRegistry.builder().build();
+        return BuilderGuiRegistry.builder().build();
     }
 
-    protected final BuilderGuiTileRegistry getGuis()
+    protected final BuilderGuiRegistry getGuis()
     {
         if (GUIS == null)
         {
             GUIS = registerGuis();
         }
         return GUIS;
+    }
+
+    protected BuilderNetworkRegistry registerNets()
+    {
+        return BuilderNetworkRegistry.builder(MOD).build();
+    }
+
+    protected final BuilderNetworkRegistry getNets()
+    {
+        if (NETS == null)
+        {
+            NETS = registerNets();
+        }
+        return NETS;
     }
 }

@@ -20,7 +20,6 @@ package com.withertech.witherlib;
 
 import com.withertech.witherlib.registration.BuilderMod;
 import com.withertech.witherlib.registration.ModData;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -33,15 +32,11 @@ public class WitherLib extends BuilderMod
     public static final Logger LOGGER = LogManager.getLogger();
     public static WitherLib INSTANCE;
 
-
     public WitherLib()
     {
         super(new ModData(MODID, FMLJavaModLoadingContext.get().getModEventBus()));
         INSTANCE = this;
-        MinecraftForge.EVENT_BUS.register(this);
-
     }
-
 
 
 }

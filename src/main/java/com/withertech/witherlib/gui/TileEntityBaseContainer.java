@@ -31,6 +31,12 @@ public abstract class TileEntityBaseContainer<X extends TileEntityBaseContainer<
 {
 
     protected final World tileWorld;
+
+    public BlockPos getTilePos()
+    {
+        return tilePos;
+    }
+
     protected final BlockPos tilePos;
 
     public TileEntityBaseContainer(ContainerType<X> type, int id, PlayerEntity player, World tileWorld, BlockPos tilePos)

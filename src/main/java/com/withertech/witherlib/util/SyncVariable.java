@@ -27,6 +27,7 @@ import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -125,10 +126,10 @@ public @interface SyncVariable
          * @param tags The NBT to read values from.
          */
         @SuppressWarnings("unchecked")
-        public static void readSyncVars(Object obj, CompoundNBT tags)
+        public static <T> void readSyncVars(Class<? extends T> clazz, T obj, CompoundNBT tags)
         {
             // Try to read from NBT for fields marked with SyncVariable.
-            for (Field field : obj.getClass().getDeclaredFields())
+            for (Field field : clazz.getDeclaredFields())
             {
                 for (Annotation annotation : field.getDeclaredAnnotations())
                 {
@@ -184,7 +185,7 @@ public @interface SyncVariable
                             {
                                 ((LazyOptional<INBTSerializable<CompoundNBT>>) field.get(obj)).ifPresent(compoundNBTINBTSerializable -> compoundNBTINBTSerializable.deserializeNBT(tags.getCompound(name)));
                             }
-                            else if (field.getType() == ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class))
+                            else if (Arrays.stream(field.getType().getInterfaces()).anyMatch(aClass -> aClass == ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class)))
                             {
                                 ((INBTSerializable<CompoundNBT>) field.get(obj)).deserializeNBT(tags.getCompound(name));
                             }
@@ -217,11 +218,12 @@ public @interface SyncVariable
          * @return The modified tags.
          */
         @SuppressWarnings("unchecked") // from serializer
-        public static CompoundNBT writeSyncVars(Object obj, CompoundNBT tags, Type syncType)
+        public static <T> CompoundNBT writeSyncVars(Class<? extends T> clazz, T obj, CompoundNBT tags, Type syncType)
         {
 
+
             // Try to write to NBT for fields marked with SyncVariable.
-            for (Field field : obj.getClass().getDeclaredFields())
+            for (Field field : clazz.getDeclaredFields())
             {
                 for (Annotation annotation : field.getDeclaredAnnotations())
                 {

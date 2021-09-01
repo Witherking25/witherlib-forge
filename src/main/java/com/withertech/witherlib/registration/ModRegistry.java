@@ -22,6 +22,7 @@ import com.mojang.datafixers.util.Pair;
 import com.withertech.witherlib.WitherLib;
 import com.withertech.witherlib.data.*;
 import com.withertech.witherlib.gui.TileGui;
+import com.withertech.witherlib.network.PacketChannel;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.data.DataGenerator;
@@ -84,7 +85,9 @@ public class ModRegistry
 
     public final Supplier<BuilderTabRegistry> TABS;
 
-    public final Supplier<BuilderGuiTileRegistry> GUIS;
+    public final Supplier<BuilderGuiRegistry> GUIS;
+
+    public final Supplier<BuilderNetworkRegistry> NETS;
 
     public ModRegistry(
             ModData mod,
@@ -99,8 +102,8 @@ public class ModRegistry
             Supplier<BuilderDataGenerator> data_generator,
             Supplier<BuilderTagRegistry> tags,
             Supplier<BuilderTabRegistry> tabs,
-            Supplier<BuilderGuiTileRegistry> guis
-    )
+            Supplier<BuilderGuiRegistry> guis,
+            Supplier<BuilderNetworkRegistry> nets)
     {
         MOD = mod;
         BLOCKS = blocks;
@@ -115,6 +118,7 @@ public class ModRegistry
         TAGS = tags;
         TABS = tabs;
         GUIS = guis;
+        NETS = nets;
 
         MOD.MOD_EVENT_BUS.addListener(this::onGatherData);
         MOD.MOD_EVENT_BUS.addListener(this::onClientSetup);
@@ -136,6 +140,16 @@ public class ModRegistry
         FLUIDS.get().register(MOD.MOD_EVENT_BUS);
         WitherLib.LOGGER.info("Registering Entities for " + MOD.MODID);
         ENTITIES.get().register(MOD.MOD_EVENT_BUS);
+        WitherLib.LOGGER.info("Registering Networks for " + MOD.MODID);
+        NETS.get().getCHANNELS().forEach((id, packetChannel) ->
+                NETS.get().getPACKETS().get(id).forEach((packet) ->
+                        registerPacket(packetChannel, packet.getPacketClass(), packet.getPacketSupplier(), packet.isShouldBeQueued())));
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void registerPacket(@Nonnull PacketChannel channel, Class clazz, Supplier supplier, boolean queue)
+    {
+        channel.registerMessage(clazz, supplier, queue);
     }
 
     public <T extends Block> RegistryObject<T> getBlock(TypedRegKey<RegistryObject<T>> key)
@@ -186,6 +200,16 @@ public class ModRegistry
     public ItemGroup getTab(String key)
     {
         return TABS.get().getTab(key);
+    }
+
+    public PacketChannel getNet(String key)
+    {
+        return NETS.get().getCHANNELS().get(key);
+    }
+
+    public PacketChannel getNet()
+    {
+        return getNet("main");
     }
 
     public void onClientSetup(FMLClientSetupEvent event)

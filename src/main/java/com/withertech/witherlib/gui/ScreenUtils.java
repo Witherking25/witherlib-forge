@@ -219,21 +219,21 @@ public class ScreenUtils
         drawTexture(matrixStack, x + 4, y + 4, width - 8, height - 8, 4 / 9f, 4 / 9f, 1 / 9f, 1 / 9f);
     }
 
-    public static void drawButtonBackground(MatrixStack matrixStack, float x, float y, float width, float height, float yOffset)
+    public static void drawButtonBackground(MatrixStack matrixStack, float x, float y, float width, float height,  float xOffset, float yOffset)
     {
         Minecraft.getInstance().getTextureManager().bind(BUTTON_BACKGROUND);
         // corners
-        drawTexture(matrixStack, x, y, 2, 2, 0, yOffset, 2 / 5f, 2 / 15f);
-        drawTexture(matrixStack, x + width - 2, y, 2, 2, 3 / 5f, yOffset, 2 / 5f, 2 / 15f);
-        drawTexture(matrixStack, x + width - 2, y + height - 2, 2, 2, 3 / 5f, yOffset + 3 / 15f, 2 / 5f, 2 / 15f);
-        drawTexture(matrixStack, x, y + height - 2, 2, 2, 0, yOffset + 3 / 15f, 2 / 5f, 2 / 15f);
+        drawTexture(matrixStack, x, y, 2, 2, xOffset, yOffset, 2 / 10f, 2 / 15f);
+        drawTexture(matrixStack, x + width - 2, y, 2, 2, xOffset + 3 / 10f, yOffset, 2 / 10f, 2 / 15f);
+        drawTexture(matrixStack, x + width - 2, y + height - 2, 2, 2, xOffset + 3 / 10f, yOffset + 3 / 15f, 2 / 10f, 2 / 15f);
+        drawTexture(matrixStack, x, y + height - 2, 2, 2, xOffset, yOffset + 3 / 15f, 2 / 10f, 2 / 15f);
         // edges
-        drawTexture(matrixStack, x + 2, y, width - 4, 2, 2 / 5f, yOffset, 1 / 5f, 2 / 15f);
-        drawTexture(matrixStack, x + 2, y + height - 2, width - 4, 2, 2 / 5f, yOffset + 3 / 15f, 1 / 5f, 2 / 15f);
-        drawTexture(matrixStack, x, y + 2, 2, height - 4, 0, yOffset + 2 / 15f, 2 / 5f, 1 / 15f);
-        drawTexture(matrixStack, x + width - 2, y + 2, 2, height - 4, 3 / 5f, yOffset + 2 / 15f, 2 / 5f, 1 / 15f);
+        drawTexture(matrixStack, x + 2, y, width - 4, 2, xOffset + 2 / 10f, yOffset, 1 / 10f, 2 / 15f);
+        drawTexture(matrixStack, x + 2, y + height - 2, width - 4, 2, xOffset + 2 / 10f, yOffset + 3 / 15f, 1 / 10f, 2 / 15f);
+        drawTexture(matrixStack, x, y + 2, 2, height - 4, xOffset, yOffset + 2 / 15f, 2 / 10f, 1 / 15f);
+        drawTexture(matrixStack, x + width - 2, y + 2, 2, height - 4, xOffset + 3 / 10f, yOffset + 2 / 15f, 2 / 10f, 1 / 15f);
         // center
-        drawTexture(matrixStack, x + 2, y + 2, width - 4, height - 4, 2 / 5f, yOffset + 2 / 15f, 1 / 5f, 1 / 15f);
+        drawTexture(matrixStack, x + 2, y + 2, width - 4, height - 4, xOffset + 2 / 10f, yOffset + 2 / 15f, 1 / 10f, 1 / 15f);
     }
 
     public static void drawTexture(MatrixStack matrixStack, float x, float y, float width, float height)

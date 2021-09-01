@@ -18,16 +18,49 @@
 
 package com.withertech.witherlib.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
+
+import javax.annotation.Nonnull;
 
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
 public abstract class TileEntityBaseContainerScreen<T extends TileEntity, X extends TileEntityBaseContainer<X, T>> extends ObjectBaseContainerScreen<T, X>
 {
-    public TileEntityBaseContainerScreen(X screenContainer, ITextComponent title)
+    public TileEntityBaseContainerScreen(X screenContainer, PlayerInventory inventory, ITextComponent title)
     {
         super(screenContainer, title);
     }
+
+
+
+    protected abstract int sizeX(@Nonnull T tile);
+
+    protected abstract int sizeY(@Nonnull T tile);
+
+    protected abstract void addWidgets(@Nonnull T tile);
+
+    protected void tick(@Nonnull T tile)
+    {
+    }
+
+    protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, @Nonnull T tile)
+    {
+        super.renderBackground(matrixStack, mouseX, mouseY, tile);
+    }
+
+    protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, @Nonnull T tile)
+    {
+        super.renderForeground(matrixStack, mouseX, mouseY, tile);
+    }
+
+    protected void renderTooltips(MatrixStack matrixStack, int mouseX, int mouseY, @Nonnull T tile)
+    {
+        super.renderTooltips(matrixStack, mouseX, mouseY, tile);
+    }
+
+
 }

@@ -63,7 +63,7 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
      */
     protected CompoundNBT writeData()
     {
-        return SyncVariable.Helper.writeSyncVars(this, new CompoundNBT(), SyncVariable.Type.WRITE);
+        return SyncVariable.Helper.writeSyncVars(getClass(), this, new CompoundNBT(), SyncVariable.Type.WRITE);
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
      */
     protected CompoundNBT writeClientData()
     {
-        return SyncVariable.Helper.writeSyncVars(this, new CompoundNBT(), SyncVariable.Type.PACKET);
+        return SyncVariable.Helper.writeSyncVars(getClass(), this, new CompoundNBT(), SyncVariable.Type.PACKET);
     }
 
     /**
@@ -96,7 +96,7 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
      */
     public void readData(CompoundNBT tag)
     {
-        SyncVariable.Helper.readSyncVars(this, tag);
+        SyncVariable.Helper.readSyncVars(getClass(), this, tag);
     }
 
     @Nonnull

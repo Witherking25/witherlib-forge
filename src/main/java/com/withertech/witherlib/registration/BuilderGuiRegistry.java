@@ -29,11 +29,11 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BuilderGuiTileRegistry
+public class BuilderGuiRegistry
 {
     private final Map<TypedGuiKey<? extends TileGui<? extends BaseTileBlock<?>, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, TileGui<?, ?, ?, ?, ?>> GUI_TILES;
 
-    private BuilderGuiTileRegistry(Builder builder)
+    private BuilderGuiRegistry(Builder builder)
     {
         GUI_TILES = builder.GUI_TILES;
     }
@@ -68,9 +68,9 @@ public class BuilderGuiTileRegistry
             return this;
         }
 
-        public BuilderGuiTileRegistry build()
+        public BuilderGuiRegistry build()
         {
-            return new BuilderGuiTileRegistry(this);
+            return new BuilderGuiRegistry(this);
         }
 
 

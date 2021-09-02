@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class BuilderGuiRegistry
 {
-    private final Map<TypedGuiKey<? extends TileGui<? extends BaseTileBlock<?>, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, TileGui<?, ?, ?, ?, ?>> GUI_TILES;
+    private final Map<TypedGuiKey<? extends TileGui<? extends BaseTileBlock<?>, ?, ?, ?>, ?, ?, ?, ?>, TileGui<?, ?, ?, ?>> GUI_TILES;
 
     private BuilderGuiRegistry(Builder builder)
     {
@@ -44,24 +44,24 @@ public class BuilderGuiRegistry
     }
 
     @SuppressWarnings("unchecked")
-    public <B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>> TileGui<B, T, C, S, R> get(TypedGuiKey<TileGui<B, T, C, S, R>, B, T, C, S, R> key)
+    public <B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>> TileGui<B, T, C, S> get(TypedGuiKey<TileGui<B, T, C, S>, B, T, C, S> key)
     {
-        return (TileGui<B, T, C, S, R>) GUI_TILES.get(key);
+        return (TileGui<B, T, C, S>) GUI_TILES.get(key);
     }
 
-    public Map<TypedGuiKey<? extends TileGui<? extends BaseTileBlock<?>, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, TileGui<?, ?, ?, ?, ?>> getGUIS()
+    public Map<TypedGuiKey<? extends TileGui<? extends BaseTileBlock<?>, ?, ?, ?>, ?, ?, ?, ?>, TileGui<?, ?, ?, ?>> getGUIS()
     {
         return GUI_TILES;
     }
 
     public static class Builder
     {
-        private final Map<TypedGuiKey<? extends TileGui<?, ?, ?, ?, ?>, ?, ?, ?, ?, ?>, TileGui<?, ?, ?, ?, ?>> GUI_TILES = new HashMap<>();
+        private final Map<TypedGuiKey<? extends TileGui<?, ?, ?, ?>, ?, ?, ?, ?>, TileGui<?, ?, ?, ?>> GUI_TILES = new HashMap<>();
 
-        public <B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<T>>
+        public <B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>>
         Builder add(
-                TypedGuiKey<? extends TileGui<B, T, C, S, R>, B, T, C, S, R> id,
-                TileGui<B, T, C, S, R> tileGui
+                TypedGuiKey<? extends TileGui<B, T, C, S>, B, T, C, S> id,
+                TileGui<B, T, C, S> tileGui
         )
         {
             GUI_TILES.put(id, tileGui);

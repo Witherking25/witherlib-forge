@@ -30,13 +30,12 @@ import net.minecraftforge.fml.RegistryObject;
 import javax.annotation.Nullable;
 import java.util.function.Function;
 
-public abstract class TileGui<B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>, R extends TileEntityRenderer<? super T>>
+public abstract class TileGui<B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>>
 {
     protected final RegistryObject<B> block = registerBlock();
     protected final RegistryObject<TileEntityType<T>> tile = registerTile();
     protected final RegistryObject<ContainerType<C>> container = registerContainer();
     protected final IScreenFactory<C, S> screen = registerScreen();
-    protected final Function<? super TileEntityRendererDispatcher, R> ter = registerTer();
 
     protected abstract RegistryObject<B> registerBlock();
 
@@ -64,14 +63,5 @@ public abstract class TileGui<B extends BaseTileBlock<T>, T extends BaseTileEnti
     public final IScreenFactory<C, S> getScreen()
     {
         return screen;
-    }
-
-    @Nullable
-    protected abstract Function<? super TileEntityRendererDispatcher, R> registerTer();
-
-    @Nullable
-    public final Function<? super TileEntityRendererDispatcher, R> getTer()
-    {
-        return ter;
     }
 }

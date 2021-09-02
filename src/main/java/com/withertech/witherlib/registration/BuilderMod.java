@@ -19,7 +19,6 @@
 package com.withertech.witherlib.registration;
 
 import com.withertech.witherlib.data.BuilderDataGenerator;
-import com.withertech.witherlib.network.PacketChannel;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
@@ -27,9 +26,6 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import javax.annotation.Nonnull;
-import java.util.function.Supplier;
 
 public abstract class BuilderMod
 {
@@ -44,12 +40,14 @@ public abstract class BuilderMod
     private BuilderForgeRegistry<EntityType<?>> ENTITIES;
     private BuilderEntityAttributeRegistry ENTITY_ATTRIBUTES;
     private BuilderEntityRendererRegistry ENTITY_RENDERERS;
+    private BuilderTileEntityRendererRegistry TILE_RENDERERS;
     private BuilderDataGenerator DATA_GENERATORS;
     private BuilderTagRegistry TAGS;
     private BuilderTabRegistry TABS;
 
     private BuilderGuiRegistry GUIS;
     private BuilderNetworkRegistry NETS;
+    private BuilderConfigRegistry CONFIGS;
 
     protected BuilderMod(ModData mod)
     {
@@ -65,11 +63,14 @@ public abstract class BuilderMod
                         this::getEntities,
                         this::getEntityAttributes,
                         this::getEntityRenderers,
+                        this::getTileRenderers,
                         this::getDataGenerators,
                         this::getTags,
                         this::getTabs,
                         this::getGuis,
-                        this::getNets);
+                        this::getNets,
+                        this::getConfigs
+                );
     }
 
 
@@ -185,6 +186,20 @@ public abstract class BuilderMod
         return ENTITY_RENDERERS;
     }
 
+    protected BuilderTileEntityRendererRegistry registerTileRenderers()
+    {
+        return BuilderTileEntityRendererRegistry.builder().build();
+    }
+
+    protected final BuilderTileEntityRendererRegistry getTileRenderers()
+    {
+        if (TILE_RENDERERS == null)
+        {
+            TILE_RENDERERS = registerTileRenderers();
+        }
+        return TILE_RENDERERS;
+    }
+
     protected BuilderDataGenerator registerDataGenerators()
     {
         return BuilderDataGenerator.builder(MOD).build();
@@ -253,5 +268,19 @@ public abstract class BuilderMod
             NETS = registerNets();
         }
         return NETS;
+    }
+
+    protected BuilderConfigRegistry registerConfigs()
+    {
+        return BuilderConfigRegistry.builder().build();
+    }
+
+    protected final BuilderConfigRegistry getConfigs()
+    {
+        if (CONFIGS == null)
+        {
+            CONFIGS = registerConfigs();
+        }
+        return CONFIGS;
     }
 }

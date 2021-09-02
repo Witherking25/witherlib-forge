@@ -66,6 +66,7 @@ public class BuilderForgeRegistry<T extends IForgeRegistryEntry<T>>
         return ENTRIES;
     }
 
+    @SuppressWarnings("unchecked")
     public <S extends T> RegistryObject<S> get(TypedRegKey<RegistryObject<S>> key)
     {
         return (RegistryObject<S>) ENTRIES.get(key);

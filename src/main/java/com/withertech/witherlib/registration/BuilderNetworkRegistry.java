@@ -22,6 +22,7 @@ import com.withertech.witherlib.network.BasePacket;
 import com.withertech.witherlib.network.PacketChannel;
 import javafx.util.Pair;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,20 @@ public class BuilderNetworkRegistry
     public Map<String, List<Channel.Packet<?>>> getPACKETS()
     {
         return PACKETS;
+    }
+
+    public void register()
+    {
+        getCHANNELS().forEach((id, packetChannel) ->
+                getPACKETS().get(id).forEach((packet) ->
+                        registerPacket(packetChannel, packet.getPacketClass(), packet.getPacketSupplier(), packet.isShouldBeQueued())));
+    }
+
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void registerPacket(@Nonnull PacketChannel channel, Class clazz, Supplier supplier, boolean queue)
+    {
+        channel.registerMessage(clazz, supplier, queue);
     }
 
     public static Builder builder(ModData mod)

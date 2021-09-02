@@ -16,25 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib;
+package com.withertech.witherlib.render;
 
-import com.withertech.witherlib.registration.BuilderMod;
-import com.withertech.witherlib.registration.ModData;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.withertech.witherlib.tile.BaseTileEntity;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 
-@Mod(WitherLib.MODID)
-public class WitherLib extends BuilderMod
+import java.util.function.Function;
+
+@FunctionalInterface
+public interface ITileEntityRendererFactory<T extends BaseTileEntity<T>> extends Function<TileEntityRendererDispatcher, TileEntityRenderer<T>>
 {
-    public static final String MODID = "witherlib";
-    public static final Logger LOGGER = LogManager.getLogger();
-    public static WitherLib INSTANCE;
 
-    public WitherLib()
-    {
-        super(new ModData(MODID, FMLJavaModLoadingContext.get().getModEventBus()));
-        INSTANCE = this;
-    }
 }

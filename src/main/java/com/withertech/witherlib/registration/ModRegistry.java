@@ -20,9 +20,10 @@ package com.withertech.witherlib.registration;
 
 import com.mojang.datafixers.util.Pair;
 import com.withertech.witherlib.WitherLib;
+import com.withertech.witherlib.config.BaseConfig;
 import com.withertech.witherlib.data.*;
-import com.withertech.witherlib.gui.TileGui;
 import com.withertech.witherlib.network.PacketChannel;
+import com.withertech.witherlib.render.ITileEntityRendererFactory;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.data.DataGenerator;
@@ -42,6 +43,7 @@ import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.fml.RegistryObject;
@@ -79,6 +81,8 @@ public class ModRegistry
 
     public final Supplier<BuilderEntityRendererRegistry> ENTITY_RENDERERS;
 
+    public final Supplier<BuilderTileEntityRendererRegistry> TILE_RENDERERS;
+
     public final Supplier<BuilderDataGenerator> DATA_GENERATOR;
 
     public final Supplier<BuilderTagRegistry> TAGS;
@@ -88,6 +92,8 @@ public class ModRegistry
     public final Supplier<BuilderGuiRegistry> GUIS;
 
     public final Supplier<BuilderNetworkRegistry> NETS;
+
+    public final Supplier<BuilderConfigRegistry> CONFIGS;
 
     public ModRegistry(
             ModData mod,
@@ -99,11 +105,14 @@ public class ModRegistry
             Supplier<BuilderForgeRegistry<EntityType<?>>> entities,
             Supplier<BuilderEntityAttributeRegistry> entity_attributes,
             Supplier<BuilderEntityRendererRegistry> entity_renderers,
+            Supplier<BuilderTileEntityRendererRegistry> tile_renderers,
             Supplier<BuilderDataGenerator> data_generator,
             Supplier<BuilderTagRegistry> tags,
             Supplier<BuilderTabRegistry> tabs,
             Supplier<BuilderGuiRegistry> guis,
-            Supplier<BuilderNetworkRegistry> nets)
+            Supplier<BuilderNetworkRegistry> nets,
+            Supplier<BuilderConfigRegistry> configs
+    )
     {
         MOD = mod;
         BLOCKS = blocks;
@@ -114,11 +123,13 @@ public class ModRegistry
         ENTITIES = entities;
         ENTITY_ATTRIBUTES = entity_attributes;
         ENTITY_RENDERERS = entity_renderers;
+        TILE_RENDERERS = tile_renderers;
         DATA_GENERATOR = data_generator;
         TAGS = tags;
         TABS = tabs;
         GUIS = guis;
         NETS = nets;
+        CONFIGS = configs;
 
         MOD.MOD_EVENT_BUS.addListener(this::onGatherData);
         MOD.MOD_EVENT_BUS.addListener(this::onClientSetup);
@@ -141,15 +152,9 @@ public class ModRegistry
         WitherLib.LOGGER.info("Registering Entities for " + MOD.MODID);
         ENTITIES.get().register(MOD.MOD_EVENT_BUS);
         WitherLib.LOGGER.info("Registering Networks for " + MOD.MODID);
-        NETS.get().getCHANNELS().forEach((id, packetChannel) ->
-                NETS.get().getPACKETS().get(id).forEach((packet) ->
-                        registerPacket(packetChannel, packet.getPacketClass(), packet.getPacketSupplier(), packet.isShouldBeQueued())));
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private void registerPacket(@Nonnull PacketChannel channel, Class clazz, Supplier supplier, boolean queue)
-    {
-        channel.registerMessage(clazz, supplier, queue);
+        NETS.get().register();
+        WitherLib.LOGGER.info("Registering Configs for " + MOD.MODID);
+        CONFIGS.get().register();
     }
 
     public <T extends Block> RegistryObject<T> getBlock(TypedRegKey<RegistryObject<T>> key)
@@ -212,35 +217,55 @@ public class ModRegistry
         return getNet("main");
     }
 
+    public <T extends BaseConfig> T getConfig(TypedRegKey<T> key)
+    {
+        return CONFIGS.get().getConfig(key);
+    }
+
+    public <T extends BaseConfig> ForgeConfigSpec getSpec(TypedRegKey<T> key)
+    {
+        return CONFIGS.get().getSpec(key);
+    }
+
     public void onClientSetup(FMLClientSetupEvent event)
     {
         ENTITIES.get().getENTRIES().forEach((key, entityTypeRegistryObject) ->
         {
             if (ENTITY_RENDERERS.get().containsKey(key.getId()))
             {
-                RenderingRegistry.registerEntityRenderingHandler((EntityType<? extends Entity>) entityTypeRegistryObject.get(), (IRenderFactory<? super Entity>) ENTITY_RENDERERS.get().getEntity(key.getId()));
+                registerEntityRenderingHandler(entityTypeRegistryObject.get(), ENTITY_RENDERERS.get().getEntity(key.getId()));
+            }
+        });
+        TILES.get().getENTRIES().forEach((key, tileEntityTypeRegistryObject) ->
+        {
+            if (TILE_RENDERERS.get().containsKey(key.getId()))
+            {
+                bindTileEntityRenderer(tileEntityTypeRegistryObject.get(), TILE_RENDERERS.get().get(key.getId()));
             }
         });
         GUIS.get().getGUIS().forEach((key, tileGui) ->
-        {
-            if (tileGui.getTer() != null)
-            {
-                bindTileEntityRenderer(tileGui);
-            }
-            registerScreen(tileGui);
-        });
+                registerScreen(tileGui.getContainer().get(), tileGui.getScreen()));
     }
 
-    private void bindTileEntityRenderer(TileGui tileGui)
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void bindTileEntityRenderer(TileEntityType tile, ITileEntityRendererFactory renderer)
     {
-        ClientRegistry.bindTileEntityRenderer((TileEntityType<? extends TileEntity>) tileGui.getTile().get(), tileGui.getTer());
+        ClientRegistry.bindTileEntityRenderer(tile, renderer);
     }
 
-    private void registerScreen(TileGui tileGui)
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void registerScreen(ContainerType container, ScreenManager.IScreenFactory screen)
     {
-        ScreenManager.register((ContainerType<? extends Container>) tileGui.getContainer().get(), tileGui.getScreen());
+        ScreenManager.register(container, screen);
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void registerEntityRenderingHandler(EntityType entity, IRenderFactory renderer)
+    {
+        RenderingRegistry.registerEntityRenderingHandler(entity, renderer);
+    }
+
+    @SuppressWarnings("unchecked")
     public void onEntityAttributeCreation(EntityAttributeCreationEvent event)
     {
         ENTITIES.get().getENTRIES().forEach((key, entityTypeRegistryObject) ->

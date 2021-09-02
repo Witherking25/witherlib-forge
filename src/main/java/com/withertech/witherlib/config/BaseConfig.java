@@ -16,25 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib;
+package com.withertech.witherlib.config;
 
-import com.withertech.witherlib.registration.BuilderMod;
-import com.withertech.witherlib.registration.ModData;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.withertech.witherlib.registration.TypedRegKey;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.Builder;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.fml.config.ModConfig;
 
-@Mod(WitherLib.MODID)
-public class WitherLib extends BuilderMod
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class BaseConfig
 {
-    public static final String MODID = "witherlib";
-    public static final Logger LOGGER = LogManager.getLogger();
-    public static WitherLib INSTANCE;
-
-    public WitherLib()
+    public BaseConfig(Builder builder)
     {
-        super(new ModData(MODID, FMLJavaModLoadingContext.get().getModEventBus()));
-        INSTANCE = this;
     }
+
+
+    public abstract ModConfig.Type getType();
 }

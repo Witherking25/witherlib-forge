@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.render;
+package com.withertech.witherlib.util;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -59,7 +59,7 @@ public class RenderUtils
         RenderSystem.defaultBlendFunc();
     });
     private static final RenderType LINES_NO_DEPTH = RenderType.create(
-            "supermartijn642corelib:highlight",
+            "witherlib:highlight",
             DefaultVertexFormats.POSITION_COLOR,
             GL11.GL_LINES,
             128,

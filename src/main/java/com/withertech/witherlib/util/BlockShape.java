@@ -276,9 +276,9 @@ public class BlockShape
         return null;
     }
 
-    private BlockShape transformBoxes(Function<AxisAlignedBB, AxisAlignedBB> transformer)
+    private BlockShape transformBoxes(BoxTransformer transformer)
     {
-        return new BlockShape(this.toBoxes().stream().map(transformer::apply).collect(Collectors.toList()));
+        return new BlockShape(this.toBoxes().stream().map(transformer).collect(Collectors.toList()));
     }
 
     @Deprecated
@@ -287,15 +287,22 @@ public class BlockShape
         return this.shape;
     }
 
+    @FunctionalInterface
+    public interface BoxTransformer extends Function<AxisAlignedBB, AxisAlignedBB>
+    {
+        @Override
+        AxisAlignedBB apply(AxisAlignedBB axisAlignedBB);
+    }
+
+    @FunctionalInterface
     public interface LineConsumer
     {
-
         void apply(double x1, double y1, double z1, double x2, double y2, double z2);
     }
 
+    @FunctionalInterface
     public interface PointConsumer
     {
-
         void apply(double x, double y, double z);
     }
 }

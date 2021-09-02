@@ -49,6 +49,11 @@ public class TypedRegKey<X>
         this.type = type;
     }
 
+    public static <X> TypedRegKey<X> custom(String id, Class<X> clazz)
+    {
+        return new TypedRegKey<X>(id, ClassUtil.castClass(TypedRegKey.class));
+    }
+
     public static <X extends Block> TypedRegKey<RegistryObject<X>> block(String id, Class<X> clazz)
     {
         return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));

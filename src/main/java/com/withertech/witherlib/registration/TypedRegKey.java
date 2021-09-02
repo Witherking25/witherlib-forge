@@ -40,8 +40,8 @@ import java.util.Objects;
 
 public class TypedRegKey<X>
 {
-    protected final Class<X> type;
-    protected final String id;
+    private final Class<X> type;
+    private final String id;
 
     private TypedRegKey(String id, Class<X> type)
     {

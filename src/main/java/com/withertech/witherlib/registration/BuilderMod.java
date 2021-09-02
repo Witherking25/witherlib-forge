@@ -272,7 +272,7 @@ public abstract class BuilderMod
 
     protected BuilderConfigRegistry registerConfigs()
     {
-        return BuilderConfigRegistry.builder().build();
+        return BuilderConfigRegistry.builder(MOD).build();
     }
 
     protected final BuilderConfigRegistry getConfigs()

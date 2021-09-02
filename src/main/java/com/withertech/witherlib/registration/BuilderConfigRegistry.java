@@ -32,14 +32,17 @@ public class BuilderConfigRegistry
     private final Map<TypedRegKey<? extends BaseConfig>, Function<ForgeConfigSpec.Builder, BaseConfig>> FACTORIES;
     private final Map<TypedRegKey<? extends BaseConfig>, Pair<BaseConfig, ForgeConfigSpec>> CONFIGS = new HashMap<>();
 
+    private final ModData MOD;
+
     public BuilderConfigRegistry(Builder builder)
     {
         FACTORIES = builder.CONFIGS;
+        MOD = builder.MOD;
     }
 
-    public static Builder builder()
+    public static Builder builder(ModData mod)
     {
-        return new Builder();
+        return new Builder(mod);
     }
 
     @SuppressWarnings("unchecked")
@@ -75,15 +78,18 @@ public class BuilderConfigRegistry
         {
             Pair<BaseConfig, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(builderBaseConfigFunction);
             CONFIGS.put(typedRegKey, pair);
-            ModLoadingContext.get().registerConfig(pair.getLeft().getType(), pair.getRight());
+            ModLoadingContext.get().registerConfig(pair.getLeft().getType(), pair.getRight(), String.format("%s-%s.toml", MOD.MODID, typedRegKey.getId()));
         });
     }
 
     public static class Builder
     {
         private final Map<TypedRegKey<? extends BaseConfig>, Function<ForgeConfigSpec.Builder, BaseConfig>> CONFIGS = new HashMap<>();
+        private final ModData MOD;
 
-        private Builder() {}
+        private Builder(ModData mod) {
+            this.MOD = mod;
+        }
 
         @SuppressWarnings("unchecked")
         public <T extends BaseConfig> Builder add(TypedRegKey<T> key, Function<ForgeConfigSpec.Builder, T> value)

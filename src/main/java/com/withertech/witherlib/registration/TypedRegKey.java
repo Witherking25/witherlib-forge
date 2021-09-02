@@ -35,6 +35,7 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.Objects;
 
@@ -49,9 +50,9 @@ public class TypedRegKey<X>
         this.type = type;
     }
 
-    public static <X> TypedRegKey<X> custom(String id, Class<X> clazz)
+    public static <X extends IForgeRegistryEntry<? super X>> TypedRegKey<RegistryObject<X>> custom(String id, Class<X> clazz)
     {
-        return new TypedRegKey<X>(id, ClassUtil.castClass(TypedRegKey.class));
+        return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
     }
 
     public static <X extends Block> TypedRegKey<RegistryObject<X>> block(String id, Class<X> clazz)

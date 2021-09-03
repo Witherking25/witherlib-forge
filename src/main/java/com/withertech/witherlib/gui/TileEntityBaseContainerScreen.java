@@ -36,7 +36,6 @@ public abstract class TileEntityBaseContainerScreen<T extends TileEntity, X exte
     }
 
 
-
     protected abstract int sizeX(@Nonnull T tile);
 
     protected abstract int sizeY(@Nonnull T tile);

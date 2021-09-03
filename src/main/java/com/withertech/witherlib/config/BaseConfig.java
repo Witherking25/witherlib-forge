@@ -18,14 +18,8 @@
 
 package com.withertech.witherlib.config;
 
-import com.withertech.witherlib.registration.TypedRegKey;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.fml.config.ModConfig;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class BaseConfig
 {

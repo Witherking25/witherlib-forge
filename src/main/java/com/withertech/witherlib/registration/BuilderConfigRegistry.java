@@ -87,7 +87,8 @@ public class BuilderConfigRegistry
         private final Map<TypedRegKey<? extends BaseConfig>, Function<ForgeConfigSpec.Builder, BaseConfig>> CONFIGS = new HashMap<>();
         private final ModData MOD;
 
-        private Builder(ModData mod) {
+        private Builder(ModData mod)
+        {
             this.MOD = mod;
         }
 

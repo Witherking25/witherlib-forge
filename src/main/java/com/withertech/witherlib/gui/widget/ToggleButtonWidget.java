@@ -22,7 +22,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.withertech.witherlib.gui.ScreenUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.client.gui.widget.Slider;
 
 import java.util.function.Supplier;
 

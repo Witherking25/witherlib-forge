@@ -32,22 +32,26 @@ public abstract class BuilderMod
     public final ModRegistry REGISTRY;
     public final ModData MOD;
 
+    private BuilderCustomRegistryRegistry CUSTOM_REGISTRIES;
+    private BuilderCustomRegistryEntryRegistry CUSTOM_REGISTRY_ENTRIES;
+
     private BuilderForgeRegistry<Block> BLOCKS;
     private BuilderForgeRegistry<Item> ITEMS;
     private BuilderForgeRegistry<TileEntityType<?>> TILES;
     private BuilderForgeRegistry<ContainerType<?>> CONTAINERS;
     private BuilderForgeRegistry<Fluid> FLUIDS;
     private BuilderForgeRegistry<EntityType<?>> ENTITIES;
+
     private BuilderEntityAttributeRegistry ENTITY_ATTRIBUTES;
     private BuilderEntityRendererRegistry ENTITY_RENDERERS;
     private BuilderTileEntityRendererRegistry TILE_RENDERERS;
     private BuilderDataGenerator DATA_GENERATORS;
     private BuilderTagRegistry TAGS;
     private BuilderTabRegistry TABS;
-
     private BuilderGuiRegistry GUIS;
     private BuilderNetworkRegistry NETS;
     private BuilderConfigRegistry CONFIGS;
+
 
     protected BuilderMod(ModData mod)
     {
@@ -55,6 +59,8 @@ public abstract class BuilderMod
         REGISTRY = new ModRegistry
                 (
                         MOD,
+                        this::getCustomRegistries,
+                        this::getCustomRegistryEntries,
                         this::getBlocks,
                         this::getItems,
                         this::getTiles,
@@ -73,6 +79,33 @@ public abstract class BuilderMod
                 );
     }
 
+    protected BuilderCustomRegistryRegistry registerCustomRegistries()
+    {
+        return BuilderCustomRegistryRegistry.builder(MOD).build();
+    }
+
+    protected final BuilderCustomRegistryRegistry getCustomRegistries()
+    {
+        if (CUSTOM_REGISTRIES == null)
+        {
+            CUSTOM_REGISTRIES = registerCustomRegistries();
+        }
+        return CUSTOM_REGISTRIES;
+    }
+
+    protected BuilderCustomRegistryEntryRegistry registerCustomRegistryEntries()
+    {
+        return BuilderCustomRegistryEntryRegistry.builder().build();
+    }
+
+    protected final BuilderCustomRegistryEntryRegistry getCustomRegistryEntries()
+    {
+        if (CUSTOM_REGISTRY_ENTRIES == null)
+        {
+            CUSTOM_REGISTRY_ENTRIES = registerCustomRegistryEntries();
+        }
+        return CUSTOM_REGISTRY_ENTRIES;
+    }
 
     protected BuilderForgeRegistry<Block> registerBlocks()
     {

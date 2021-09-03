@@ -45,13 +45,17 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -64,6 +68,10 @@ import java.util.stream.Stream;
 public class ModRegistry
 {
     public final ModData MOD;
+
+    public final Supplier<BuilderCustomRegistryRegistry> REGISTRIES;
+
+    public final Supplier<BuilderCustomRegistryEntryRegistry> CUSTOM_REGISTRY_ENTRIES;
 
     public final Supplier<BuilderForgeRegistry<Block>> BLOCKS;
 
@@ -97,7 +105,8 @@ public class ModRegistry
 
     public ModRegistry(
             ModData mod,
-            Supplier<BuilderForgeRegistry<Block>> blocks,
+            Supplier<BuilderCustomRegistryRegistry> registries,
+            Supplier<BuilderCustomRegistryEntryRegistry> custom_registry_entries, Supplier<BuilderForgeRegistry<Block>> blocks,
             Supplier<BuilderForgeRegistry<Item>> items,
             Supplier<BuilderForgeRegistry<TileEntityType<?>>> tiles,
             Supplier<BuilderForgeRegistry<ContainerType<?>>> containers,
@@ -115,6 +124,8 @@ public class ModRegistry
     )
     {
         MOD = mod;
+        REGISTRIES = registries;
+        CUSTOM_REGISTRY_ENTRIES = custom_registry_entries;
         BLOCKS = blocks;
         ITEMS = items;
         TILES = tiles;
@@ -134,6 +145,7 @@ public class ModRegistry
         MOD.MOD_EVENT_BUS.addListener(this::onGatherData);
         MOD.MOD_EVENT_BUS.addListener(this::onClientSetup);
         MOD.MOD_EVENT_BUS.addListener(this::onEntityAttributeCreation);
+        MOD.MOD_EVENT_BUS.addListener(this::onNewRegistry);
         register();
     }
 
@@ -151,6 +163,10 @@ public class ModRegistry
         FLUIDS.get().register(MOD.MOD_EVENT_BUS);
         WitherLib.LOGGER.info("Registering Entities for " + MOD.MODID);
         ENTITIES.get().register(MOD.MOD_EVENT_BUS);
+
+        WitherLib.LOGGER.info("Registering Custom Registry Entries for " + MOD.MODID);
+        CUSTOM_REGISTRY_ENTRIES.get().register(MOD.MOD_EVENT_BUS);
+
         WitherLib.LOGGER.info("Registering Networks for " + MOD.MODID);
         NETS.get().register();
         WitherLib.LOGGER.info("Registering Configs for " + MOD.MODID);
@@ -227,6 +243,16 @@ public class ModRegistry
         return CONFIGS.get().getSpec(key);
     }
 
+    public <T extends IForgeRegistryEntry<T>> ForgeRegistry<T> getCustomRegistry(TypedRegKey<T> type)
+    {
+        return REGISTRIES.get().get(type);
+    }
+
+    public <T extends IForgeRegistryEntry<T>> BuilderForgeRegistry<T> getCustomRegistryEntry(Class<T> type)
+    {
+        return CUSTOM_REGISTRY_ENTRIES.get().get(type);
+    }
+
     public void onClientSetup(FMLClientSetupEvent event)
     {
         ENTITIES.get().getENTRIES().forEach((key, entityTypeRegistryObject) ->
@@ -275,6 +301,12 @@ public class ModRegistry
                 event.put((EntityType<? extends LivingEntity>) entityTypeRegistryObject.get(), ENTITY_ATTRIBUTES.get().getEntity(key.getId()).build());
             }
         });
+    }
+
+    @SubscribeEvent
+    public void onNewRegistry(RegistryEvent.NewRegistry event)
+    {
+        REGISTRIES.get().register();
     }
 
     public void onGatherData(GatherDataEvent event)

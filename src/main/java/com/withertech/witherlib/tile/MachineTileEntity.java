@@ -103,7 +103,9 @@ public abstract class MachineTileEntity<T extends MachineTileEntity<T>> extends 
                 needUpdate = true;
             }
             if (needUpdate)
+            {
                 dataChanged();
+            }
         }
     }
 }

@@ -26,14 +26,12 @@ import com.withertech.witherlib.gui.TileGui;
 import com.withertech.witherlib.tile.BaseTileEntity;
 import com.withertech.witherlib.util.ClassUtil;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -50,47 +48,52 @@ public class TypedRegKey<X>
         this.type = type;
     }
 
-    public static <X extends IForgeRegistryEntry<? super X>> TypedRegKey<RegistryObject<X>> custom(String id, Class<X> clazz)
+    public static <X extends IForgeRegistryEntry<X>> TypedRegKey<X> registry(String id, Class<X> type)
     {
         return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
     }
 
-    public static <X extends Block> TypedRegKey<RegistryObject<X>> block(String id, Class<X> clazz)
+    public static <X extends IForgeRegistryEntry<X>> TypedRegKey<RegistryObject<X>> custom(String id, Class<X> type)
     {
         return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
     }
 
-    public static <X extends Item> TypedRegKey<RegistryObject<X>> item(String id, Class<X> clazz)
+    public static <X extends Block> TypedRegKey<RegistryObject<X>> block(String id, Class<X> type)
     {
         return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
     }
 
-    public static <X extends Fluid> TypedRegKey<RegistryObject<X>> fluid(String id, Class<X> clazz)
+    public static <X extends Item> TypedRegKey<RegistryObject<X>> item(String id, Class<X> type)
     {
         return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
     }
 
-    public static <X extends Entity> TypedRegKey<RegistryObject<EntityType<X>>> entity(String id, Class<X> clazz)
+    public static <X extends Fluid> TypedRegKey<RegistryObject<X>> fluid(String id, Class<X> type)
     {
         return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
     }
 
-    public static <X extends BaseTileEntity<X>> TypedRegKey<RegistryObject<TileEntityType<X>>> tile(String id, Class<X> clazz)
+    public static <X extends Entity> TypedRegKey<RegistryObject<EntityType<X>>> entity(String id, Class<X> type)
     {
         return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
     }
 
-    public static <X extends TileEntityBaseContainer<X, ?>> TypedRegKey<RegistryObject<ContainerType<X>>> container(String id, Class<X> clazz)
+    public static <X extends BaseTileEntity<X>> TypedRegKey<RegistryObject<TileEntityType<X>>> tile(String id, Class<X> type)
     {
         return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
     }
 
-    public static <X extends BaseConfig> TypedRegKey<X> config(String id, Class<X> clazz)
+    public static <X extends TileEntityBaseContainer<X, ?>> TypedRegKey<RegistryObject<ContainerType<X>>> container(String id, Class<X> type)
     {
         return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
     }
 
-    public static <X extends TileGui<B, T, C, S>, B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>> TypedGuiKey<X, B, T, C, S> gui(String id, Class<X> clazz)
+    public static <X extends BaseConfig> TypedRegKey<X> config(String id, Class<X> type)
+    {
+        return new TypedRegKey<>(id, ClassUtil.castClass(TypedRegKey.class));
+    }
+
+    public static <X extends TileGui<B, T, C, S>, B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>> TypedGuiKey<X, B, T, C, S> gui(String id, Class<X> type)
     {
         return new TypedGuiKey<>(id, ClassUtil.castClass(TypedRegKey.class));
     }

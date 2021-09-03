@@ -21,14 +21,9 @@ package com.withertech.witherlib.gui;
 import com.withertech.witherlib.block.BaseTileBlock;
 import com.withertech.witherlib.tile.BaseTileEntity;
 import net.minecraft.client.gui.ScreenManager.IScreenFactory;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
-
-import javax.annotation.Nullable;
-import java.util.function.Function;
 
 public abstract class TileGui<B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>>
 {

@@ -20,7 +20,6 @@ package com.withertech.witherlib.registration;
 
 import com.withertech.witherlib.network.BasePacket;
 import com.withertech.witherlib.network.PacketChannel;
-import javafx.util.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -40,6 +39,16 @@ public class BuilderNetworkRegistry
         PACKETS = builder.PACKETS;
     }
 
+    public static Builder builder(ModData mod)
+    {
+        return new Builder(mod);
+    }
+
+    public static Channel.ChannelBuilder channel()
+    {
+        return new Channel.ChannelBuilder();
+    }
+
     public Map<String, PacketChannel> getCHANNELS()
     {
         return CHANNELS;
@@ -57,21 +66,10 @@ public class BuilderNetworkRegistry
                         registerPacket(packetChannel, packet.getPacketClass(), packet.getPacketSupplier(), packet.isShouldBeQueued())));
     }
 
-
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void registerPacket(@Nonnull PacketChannel channel, Class clazz, Supplier supplier, boolean queue)
     {
         channel.registerMessage(clazz, supplier, queue);
-    }
-
-    public static Builder builder(ModData mod)
-    {
-        return new Builder(mod);
-    }
-
-    public static Channel.ChannelBuilder channel()
-    {
-        return new Channel.ChannelBuilder();
     }
 
     public static class Builder

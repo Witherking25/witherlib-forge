@@ -219,7 +219,7 @@ public class ScreenUtils
         drawTexture(matrixStack, x + 4, y + 4, width - 8, height - 8, 4 / 9f, 4 / 9f, 1 / 9f, 1 / 9f);
     }
 
-    public static void drawButtonBackground(MatrixStack matrixStack, float x, float y, float width, float height,  float xOffset, float yOffset)
+    public static void drawButtonBackground(MatrixStack matrixStack, float x, float y, float width, float height, float xOffset, float yOffset)
     {
         Minecraft.getInstance().getTextureManager().bind(BUTTON_BACKGROUND);
         // corners

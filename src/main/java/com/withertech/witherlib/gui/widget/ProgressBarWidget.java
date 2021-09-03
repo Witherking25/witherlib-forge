@@ -57,8 +57,8 @@ public class ProgressBarWidget extends Widget
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
         ScreenUtils.bindTexture(PROGRESS);
-        float percentage = maxProgress.get() == 0 ? 1 : Math.max(Math.min(progress.get() / (float)maxProgress.get(), 1), 0);
+        float percentage = maxProgress.get() == 0 ? 1 : Math.max(Math.min(progress.get() / (float) maxProgress.get(), 1), 0);
         ScreenUtils.drawTexture(matrixStack, this.x, this.y, this.width, this.height, 0, 0, 1, 16 / 32f);
-        ScreenUtils.drawTexture(matrixStack, this.x, this.y, this.width * percentage, this.height, 0, 16 / 32f,  percentage, 16 / 32f);
+        ScreenUtils.drawTexture(matrixStack, this.x, this.y, this.width * percentage, this.height, 0, 16 / 32f, percentage, 16 / 32f);
     }
 }

@@ -24,7 +24,6 @@ import com.withertech.witherlib.gui.TileEntityBaseContainerScreen;
 import com.withertech.witherlib.gui.TileGui;
 import com.withertech.witherlib.registration.TypedRegKey.TypedGuiKey;
 import com.withertech.witherlib.tile.BaseTileEntity;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 
 import java.util.HashMap;
 import java.util.Map;

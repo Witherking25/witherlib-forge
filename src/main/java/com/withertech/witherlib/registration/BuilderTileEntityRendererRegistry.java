@@ -18,8 +18,8 @@
 
 package com.withertech.witherlib.registration;
 
-import com.withertech.witherlib.tile.BaseTileEntity;
 import com.withertech.witherlib.render.ITileEntityRendererFactory;
+import com.withertech.witherlib.tile.BaseTileEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +33,11 @@ public class BuilderTileEntityRendererRegistry
         TILES = builder.TILES;
     }
 
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
     public ITileEntityRendererFactory<?> get(String key)
     {
         return TILES.get(key);
@@ -43,16 +48,13 @@ public class BuilderTileEntityRendererRegistry
         return TILES.containsKey(key);
     }
 
-    public static Builder builder()
-    {
-        return new Builder();
-    }
-
     public static class Builder
     {
         private final Map<String, ITileEntityRendererFactory<?>> TILES = new HashMap<>();
 
-        private Builder() {}
+        private Builder()
+        {
+        }
 
         public <T extends BaseTileEntity<T>> Builder add(String name, ITileEntityRendererFactory<T> renderer)
         {

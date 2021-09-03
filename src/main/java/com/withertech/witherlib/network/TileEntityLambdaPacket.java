@@ -27,16 +27,28 @@ import java.util.function.BiConsumer;
 
 public abstract class TileEntityLambdaPacket<T extends TileEntity> extends TileEntityBasePacket<T>
 {
-    private BiConsumer<T, PacketContext> handler;
+    private final BiConsumer<T, PacketContext> handler;
 
     public TileEntityLambdaPacket()
     {
-
+        this.handler = null;
     }
 
     public TileEntityLambdaPacket(RegistryKey<World> dimension, BlockPos pos, BiConsumer<T, PacketContext> handler)
     {
         super(dimension, pos);
+        this.handler = handler;
+    }
+
+    public TileEntityLambdaPacket(World world, BlockPos pos, BiConsumer<T, PacketContext> handler)
+    {
+        super(world, pos);
+        this.handler = handler;
+    }
+
+    public TileEntityLambdaPacket(BlockPos pos, BiConsumer<T, PacketContext> handler)
+    {
+        super(pos);
         this.handler = handler;
     }
 

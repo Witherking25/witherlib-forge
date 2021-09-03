@@ -16,22 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.util;
+package com.withertech.witherlib.nbt;
 
+import com.withertech.witherlib.util.ClassUtil;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -121,12 +125,23 @@ public @interface SyncVariable
         /**
          * Reads sync variables for the object. This method will attempt to read a value from NBT
          * and assign that value for any field marked with the SyncVariable annotation.
-         *
          * @param obj  The object with SyncVariable fields.
          * @param tags The NBT to read values from.
          */
-        @SuppressWarnings("unchecked")
-        public static <T> void readSyncVars(Class<? extends T> clazz, T obj, CompoundNBT tags)
+        public static <T> void readSyncVars(T obj, CompoundNBT tags)
+        {
+            readSyncVars(obj.getClass(), obj, tags);
+        }
+
+        /**
+         * Reads sync variables for the object. This method will attempt to read a value from NBT
+         * and assign that value for any field marked with the SyncVariable annotation.
+         * @param clazz The class to search for fields in
+         * @param obj   The object with SyncVariable fields.
+         * @param tags  The NBT to read values from.
+         */
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        public static <T> void readSyncVars(@Nonnull Class<? extends T> clazz, T obj, CompoundNBT tags)
         {
             // Try to read from NBT for fields marked with SyncVariable.
             for (Field field : clazz.getDeclaredFields())
@@ -141,7 +156,6 @@ public @interface SyncVariable
                         {
                             // Set fields accessible if necessary.
 
-                            //noinspection deprecation
                             if (!field.isAccessible())
                             {
                                 field.setAccessible(true);
@@ -181,11 +195,15 @@ public @interface SyncVariable
                             {
                                 field.setByte(obj, tags.getByte(name));
                             }
-                            else if (field.getType() == ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class))
+                            else if (ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class).isAssignableFrom(field.getType()))
                             {
                                 ((LazyOptional<INBTSerializable<CompoundNBT>>) field.get(obj)).ifPresent(compoundNBTINBTSerializable -> compoundNBTINBTSerializable.deserializeNBT(tags.getCompound(name)));
                             }
-                            else if (Arrays.stream(field.getType().getInterfaces()).anyMatch(aClass -> aClass == ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class)))
+                            else if (ClassUtil.<INBTSerializable<ListNBT>>castClass(INBTSerializable.class).isAssignableFrom(field.getType()))
+                            {
+                                ((INBTSerializable<ListNBT>) field.get(obj)).deserializeNBT(tags.getList(name, new CompoundNBT().getId()));
+                            }
+                            else if (ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class).isAssignableFrom(field.getType()))
                             {
                                 ((INBTSerializable<CompoundNBT>) field.get(obj)).deserializeNBT(tags.getCompound(name));
                             }
@@ -217,8 +235,22 @@ public @interface SyncVariable
          * @param syncType The sync type (WRITE or PACKET).
          * @return The modified tags.
          */
-        @SuppressWarnings("unchecked") // from serializer
-        public static <T> CompoundNBT writeSyncVars(Class<? extends T> clazz, T obj, CompoundNBT tags, Type syncType)
+        public static <T> CompoundNBT writeSyncVars(T obj, CompoundNBT tags, Type syncType)
+        {
+            return writeSyncVars(obj.getClass(), obj, tags, syncType);
+        }
+
+        /**
+         * Writes sync variables for the object. This method will take the values in all fields
+         * marked with the SyncVariable annotation and save them to NBT.
+         * @param clazz    The class to search for fields in.
+         * @param obj      The object with SyncVariable fields.
+         * @param tags     The NBT to save values to.
+         * @param syncType The sync type (WRITE or PACKET).
+         * @return The modified tags.
+         */
+        @SuppressWarnings({"unchecked", "rawtypes"}) // from serializer
+        public static <T> CompoundNBT writeSyncVars(@Nonnull Class<? extends T> clazz, T obj, CompoundNBT tags, Type syncType)
         {
 
 
@@ -277,16 +309,19 @@ public @interface SyncVariable
                                 {
                                     tags.putByte(name, field.getByte(obj));
                                 }
-                                else if (field.getType() == ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class))
+                                else if (ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class).isAssignableFrom(field.getType()))
                                 {
                                     ((LazyOptional<INBTSerializable<CompoundNBT>>) field.get(obj)).ifPresent(compoundNBTINBTSerializable ->
                                             tags.put(name, compoundNBTINBTSerializable.serializeNBT()));
                                 }
-                                else if (field.getType() == ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class))
+                                else if (ClassUtil.<INBTSerializable<ListNBT>>castClass(INBTSerializable.class).isAssignableFrom(field.getType()))
+                                {
+                                    tags.put(name, ((INBTSerializable<ListNBT>) field.get(obj)).serializeNBT());
+                                }
+                                else if (ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class).isAssignableFrom(field.getType()))
                                 {
                                     tags.put(name, ((INBTSerializable<CompoundNBT>) field.get(obj)).serializeNBT());
                                 }
-
                                 else if (SERIALIZERS.containsKey(field.getType()))
                                 {
                                     CompoundNBT compound = new CompoundNBT();

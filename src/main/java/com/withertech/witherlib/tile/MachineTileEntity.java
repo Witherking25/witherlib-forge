@@ -18,7 +18,7 @@
 
 package com.withertech.witherlib.tile;
 
-import com.withertech.witherlib.util.SyncVariable;
+import com.withertech.witherlib.nbt.SyncVariable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;

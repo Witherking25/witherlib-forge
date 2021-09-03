@@ -74,7 +74,7 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Contain
     @Nonnull
     public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult)
     {
-        if (!world.isClientSide)
+        if (!world.isClientSide() && hasContainer())
         {
             NetworkHooks.openGui((ServerPlayerEntity) player, new INamedContainerProvider()
             {
@@ -94,6 +94,8 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Contain
         }
         return ActionResultType.CONSUME;
     }
+
+    protected abstract boolean hasContainer();
 
     protected abstract Container createMenu(int id, PlayerEntity player, BlockPos pos);
 

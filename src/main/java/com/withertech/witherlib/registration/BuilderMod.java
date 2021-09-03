@@ -27,9 +27,19 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 
+/**
+ * The Abstract class BuilderMod
+ * Your Mod class should extend this
+ */
 public abstract class BuilderMod
 {
+    /**
+     * The Main Registry
+     */
     public final ModRegistry REGISTRY;
+    /**
+     * The ModData for your mod
+     */
     public final ModData MOD;
 
     private BuilderCustomRegistryRegistry CUSTOM_REGISTRIES;
@@ -53,6 +63,11 @@ public abstract class BuilderMod
     private BuilderConfigRegistry CONFIGS;
 
 
+    /**
+     * The constructor you should override for your Mod class
+     * @see com.withertech.witherlib.WitherLib
+     * @param mod Your Mod's {@link ModData}
+     */
     protected BuilderMod(ModData mod)
     {
         MOD = mod;
@@ -79,11 +94,26 @@ public abstract class BuilderMod
                 );
     }
 
+    /**
+     * Register custom registries.
+     * <p>
+     * Override this in your Mod class to register any custom registries you have
+     *
+     * @return the {@link BuilderCustomRegistryRegistry}
+     */
     protected BuilderCustomRegistryRegistry registerCustomRegistries()
     {
         return BuilderCustomRegistryRegistry.builder(MOD).build();
     }
 
+    /**
+     * Gets custom registries.
+     * <p>
+     * Use this method to retrieve an instance of your custom registry
+     * <p>
+     * <code>getCustomRegistries().get(TypedRegKey.registry("id", Type.class))<code/>
+     * @return the {@link BuilderCustomRegistryRegistry}
+     */
     protected final BuilderCustomRegistryRegistry getCustomRegistries()
     {
         if (CUSTOM_REGISTRIES == null)
@@ -93,11 +123,26 @@ public abstract class BuilderMod
         return CUSTOM_REGISTRIES;
     }
 
+    /**
+     * Register custom registry entries
+     * <p>
+     * Override this in your Mod class to register entries for any custom registries you have
+     *
+     * @return the {@link BuilderCustomRegistryEntryRegistry}
+     */
     protected BuilderCustomRegistryEntryRegistry registerCustomRegistryEntries()
     {
         return BuilderCustomRegistryEntryRegistry.builder().build();
     }
 
+    /**
+     * Gets custom registry entries.
+     * <p>
+     * Use this method to retrieve an instance of an entry in your custom registry
+     * <p>
+     * <code>getCustomRegistryEntries().get(TypedRegKey.registry("id", Type.class)).get(TypedRegKey.custom("id", Type.class))<code/>
+     * @return the {@link BuilderCustomRegistryEntryRegistry}
+     */
     protected final BuilderCustomRegistryEntryRegistry getCustomRegistryEntries()
     {
         if (CUSTOM_REGISTRY_ENTRIES == null)
@@ -107,11 +152,21 @@ public abstract class BuilderMod
         return CUSTOM_REGISTRY_ENTRIES;
     }
 
+    /**
+     * Register blocks builder forge registry.
+     *
+     * @return the builder forge registry
+     */
     protected BuilderForgeRegistry<Block> registerBlocks()
     {
         return BuilderForgeRegistry.builder(MOD, ForgeRegistries.BLOCKS).build();
     }
 
+    /**
+     * Gets blocks.
+     *
+     * @return the blocks
+     */
     protected final BuilderForgeRegistry<Block> getBlocks()
     {
         if (BLOCKS == null)
@@ -121,11 +176,21 @@ public abstract class BuilderMod
         return BLOCKS;
     }
 
+    /**
+     * Register items builder forge registry.
+     *
+     * @return the builder forge registry
+     */
     protected BuilderForgeRegistry<Item> registerItems()
     {
         return BuilderForgeRegistry.builder(MOD, ForgeRegistries.ITEMS).build();
     }
 
+    /**
+     * Gets items.
+     *
+     * @return the items
+     */
     protected final BuilderForgeRegistry<Item> getItems()
     {
         if (ITEMS == null)
@@ -135,11 +200,21 @@ public abstract class BuilderMod
         return ITEMS;
     }
 
+    /**
+     * Register tiles builder forge registry.
+     *
+     * @return the builder forge registry
+     */
     protected BuilderForgeRegistry<TileEntityType<?>> registerTiles()
     {
         return BuilderForgeRegistry.builder(MOD, ForgeRegistries.TILE_ENTITIES).build();
     }
 
+    /**
+     * Gets tiles.
+     *
+     * @return the tiles
+     */
     protected final BuilderForgeRegistry<TileEntityType<?>> getTiles()
     {
         if (TILES == null)
@@ -149,11 +224,21 @@ public abstract class BuilderMod
         return TILES;
     }
 
+    /**
+     * Register containers builder forge registry.
+     *
+     * @return the builder forge registry
+     */
     protected BuilderForgeRegistry<ContainerType<?>> registerContainers()
     {
         return BuilderForgeRegistry.builder(MOD, ForgeRegistries.CONTAINERS).build();
     }
 
+    /**
+     * Gets containers.
+     *
+     * @return the containers
+     */
     protected final BuilderForgeRegistry<ContainerType<?>> getContainers()
     {
         if (CONTAINERS == null)
@@ -163,11 +248,21 @@ public abstract class BuilderMod
         return CONTAINERS;
     }
 
+    /**
+     * Register fluids builder forge registry.
+     *
+     * @return the builder forge registry
+     */
     protected BuilderForgeRegistry<Fluid> registerFluids()
     {
         return BuilderForgeRegistry.builder(MOD, ForgeRegistries.FLUIDS).build();
     }
 
+    /**
+     * Gets fluids.
+     *
+     * @return the fluids
+     */
     protected final BuilderForgeRegistry<Fluid> getFluids()
     {
         if (FLUIDS == null)
@@ -177,11 +272,21 @@ public abstract class BuilderMod
         return FLUIDS;
     }
 
+    /**
+     * Register entities builder forge registry.
+     *
+     * @return the builder forge registry
+     */
     protected BuilderForgeRegistry<EntityType<?>> registerEntities()
     {
         return BuilderForgeRegistry.builder(MOD, ForgeRegistries.ENTITIES).build();
     }
 
+    /**
+     * Gets entities.
+     *
+     * @return the entities
+     */
     protected final BuilderForgeRegistry<EntityType<?>> getEntities()
     {
         if (ENTITIES == null)
@@ -191,11 +296,21 @@ public abstract class BuilderMod
         return ENTITIES;
     }
 
+    /**
+     * Register entity attributes builder entity attribute registry.
+     *
+     * @return the builder entity attribute registry
+     */
     protected BuilderEntityAttributeRegistry registerEntityAttributes()
     {
         return BuilderEntityAttributeRegistry.builder().build();
     }
 
+    /**
+     * Gets entity attributes.
+     *
+     * @return the entity attributes
+     */
     protected final BuilderEntityAttributeRegistry getEntityAttributes()
     {
         if (ENTITY_ATTRIBUTES == null)
@@ -205,11 +320,21 @@ public abstract class BuilderMod
         return ENTITY_ATTRIBUTES;
     }
 
+    /**
+     * Register entity renderers builder entity renderer registry.
+     *
+     * @return the builder entity renderer registry
+     */
     protected BuilderEntityRendererRegistry registerEntityRenderers()
     {
         return BuilderEntityRendererRegistry.builder().build();
     }
 
+    /**
+     * Gets entity renderers.
+     *
+     * @return the entity renderers
+     */
     protected final BuilderEntityRendererRegistry getEntityRenderers()
     {
         if (ENTITY_RENDERERS == null)
@@ -219,11 +344,21 @@ public abstract class BuilderMod
         return ENTITY_RENDERERS;
     }
 
+    /**
+     * Register tile renderers builder tile entity renderer registry.
+     *
+     * @return the builder tile entity renderer registry
+     */
     protected BuilderTileEntityRendererRegistry registerTileRenderers()
     {
         return BuilderTileEntityRendererRegistry.builder().build();
     }
 
+    /**
+     * Gets tile renderers.
+     *
+     * @return the tile renderers
+     */
     protected final BuilderTileEntityRendererRegistry getTileRenderers()
     {
         if (TILE_RENDERERS == null)
@@ -233,11 +368,21 @@ public abstract class BuilderMod
         return TILE_RENDERERS;
     }
 
+    /**
+     * Register data generators builder data generator.
+     *
+     * @return the builder data generator
+     */
     protected BuilderDataGenerator registerDataGenerators()
     {
         return BuilderDataGenerator.builder(MOD).build();
     }
 
+    /**
+     * Gets data generators.
+     *
+     * @return the data generators
+     */
     protected final BuilderDataGenerator getDataGenerators()
     {
         if (DATA_GENERATORS == null)
@@ -247,11 +392,21 @@ public abstract class BuilderMod
         return DATA_GENERATORS;
     }
 
+    /**
+     * Register tags builder tag registry.
+     *
+     * @return the builder tag registry
+     */
     protected BuilderTagRegistry registerTags()
     {
         return BuilderTagRegistry.builder(MOD).build();
     }
 
+    /**
+     * Gets tags.
+     *
+     * @return the tags
+     */
     protected final BuilderTagRegistry getTags()
     {
         if (TAGS == null)
@@ -261,11 +416,21 @@ public abstract class BuilderMod
         return TAGS;
     }
 
+    /**
+     * Register tabs builder tab registry.
+     *
+     * @return the builder tab registry
+     */
     protected BuilderTabRegistry registerTabs()
     {
         return BuilderTabRegistry.builder().build();
     }
 
+    /**
+     * Gets tabs.
+     *
+     * @return the tabs
+     */
     protected final BuilderTabRegistry getTabs()
     {
         if (TABS == null)
@@ -275,11 +440,21 @@ public abstract class BuilderMod
         return TABS;
     }
 
+    /**
+     * Register guis builder gui registry.
+     *
+     * @return the builder gui registry
+     */
     protected BuilderGuiRegistry registerGuis()
     {
         return BuilderGuiRegistry.builder().build();
     }
 
+    /**
+     * Gets guis.
+     *
+     * @return the guis
+     */
     protected final BuilderGuiRegistry getGuis()
     {
         if (GUIS == null)
@@ -289,11 +464,21 @@ public abstract class BuilderMod
         return GUIS;
     }
 
+    /**
+     * Register nets builder network registry.
+     *
+     * @return the builder network registry
+     */
     protected BuilderNetworkRegistry registerNets()
     {
         return BuilderNetworkRegistry.builder(MOD).build();
     }
 
+    /**
+     * Gets nets.
+     *
+     * @return the nets
+     */
     protected final BuilderNetworkRegistry getNets()
     {
         if (NETS == null)
@@ -303,11 +488,21 @@ public abstract class BuilderMod
         return NETS;
     }
 
+    /**
+     * Register configs builder config registry.
+     *
+     * @return the builder config registry
+     */
     protected BuilderConfigRegistry registerConfigs()
     {
         return BuilderConfigRegistry.builder(MOD).build();
     }
 
+    /**
+     * Gets configs.
+     *
+     * @return the configs
+     */
     protected final BuilderConfigRegistry getConfigs()
     {
         if (CONFIGS == null)

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.util;
+package com.withertech.witherlib.nbt;
 
 import net.minecraft.nbt.CompoundNBT;
 

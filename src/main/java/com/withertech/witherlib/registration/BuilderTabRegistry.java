@@ -56,7 +56,7 @@ public class BuilderTabRegistry
 
         }
 
-        public Builder addGroup(String name, ItemGroup group)
+        public Builder add(String name, ItemGroup group)
         {
             ITEM_GROUPS.put(name, group);
             return this;

@@ -51,6 +51,11 @@ public class BuilderForgeRegistry<T extends IForgeRegistryEntry<T>>
         return new Builder<>(mod, type);
     }
 
+    public boolean containsKey(TypedRegKey<?> key)
+    {
+        return ENTRIES.containsKey(key);
+    }
+
     public void register(IEventBus bus)
     {
         REGISTRY.register(bus);

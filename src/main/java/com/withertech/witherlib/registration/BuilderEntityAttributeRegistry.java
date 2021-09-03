@@ -38,7 +38,7 @@ public class BuilderEntityAttributeRegistry
         return new Builder();
     }
 
-    public AttributeModifierMap.MutableAttribute getEntity(String key)
+    public AttributeModifierMap.MutableAttribute get(String key)
     {
         return ENTITIES.get(key).get();
     }
@@ -57,7 +57,7 @@ public class BuilderEntityAttributeRegistry
 
         }
 
-        public Builder addEntity(String name, Supplier<AttributeModifierMap.MutableAttribute> attributes)
+        public Builder add(String name, Supplier<AttributeModifierMap.MutableAttribute> attributes)
         {
             ENTITIES.put(name, attributes);
             return this;

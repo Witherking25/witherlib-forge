@@ -45,6 +45,16 @@ public class BuilderCustomRegistryRegistry
         return new RegistryBuilder<T>().setType(type);
     }
 
+    public boolean containsRegistry(TypedRegKey<?> key)
+    {
+        return REGISTRIES.containsKey(key);
+    }
+
+    public boolean containsBuilder(TypedRegKey<?> key)
+    {
+        return BUILDERS.containsKey(key);
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends IForgeRegistryEntry<T>> ForgeRegistry<T> get(TypedRegKey<T> key)
     {

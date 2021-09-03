@@ -49,6 +49,16 @@ public class BuilderNetworkRegistry
         return new Channel.ChannelBuilder();
     }
 
+    public boolean containsChannel(String key)
+    {
+        return CHANNELS.containsKey(key);
+    }
+
+    public boolean containsPacket(String key)
+    {
+        return PACKETS.containsKey(key);
+    }
+
     public Map<String, PacketChannel> getCHANNELS()
     {
         return CHANNELS;
@@ -62,14 +72,14 @@ public class BuilderNetworkRegistry
     public void register()
     {
         getCHANNELS().forEach((id, packetChannel) ->
-                getPACKETS().get(id).forEach((packet) ->
+                ((containsPacket(id))?getPACKETS().get(id):new ArrayList<Channel.Packet<?>>()).forEach((packet) ->
                         registerPacket(packetChannel, packet.getPacketClass(), packet.getPacketSupplier(), packet.isShouldBeQueued())));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private void registerPacket(@Nonnull PacketChannel channel, Class clazz, Supplier supplier, boolean queue)
+    private void registerPacket(@Nonnull PacketChannel channel, Class type, Supplier supplier, boolean queue)
     {
-        channel.registerMessage(clazz, supplier, queue);
+        channel.registerMessage(type, supplier, queue);
     }
 
     public static class Builder

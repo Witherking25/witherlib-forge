@@ -48,6 +48,21 @@ public class BuilderTagRegistry
         return new Builder(mod);
     }
 
+    public boolean containsBlock(String key)
+    {
+        return BLOCKS.containsKey(key);
+    }
+
+    public boolean containsItem(String key)
+    {
+        return ITEMS.containsKey(key);
+    }
+
+    public boolean containsFluid(String key)
+    {
+        return FLUIDS.containsKey(key);
+    }
+
     public ITag.INamedTag<Block> getBlock(String key)
     {
         return BLOCKS.get(key);

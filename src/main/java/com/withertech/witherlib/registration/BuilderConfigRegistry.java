@@ -45,6 +45,16 @@ public class BuilderConfigRegistry
         return new Builder(mod);
     }
 
+    public boolean containsFactory(TypedRegKey<?> key)
+    {
+        return FACTORIES.containsKey(key);
+    }
+
+    public boolean containsConfig(TypedRegKey<?> key)
+    {
+        return CONFIGS.containsKey(key);
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends BaseConfig> Function<ForgeConfigSpec.Builder, T> getFactory(TypedRegKey<T> key)
     {

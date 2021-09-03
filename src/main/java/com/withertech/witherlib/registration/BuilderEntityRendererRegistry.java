@@ -38,7 +38,7 @@ public class BuilderEntityRendererRegistry
         return new Builder();
     }
 
-    public IRenderFactory<?> getEntity(String key)
+    public IRenderFactory<?> get(String key)
     {
         return ENTITIES.get(key);
     }
@@ -57,7 +57,7 @@ public class BuilderEntityRendererRegistry
 
         }
 
-        public <T extends Entity> Builder addEntity(String name, IRenderFactory<T> renderer)
+        public <T extends Entity> Builder add(String name, IRenderFactory<T> renderer)
         {
             ENTITIES.put(name, renderer);
             return this;

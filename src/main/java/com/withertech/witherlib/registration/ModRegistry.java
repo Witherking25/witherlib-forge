@@ -248,7 +248,7 @@ public class ModRegistry
         return REGISTRIES.get().get(type);
     }
 
-    public <T extends IForgeRegistryEntry<T>> BuilderForgeRegistry<T> getCustomRegistryEntry(Class<T> type)
+    public <T extends IForgeRegistryEntry<T>> BuilderForgeRegistry<T> getCustomRegistryEntry(TypedRegKey<T> type)
     {
         return CUSTOM_REGISTRY_ENTRIES.get().get(type);
     }
@@ -259,7 +259,7 @@ public class ModRegistry
         {
             if (ENTITY_RENDERERS.get().containsKey(key.getId()))
             {
-                registerEntityRenderingHandler(entityTypeRegistryObject.get(), ENTITY_RENDERERS.get().getEntity(key.getId()));
+                registerEntityRenderingHandler(entityTypeRegistryObject.get(), ENTITY_RENDERERS.get().get(key.getId()));
             }
         });
         TILES.get().getENTRIES().forEach((key, tileEntityTypeRegistryObject) ->
@@ -298,7 +298,7 @@ public class ModRegistry
         {
             if (ENTITY_ATTRIBUTES.get().containsKey(key.getId()))
             {
-                event.put((EntityType<? extends LivingEntity>) entityTypeRegistryObject.get(), ENTITY_ATTRIBUTES.get().getEntity(key.getId()).build());
+                event.put((EntityType<? extends LivingEntity>) entityTypeRegistryObject.get(), ENTITY_ATTRIBUTES.get().get(key.getId()).build());
             }
         });
     }

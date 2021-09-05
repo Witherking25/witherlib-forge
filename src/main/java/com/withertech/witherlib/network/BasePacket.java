@@ -26,33 +26,35 @@ import net.minecraft.network.PacketBuffer;
 public interface BasePacket
 {
 
-    /**
-     * Writes the data in the packet to the given {@code buffer}.
-     * The written data will be decoded in {@link #read(PacketBuffer)}.
-     *
-     * @param buffer data buffer to write to
-     */
-    void write(PacketBuffer buffer);
+	/**
+	 * Writes the data in the packet to the given {@code buffer}.
+	 * The written data will be decoded in {@link #read(PacketBuffer)}.
+	 *
+	 * @param buffer
+	 * 		data buffer to write to
+	 */
+	void write(PacketBuffer buffer);
 
-    /**
-     * Reads data written by {@link #write(PacketBuffer)} from the given
-     * {@code buffer} into the packet.
-     *
-     * @param buffer data buffer to read from
-     */
-    void read(PacketBuffer buffer);
+	/**
+	 * Reads data written by {@link #write(PacketBuffer)} from the given
+	 * {@code buffer} into the packet.
+	 *
+	 * @param buffer
+	 * 		data buffer to read from
+	 */
+	void read(PacketBuffer buffer);
 
-    /**
-     * Checks whether the received values are valid.
-     * If {@code false} is returned, the packet will be discarded.
-     *
-     * @return {@code true} if all received values are valid
-     */
-    default boolean verify(PacketContext context)
-    {
-        return true;
-    }
+	/**
+	 * Checks whether the received values are valid.
+	 * If {@code false} is returned, the packet will be discarded.
+	 *
+	 * @return {@code true} if all received values are valid
+	 */
+	default boolean verify(PacketContext context)
+	{
+		return true;
+	}
 
-    void handle(PacketContext context);
+	void handle(PacketContext context);
 
 }

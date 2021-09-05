@@ -23,89 +23,100 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 
-public abstract class MachineTileEntity<T extends MachineTileEntity<T>> extends BaseTileEntity<T> implements ITickableTileEntity
+public abstract class MachineTileEntity<T extends MachineTileEntity<T>> extends BaseTileEntity<T>
+		implements ITickableTileEntity
 {
-    @SyncVariable(name = "progress")
-    protected int progress = 0;
+	@SyncVariable(name = "progress")
+	protected int progress = 0;
 
-    public MachineTileEntity(TileEntityType<T> tileEntityTypeIn)
-    {
-        super(tileEntityTypeIn);
-    }
+	public MachineTileEntity(TileEntityType<T> tileEntityTypeIn)
+	{
+		super(tileEntityTypeIn);
+	}
 
-    public abstract boolean canMachineRun();
+	public abstract boolean canMachineRun();
 
-    public abstract void onStart();
+	public abstract void onStart();
 
-    public abstract void onTick(int progress);
+	public abstract void onTick(int progress);
 
-    public abstract void onFinish();
+	public abstract void onFinish();
 
-    public abstract int getMaxProgress();
+	public abstract int getMaxProgress();
 
-    public int getProgress()
-    {
-        return progress;
-    }
+	public int getProgress()
+	{
+		return progress;
+	}
 
-    @Override
-    protected CompoundNBT writeData()
-    {
-        return SyncVariable.Helper.writeSyncVars(MachineTileEntity.class, this, super.writeData(), SyncVariable.Type.WRITE);
-    }
+	@Override
+	protected CompoundNBT writeData()
+	{
+		return SyncVariable.Helper.writeSyncVars(
+				MachineTileEntity.class,
+				this,
+				super.writeData(),
+				SyncVariable.Type.WRITE
+		);
+	}
 
-    @Override
-    protected CompoundNBT writeClientData()
-    {
-        return SyncVariable.Helper.writeSyncVars(MachineTileEntity.class, this, super.writeClientData(), SyncVariable.Type.PACKET);
-    }
+	@Override
+	protected CompoundNBT writeClientData()
+	{
+		return SyncVariable.Helper.writeSyncVars(
+				MachineTileEntity.class,
+				this,
+				super.writeClientData(),
+				SyncVariable.Type.PACKET
+		);
+	}
 
-    @Override
-    public void readData(CompoundNBT tag)
-    {
-        super.readData(tag);
-        SyncVariable.Helper.readSyncVars(MachineTileEntity.class, this, tag);
-    }
+	@Override
+	public void readData(CompoundNBT tag)
+	{
+		super.readData(tag);
+		SyncVariable.Helper.readSyncVars(MachineTileEntity.class, this, tag);
+	}
 
-    @Override
-    public void tick()
-    {
-        if (level != null && !level.isClientSide())
-        {
-            boolean needUpdate = false;
-            if (canMachineRun())
-            {
-                if (progress == 0)
-                {
-                    onStart();
-                    progress++;
-                    needUpdate = true;
-                }
-                else if (progress < getMaxProgress())
-                {
-                    onTick(progress);
-                    progress++;
-                    if (progress % 2 == 0)
-                    {
-                        needUpdate = true;
-                    }
-                }
-                else if (progress >= getMaxProgress())
-                {
-                    onFinish();
-                    progress = 0;
-                    needUpdate = true;
-                }
-            }
-            else
-            {
-                progress = 0;
-                needUpdate = true;
-            }
-            if (needUpdate)
-            {
-                dataChanged();
-            }
-        }
-    }
+	@Override
+	public void tick()
+	{
+		if (level != null && !level.isClientSide())
+		{
+			boolean needUpdate = false;
+			if (canMachineRun())
+			{
+				if (progress == 0)
+				{
+					onStart();
+					progress++;
+					needUpdate = true;
+				}
+				else if (progress < getMaxProgress())
+				{
+					onTick(progress);
+					progress++;
+					if (progress % 2 == 0)
+					{
+						needUpdate = true;
+					}
+				}
+				else if (progress >= getMaxProgress())
+				{
+					onFinish();
+					progress   = 0;
+					needUpdate = true;
+				}
+			}
+			else
+			{
+				progress   = 0;
+				needUpdate = true;
+			}
+			if (needUpdate)
+			{
+				dataChanged();
+			}
+		}
+	}
 }

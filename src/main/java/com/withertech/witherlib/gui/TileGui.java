@@ -25,38 +25,39 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 
-public abstract class TileGui<B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>>
+public abstract class TileGui<B extends BaseTileBlock<T>, T extends BaseTileEntity<T>,
+		C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>>
 {
-    protected final RegistryObject<B> block = registerBlock();
-    protected final RegistryObject<TileEntityType<T>> tile = registerTile();
-    protected final RegistryObject<ContainerType<C>> container = registerContainer();
-    protected final IScreenFactory<C, S> screen = registerScreen();
+	protected final RegistryObject<B>                 block     = registerBlock();
+	protected final RegistryObject<TileEntityType<T>> tile      = registerTile();
+	protected final RegistryObject<ContainerType<C>>  container = registerContainer();
+	protected final IScreenFactory<C, S>              screen    = registerScreen();
 
-    protected abstract RegistryObject<B> registerBlock();
+	protected abstract RegistryObject<B> registerBlock();
 
-    public final RegistryObject<B> getBlock()
-    {
-        return block;
-    }
+	public final RegistryObject<B> getBlock()
+	{
+		return block;
+	}
 
-    protected abstract RegistryObject<TileEntityType<T>> registerTile();
+	protected abstract RegistryObject<TileEntityType<T>> registerTile();
 
-    public final RegistryObject<TileEntityType<T>> getTile()
-    {
-        return tile;
-    }
+	public final RegistryObject<TileEntityType<T>> getTile()
+	{
+		return tile;
+	}
 
-    protected abstract RegistryObject<ContainerType<C>> registerContainer();
+	protected abstract RegistryObject<ContainerType<C>> registerContainer();
 
-    public final RegistryObject<ContainerType<C>> getContainer()
-    {
-        return container;
-    }
+	public final RegistryObject<ContainerType<C>> getContainer()
+	{
+		return container;
+	}
 
-    protected abstract IScreenFactory<C, S> registerScreen();
+	protected abstract IScreenFactory<C, S> registerScreen();
 
-    public final IScreenFactory<C, S> getScreen()
-    {
-        return screen;
-    }
+	public final IScreenFactory<C, S> getScreen()
+	{
+		return screen;
+	}
 }

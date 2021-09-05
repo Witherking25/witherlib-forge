@@ -25,18 +25,18 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public enum CoreSide
 {
-    CLIENT(LogicalSide.CLIENT), SERVER(LogicalSide.SERVER);
+	CLIENT(LogicalSide.CLIENT), SERVER(LogicalSide.SERVER);
 
-    private final LogicalSide side;
+	private final LogicalSide side;
 
-    CoreSide(LogicalSide side)
-    {
-        this.side = side;
-    }
+	CoreSide(LogicalSide side)
+	{
+		this.side = side;
+	}
 
-    @Deprecated
-    public LogicalSide getUnderlyingSide()
-    {
-        return side;
-    }
+	@Deprecated
+	public LogicalSide getUnderlyingSide()
+	{
+		return side;
+	}
 }

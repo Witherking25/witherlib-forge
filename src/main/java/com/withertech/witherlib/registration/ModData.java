@@ -23,17 +23,17 @@ import net.minecraftforge.eventbus.api.IEventBus;
 
 public class ModData
 {
-    public final String MODID;
-    public final IEventBus MOD_EVENT_BUS;
+	public final String    MODID;
+	public final IEventBus MOD_EVENT_BUS;
 
-    public ModData(String modid, IEventBus mod_event_bus)
-    {
-        MODID = modid;
-        MOD_EVENT_BUS = mod_event_bus;
-    }
+	public ModData(String modid, IEventBus mod_event_bus)
+	{
+		MODID         = modid;
+		MOD_EVENT_BUS = mod_event_bus;
+	}
 
-    public ResourceLocation modLocation(String path)
-    {
-        return new ResourceLocation(MODID, path);
-    }
+	public ResourceLocation modLocation(String path)
+	{
+		return new ResourceLocation(MODID, path);
+	}
 }

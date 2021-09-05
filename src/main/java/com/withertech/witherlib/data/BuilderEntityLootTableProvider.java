@@ -27,20 +27,20 @@ import javax.annotation.Nonnull;
 
 public abstract class BuilderEntityLootTableProvider extends EntityLootTables
 {
-    @Override
-    protected abstract void addTables();
+	@Override
+	protected abstract void addTables();
 
-    @Nonnull
-    @Override
-    protected abstract Iterable<EntityType<?>> getKnownEntities();
+	@Nonnull
+	@Override
+	protected abstract Iterable<EntityType<?>> getKnownEntities();
 
-    public void add(@Nonnull EntityType<?> entityType, @Nonnull LootTable.Builder builder)
-    {
-        super.add(entityType, builder);
-    }
+	public void add(@Nonnull EntityType<?> entityType, @Nonnull LootTable.Builder builder)
+	{
+		super.add(entityType, builder);
+	}
 
-    public void add(@Nonnull ResourceLocation entityId, @Nonnull LootTable.Builder builder)
-    {
-        super.add(entityId, builder);
-    }
+	public void add(@Nonnull ResourceLocation entityId, @Nonnull LootTable.Builder builder)
+	{
+		super.add(entityId, builder);
+	}
 }

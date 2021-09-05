@@ -30,19 +30,19 @@ import javax.annotation.Nonnull;
 
 public abstract class BuilderRecipeProvider extends ForgeRecipeProvider
 {
-    public BuilderRecipeProvider(DataGenerator generatorIn)
-    {
-        super(generatorIn);
-    }
+	public BuilderRecipeProvider(DataGenerator generatorIn)
+	{
+		super(generatorIn);
+	}
 
 
-    public static InventoryChangeTrigger.Instance has(@Nonnull IItemProvider itemProvider)
-    {
-        return RecipeProvider.has(itemProvider);
-    }
+	public static InventoryChangeTrigger.Instance has(@Nonnull IItemProvider itemProvider)
+	{
+		return RecipeProvider.has(itemProvider);
+	}
 
-    public static InventoryChangeTrigger.Instance has(@Nonnull ITag<Item> itemTag)
-    {
-        return RecipeProvider.has(itemTag);
-    }
+	public static InventoryChangeTrigger.Instance has(@Nonnull ITag<Item> itemTag)
+	{
+		return RecipeProvider.has(itemTag);
+	}
 }

@@ -23,10 +23,10 @@ import net.minecraftforge.fml.config.ModConfig;
 
 public abstract class BaseConfig
 {
-    public BaseConfig(Builder builder)
-    {
-    }
+	public BaseConfig(Builder builder)
+	{
+	}
 
 
-    public abstract ModConfig.Type getType();
+	public abstract ModConfig.Type getType();
 }

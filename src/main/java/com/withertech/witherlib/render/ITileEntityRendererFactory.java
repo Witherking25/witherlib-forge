@@ -25,7 +25,8 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface ITileEntityRendererFactory<T extends BaseTileEntity<T>> extends Function<TileEntityRendererDispatcher, TileEntityRenderer<T>>
+public interface ITileEntityRendererFactory<T extends BaseTileEntity<T>>
+		extends Function<TileEntityRendererDispatcher, TileEntityRenderer<T>>
 {
 
 }

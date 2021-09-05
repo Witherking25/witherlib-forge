@@ -27,52 +27,60 @@ import net.minecraft.world.World;
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
-public abstract class TileEntityBaseContainer<X extends TileEntityBaseContainer<X, T>, T extends TileEntity> extends ObjectBaseContainer<T>
+public abstract class TileEntityBaseContainer<X extends TileEntityBaseContainer<X, T>, T extends TileEntity>
+		extends ObjectBaseContainer<T>
 {
 
-    protected final World tileWorld;
-    protected final BlockPos tilePos;
+	protected final World tileWorld;
+	protected final BlockPos tilePos;
 
-    public TileEntityBaseContainer(ContainerType<X> type, int id, PlayerEntity player, World tileWorld, BlockPos tilePos)
-    {
-        super(type, id, player);
-        this.tileWorld = tileWorld;
-        this.tilePos = tilePos;
-    }
+	public TileEntityBaseContainer(
+			ContainerType<X> type,
+			int id,
+			PlayerEntity player,
+			World tileWorld,
+			BlockPos tilePos
+	)
+	{
+		super(type, id, player);
+		this.tileWorld = tileWorld;
+		this.tilePos   = tilePos;
+	}
 
-    public TileEntityBaseContainer(ContainerType<X> type, int id, PlayerEntity player, BlockPos tilePos)
-    {
-        this(type, id, player, player.level, tilePos);
-    }
+	public TileEntityBaseContainer(ContainerType<X> type, int id, PlayerEntity player, BlockPos tilePos)
+	{
+		this(type, id, player, player.level, tilePos);
+	}
 
-    public BlockPos getTilePos()
-    {
-        return tilePos;
-    }
+	public BlockPos getTilePos()
+	{
+		return tilePos;
+	}
 
-    @Override
-    public boolean stillValid(PlayerEntity playerIn)
-    {
-        return super.stillValid(playerIn);
-    }
+	@Override
+	public boolean stillValid(PlayerEntity playerIn)
+	{
+		return super.stillValid(playerIn);
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected T getObject()
-    {
-        TileEntity tile = this.tileWorld.getBlockEntity(this.tilePos);
+	@SuppressWarnings("unchecked")
+	@Override
+	protected T getObject()
+	{
+		TileEntity tile = this.tileWorld.getBlockEntity(this.tilePos);
 
-        if (tile == null)
-        {
-            return null;
-        }
+		if (tile == null)
+		{
+			return null;
+		}
 
-        try
-        {
-            return (T) tile;
-        } catch (ClassCastException ignore)
-        {
-        }
-        return null;
-    }
+		try
+		{
+			return (T) tile;
+		}
+		catch (ClassCastException ignore)
+		{
+		}
+		return null;
+	}
 }

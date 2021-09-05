@@ -31,25 +31,25 @@ import org.apache.logging.log4j.Logger;
 @Mod(WitherLib.MODID)
 public class WitherLib extends BuilderMod
 {
-    /**
-     * The MODID.
-     */
-    public static final String MODID = "witherlib";
-    /**
-     * The LOGGER.
-     */
-    public static final Logger LOGGER = LogManager.getLogger();
-    /**
-     * The Singleton Instance
-     */
-    public static WitherLib INSTANCE;
+	/**
+	 * The MODID.
+	 */
+	public static final String    MODID  = "witherlib";
+	/**
+	 * The LOGGER.
+	 */
+	public static final Logger    LOGGER = LogManager.getLogger();
+	/**
+	 * The Singleton Instance
+	 */
+	public static       WitherLib INSTANCE;
 
-    /**
-     * The Mod Constructor
-     */
-    public WitherLib()
-    {
-        super(new ModData(MODID, FMLJavaModLoadingContext.get().getModEventBus()));
-        INSTANCE = this;
-    }
+	/**
+	 * The Mod Constructor
+	 */
+	public WitherLib()
+	{
+		super(new ModData(MODID, FMLJavaModLoadingContext.get().getModEventBus()));
+		INSTANCE = this;
+	}
 }

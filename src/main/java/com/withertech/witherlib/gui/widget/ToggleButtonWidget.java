@@ -27,31 +27,54 @@ import java.util.function.Supplier;
 
 public class ToggleButtonWidget extends AbstractButtonWidget
 {
-    private final Supplier<Boolean> getState;
-    private ITextComponent text;
+	private final Supplier<Boolean> getState;
+	private       ITextComponent    text;
 
-    public ToggleButtonWidget(int x, int y, int width, int height, ITextComponent text, Runnable onPress, Supplier<Boolean> getState)
-    {
-        super(x, y, width, height, onPress);
-        this.text = text;
-        this.getState = getState;
-    }
+	public ToggleButtonWidget(
+			int x,
+			int y,
+			int width,
+			int height,
+			ITextComponent text,
+			Runnable onPress,
+			Supplier<Boolean> getState
+	)
+	{
+		super(x, y, width, height, onPress);
+		this.text = text;
+		this.getState = getState;
+	}
 
-    public void setText(ITextComponent text)
-    {
-        this.text = text;
-    }
+	public void setText(ITextComponent text)
+	{
+		this.text = text;
+	}
 
-    @Override
-    protected ITextComponent getNarrationMessage()
-    {
-        return this.text;
-    }
+	@Override
+	protected ITextComponent getNarrationMessage()
+	{
+		return this.text;
+	}
 
-    @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
-    {
-        ScreenUtils.drawButtonBackground(matrixStack, this.x, this.y, this.width, this.height, (this.getState.get() ? 5 : 0) / 10f, (this.active ? this.isHovered() ? 5 : 0 : 10) / 15f);
-        ScreenUtils.drawCenteredStringWithShadow(matrixStack, Minecraft.getInstance().font, this.text, this.x + this.width / 2f, this.y + this.height / 2f - 5, this.active ? 0xFFFFFFFF : Integer.MAX_VALUE);
-    }
+	@Override
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	{
+		ScreenUtils.drawButtonBackground(
+				matrixStack,
+				this.x,
+				this.y,
+				this.width,
+				this.height,
+				(this.getState.get() ? 5 : 0) / 10f,
+				(this.active ? this.isHovered() ? 5 : 0 : 10) / 15f
+		);
+		ScreenUtils.drawCenteredStringWithShadow(
+				matrixStack,
+				Minecraft.getInstance().font,
+				this.text,
+				this.x + this.width / 2f,
+				this.y + this.height / 2f - 5,
+				this.active ? 0xFFFFFFFF : Integer.MAX_VALUE
+		);
+	}
 }

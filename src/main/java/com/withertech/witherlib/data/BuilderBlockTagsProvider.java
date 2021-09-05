@@ -30,19 +30,19 @@ import javax.annotation.Nullable;
 
 public abstract class BuilderBlockTagsProvider extends BlockTagsProvider
 {
-    public BuilderBlockTagsProvider(DataGenerator gen, String modId, @Nullable ExistingFileHelper existingFileHelper)
-    {
-        super(gen, modId, existingFileHelper);
-    }
+	public BuilderBlockTagsProvider(DataGenerator gen, String modId, @Nullable ExistingFileHelper existingFileHelper)
+	{
+		super(gen, modId, existingFileHelper);
+	}
 
-    @Override
-    protected abstract void addTags();
+	@Override
+	protected abstract void addTags();
 
-    @Override
-    @Nonnull
-    public TagsProvider.Builder<Block> tag(@Nonnull ITag.INamedTag<Block> tag)
-    {
-        return super.tag(tag);
-    }
+	@Override
+	@Nonnull
+	public TagsProvider.Builder<Block> tag(@Nonnull ITag.INamedTag<Block> tag)
+	{
+		return super.tag(tag);
+	}
 
 }

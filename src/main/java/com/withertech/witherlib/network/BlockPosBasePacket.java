@@ -27,39 +27,40 @@ import net.minecraft.util.math.BlockPos;
 public abstract class BlockPosBasePacket implements BasePacket
 {
 
-    public BlockPos pos;
+	public BlockPos pos;
 
-    public BlockPosBasePacket()
-    {
-    }
+	public BlockPosBasePacket()
+	{
+	}
 
-    /**
-     * Stores the given {@code pos} with the packet data.
-     *
-     * @param pos position to be stored
-     */
-    public BlockPosBasePacket(BlockPos pos)
-    {
-        this.pos = pos;
-    }
+	/**
+	 * Stores the given {@code pos} with the packet data.
+	 *
+	 * @param pos
+	 * 		position to be stored
+	 */
+	public BlockPosBasePacket(BlockPos pos)
+	{
+		this.pos = pos;
+	}
 
-    @Override
-    public void write(PacketBuffer buffer)
-    {
-        buffer.writeBlockPos(this.pos);
-    }
+	@Override
+	public void write(PacketBuffer buffer)
+	{
+		buffer.writeBlockPos(this.pos);
+	}
 
-    @Override
-    public void read(PacketBuffer buffer)
-    {
-        this.pos = buffer.readBlockPos();
-    }
+	@Override
+	public void read(PacketBuffer buffer)
+	{
+		this.pos = buffer.readBlockPos();
+	}
 
-    @Override
-    public void handle(PacketContext context)
-    {
-        this.handle(this.pos, context);
-    }
+	@Override
+	public void handle(PacketContext context)
+	{
+		this.handle(this.pos, context);
+	}
 
-    protected abstract void handle(BlockPos pos, PacketContext context);
+	protected abstract void handle(BlockPos pos, PacketContext context);
 }

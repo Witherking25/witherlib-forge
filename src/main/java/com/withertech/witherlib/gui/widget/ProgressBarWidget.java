@@ -29,36 +29,57 @@ import java.util.function.Supplier;
 
 public class ProgressBarWidget extends Widget
 {
-    private static final ResourceLocation PROGRESS = WitherLib.INSTANCE.MOD.modLocation("textures/gui/progress_bar.png");
+	private static final ResourceLocation PROGRESS = WitherLib.INSTANCE.MOD.modLocation("textures/gui/progress_bar"
+	                                                                                    + ".png");
 
-    private final Supplier<Integer> progress;
-    private final Supplier<Integer> maxProgress;
+	private final Supplier<Integer> progress;
+	private final Supplier<Integer> maxProgress;
 
-    public ProgressBarWidget(int x, int y, Supplier<Integer> progress, Supplier<Integer> maxProgress)
-    {
-        this(x, y, 24, 16, progress, maxProgress);
-    }
+	public ProgressBarWidget(int x, int y, Supplier<Integer> progress, Supplier<Integer> maxProgress)
+	{
+		this(x, y, 24, 16, progress, maxProgress);
+	}
 
-    public ProgressBarWidget(int x, int y, int width, int height, Supplier<Integer> progress, Supplier<Integer> maxProgress)
-    {
-        super(x, y, width, height);
-        this.progress = progress;
-        this.maxProgress = maxProgress;
-    }
+	public ProgressBarWidget(
+			int x,
+			int y,
+			int width,
+			int height,
+			Supplier<Integer> progress,
+			Supplier<Integer> maxProgress
+	)
+	{
+		super(x, y, width, height);
+		this.progress = progress;
+		this.maxProgress = maxProgress;
+	}
 
 
-    @Override
-    protected ITextComponent getNarrationMessage()
-    {
-        return TextComponents.string("").get();
-    }
+	@Override
+	protected ITextComponent getNarrationMessage()
+	{
+		return TextComponents.string("").get();
+	}
 
-    @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
-    {
-        ScreenUtils.bindTexture(PROGRESS);
-        float percentage = maxProgress.get() == 0 ? 1 : Math.max(Math.min(progress.get() / (float) maxProgress.get(), 1), 0);
-        ScreenUtils.drawTexture(matrixStack, this.x, this.y, this.width, this.height, 0, 0, 1, 16 / 32f);
-        ScreenUtils.drawTexture(matrixStack, this.x, this.y, this.width * percentage, this.height, 0, 16 / 32f, percentage, 16 / 32f);
-    }
+	@Override
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	{
+		ScreenUtils.bindTexture(PROGRESS);
+		float percentage = maxProgress.get() == 0 ? 1 : Math.max(Math.min(
+				progress.get() / (float) maxProgress.get(),
+				1
+		), 0);
+		ScreenUtils.drawTexture(matrixStack, this.x, this.y, this.width, this.height, 0, 0, 1, 16 / 32f);
+		ScreenUtils.drawTexture(
+				matrixStack,
+				this.x,
+				this.y,
+				this.width * percentage,
+				this.height,
+				0,
+				16 / 32f,
+				percentage,
+				16 / 32f
+		);
+	}
 }

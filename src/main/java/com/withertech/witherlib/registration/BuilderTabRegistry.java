@@ -25,47 +25,47 @@ import java.util.Map;
 
 public class BuilderTabRegistry
 {
-    private final Map<String, ItemGroup> ITEM_GROUPS;
+	private final Map<String, ItemGroup> ITEM_GROUPS;
 
-    private BuilderTabRegistry(Builder builder)
-    {
-        ITEM_GROUPS = builder.ITEM_GROUPS;
-    }
+	private BuilderTabRegistry(Builder builder)
+	{
+		ITEM_GROUPS = builder.ITEM_GROUPS;
+	}
 
-    public static Builder builder()
-    {
-        return new Builder();
-    }
+	public static Builder builder()
+	{
+		return new Builder();
+	}
 
-    public ItemGroup getTab(String key)
-    {
-        return ITEM_GROUPS.get(key);
-    }
+	public ItemGroup getTab(String key)
+	{
+		return ITEM_GROUPS.get(key);
+	}
 
-    public boolean containsKey(String key)
-    {
-        return ITEM_GROUPS.containsKey(key);
-    }
+	public boolean containsKey(String key)
+	{
+		return ITEM_GROUPS.containsKey(key);
+	}
 
-    public static class Builder
-    {
-        private final Map<String, ItemGroup> ITEM_GROUPS = new HashMap<>();
+	public static class Builder
+	{
+		private final Map<String, ItemGroup> ITEM_GROUPS = new HashMap<>();
 
-        private Builder()
-        {
+		private Builder()
+		{
 
-        }
+		}
 
-        public Builder add(String name, ItemGroup group)
-        {
-            ITEM_GROUPS.put(name, group);
-            return this;
-        }
+		public Builder add(String name, ItemGroup group)
+		{
+			ITEM_GROUPS.put(name, group);
+			return this;
+		}
 
-        public BuilderTabRegistry build()
-        {
-            return new BuilderTabRegistry(this);
-        }
+		public BuilderTabRegistry build()
+		{
+			return new BuilderTabRegistry(this);
+		}
 
-    }
+	}
 }

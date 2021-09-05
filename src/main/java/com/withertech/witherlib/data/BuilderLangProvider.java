@@ -24,8 +24,8 @@ import net.minecraftforge.common.data.LanguageProvider;
 public abstract class BuilderLangProvider extends LanguageProvider
 {
 
-    public BuilderLangProvider(DataGenerator gen, String modid, String locale)
-    {
-        super(gen, modid, locale);
-    }
+	public BuilderLangProvider(DataGenerator gen, String modid, String locale)
+	{
+		super(gen, modid, locale);
+	}
 }

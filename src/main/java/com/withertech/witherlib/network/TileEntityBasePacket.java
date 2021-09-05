@@ -32,104 +32,116 @@ import net.minecraft.world.World;
 public abstract class TileEntityBasePacket<T extends TileEntity> extends BlockPosBasePacket
 {
 
-    public RegistryKey<World> dimension;
+	public RegistryKey<World> dimension;
 
-    public TileEntityBasePacket()
-    {
-    }
+	public TileEntityBasePacket()
+	{
+	}
 
-    /**
-     * Grabs the tile entity in {@code dimension} at {@code pos}.
-     *
-     * @param dimension dimension of the tile entity
-     * @param pos       position of the tile entity
-     */
-    public TileEntityBasePacket(RegistryKey<World> dimension, BlockPos pos)
-    {
-        super(pos);
-        this.dimension = dimension;
-    }
+	/**
+	 * Grabs the tile entity in {@code dimension} at {@code pos}.
+	 *
+	 * @param dimension
+	 * 		dimension of the tile entity
+	 * @param pos
+	 * 		position of the tile entity
+	 */
+	public TileEntityBasePacket(RegistryKey<World> dimension, BlockPos pos)
+	{
+		super(pos);
+		this.dimension = dimension;
+	}
 
-    /**
-     * Grabs the tile entity in {@code world} at {@code pos}.
-     *
-     * @param world world the tile entity is in
-     * @param pos   position of the tile entity
-     */
-    public TileEntityBasePacket(World world, BlockPos pos)
-    {
-        this(world == null ? null : world.dimension(), pos);
-    }
+	/**
+	 * Grabs the tile entity in {@code world} at {@code pos}.
+	 *
+	 * @param world
+	 * 		world the tile entity is in
+	 * @param pos
+	 * 		position of the tile entity
+	 */
+	public TileEntityBasePacket(World world, BlockPos pos)
+	{
+		this(world == null ? null : world.dimension(), pos);
+	}
 
-    /**
-     * Grabs the tile entity at {@code pos} in the relevant player's dimension.
-     *
-     * @param pos position of the tile entity
-     */
-    public TileEntityBasePacket(BlockPos pos)
-    {
-        this((RegistryKey<World>) null, pos);
-    }
+	/**
+	 * Grabs the tile entity at {@code pos} in the relevant player's dimension.
+	 *
+	 * @param pos
+	 * 		position of the tile entity
+	 */
+	public TileEntityBasePacket(BlockPos pos)
+	{
+		this((RegistryKey<World>) null, pos);
+	}
 
-    @Override
-    public void write(PacketBuffer buffer)
-    {
-        super.write(buffer);
-        buffer.writeBoolean(this.dimension != null);
-        if (this.dimension != null)
-        {
-            buffer.writeResourceLocation(this.dimension.location());
-        }
-    }
+	@Override
+	public void write(PacketBuffer buffer)
+	{
+		super.write(buffer);
+		buffer.writeBoolean(this.dimension != null);
+		if (this.dimension != null)
+		{
+			buffer.writeResourceLocation(this.dimension.location());
+		}
+	}
 
-    @Override
-    public void read(PacketBuffer buffer)
-    {
-        super.read(buffer);
-        if (buffer.readBoolean())
-        {
-            this.dimension = RegistryKey.create(Registry.DIMENSION_REGISTRY, buffer.readResourceLocation());
-        }
-    }
+	@Override
+	public void read(PacketBuffer buffer)
+	{
+		super.read(buffer);
+		if (buffer.readBoolean())
+		{
+			this.dimension = RegistryKey.create(Registry.DIMENSION_REGISTRY, buffer.readResourceLocation());
+		}
+	}
 
-    @Override
-    protected void handle(BlockPos pos, PacketContext context)
-    {
-        T tile = this.getTileEntity(context);
-        if (tile != null)
-        {
-            this.handle(tile, context);
-        }
-    }
+	@Override
+	protected void handle(BlockPos pos, PacketContext context)
+	{
+		T tile = this.getTileEntity(context);
+		if (tile != null)
+		{
+			this.handle(tile, context);
+		}
+	}
 
-    protected abstract void handle(T tile, PacketContext context);
+	protected abstract void handle(T tile, PacketContext context);
 
-    @SuppressWarnings("unchecked")
-    private T getTileEntity(PacketContext context)
-    {
-        World world = this.dimension == null ? context.getWorld() :
-                context.getHandlingSide() == CoreSide.CLIENT ?
-                        context.getWorld().dimension() == this.dimension ? context.getWorld() : null :
-                        context.getWorld().getServer().getLevel(this.dimension);
+	@Override
+	public boolean verify(PacketContext context)
+	{
+		return getTileEntity(context) != null;
+	}
 
-        if (world == null)
-        {
-            return null;
-        }
+	@SuppressWarnings("unchecked")
+	private T getTileEntity(PacketContext context)
+	{
+		World world = this.dimension == null ? context.getWorld() :
+		              context.getHandlingSide() == CoreSide.CLIENT ?
+		              context.getWorld().dimension() == this.dimension ? context.getWorld() : null :
+		              context.getWorld().getServer().getLevel(this.dimension);
 
-        TileEntity tile = world.getBlockEntity(this.pos);
+		if (world == null)
+		{
+			return null;
+		}
 
-        if (tile == null)
-        {
-            return null;
-        }
+		TileEntity tile = world.getBlockEntity(this.pos);
 
-        try
-        {
-            return (T) tile;
-        } catch (ClassCastException ignore)
-        {
-        }
-        return null;
-    }
+		if (tile == null)
+		{
+			return null;
+		}
+
+		try
+		{
+			return (T) tile;
+		}
+		catch (ClassCastException ignore)
+		{
+		}
+		return null;
+	}
 }

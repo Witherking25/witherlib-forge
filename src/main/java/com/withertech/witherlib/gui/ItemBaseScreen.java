@@ -31,27 +31,27 @@ import java.util.function.Supplier;
 public abstract class ItemBaseScreen extends ObjectBaseScreen<ItemStack>
 {
 
-    private final Supplier<ItemStack> stackSupplier;
+	private final Supplier<ItemStack> stackSupplier;
 
-    private ItemBaseScreen(ITextComponent title, Supplier<ItemStack> itemStackSupplier)
-    {
-        super(title);
-        this.stackSupplier = itemStackSupplier;
-    }
+	private ItemBaseScreen(ITextComponent title, Supplier<ItemStack> itemStackSupplier)
+	{
+		super(title);
+		this.stackSupplier = itemStackSupplier;
+	}
 
-    protected ItemBaseScreen(ITextComponent title, int playerSlot)
-    {
-        this(title, () -> ClientUtils.getPlayer().inventory.getItem(playerSlot));
-    }
+	protected ItemBaseScreen(ITextComponent title, int playerSlot)
+	{
+		this(title, () -> ClientUtils.getPlayer().inventory.getItem(playerSlot));
+	}
 
-    protected ItemBaseScreen(ITextComponent title, Hand hand)
-    {
-        this(title, () -> ClientUtils.getPlayer().getItemInHand(hand));
-    }
+	protected ItemBaseScreen(ITextComponent title, Hand hand)
+	{
+		this(title, () -> ClientUtils.getPlayer().getItemInHand(hand));
+	}
 
-    @Override
-    protected ItemStack getObject()
-    {
-        return this.stackSupplier.get();
-    }
+	@Override
+	protected ItemStack getObject()
+	{
+		return this.stackSupplier.get();
+	}
 }

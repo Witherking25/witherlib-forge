@@ -25,8 +25,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 public abstract class BuilderBlockStateProvider extends BlockStateProvider
 {
 
-    public BuilderBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper)
-    {
-        super(gen, modid, exFileHelper);
-    }
+	public BuilderBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper)
+	{
+		super(gen, modid, exFileHelper);
+	}
 }

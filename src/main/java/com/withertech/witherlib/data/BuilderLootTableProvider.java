@@ -36,18 +36,23 @@ import java.util.function.Supplier;
 
 public abstract class BuilderLootTableProvider extends LootTableProvider
 {
-    public BuilderLootTableProvider(DataGenerator generator)
-    {
-        super(generator);
-    }
+	public BuilderLootTableProvider(DataGenerator generator)
+	{
+		super(generator);
+	}
 
-    @Nonnull
-    @Override
-    protected abstract List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables();
+	@Nonnull
+	@Override
+	protected abstract List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>,
+			LootParameterSet>> getTables();
 
-    @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, @Nonnull ValidationTracker validationtracker)
-    {
-        map.forEach((resourceLocation, lootTable) -> LootTableManager.validate(validationtracker, resourceLocation, lootTable));
-    }
+	@Override
+	protected void validate(Map<ResourceLocation, LootTable> map, @Nonnull ValidationTracker validationtracker)
+	{
+		map.forEach((resourceLocation, lootTable) -> LootTableManager.validate(
+				validationtracker,
+				resourceLocation,
+				lootTable
+		));
+	}
 }

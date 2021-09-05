@@ -30,19 +30,19 @@ import javax.annotation.Nullable;
 public abstract class BuilderFluidTagsProvider extends FluidTagsProvider
 {
 
-    public BuilderFluidTagsProvider(DataGenerator gen, String modId, @Nullable ExistingFileHelper existingFileHelper)
-    {
-        super(gen, modId, existingFileHelper);
-    }
+	public BuilderFluidTagsProvider(DataGenerator gen, String modId, @Nullable ExistingFileHelper existingFileHelper)
+	{
+		super(gen, modId, existingFileHelper);
+	}
 
-    @Override
-    protected abstract void addTags();
+	@Override
+	protected abstract void addTags();
 
-    @Override
-    @Nonnull
-    public Builder<Fluid> tag(@Nonnull ITag.INamedTag<Fluid> tag)
-    {
-        return super.tag(tag);
-    }
+	@Override
+	@Nonnull
+	public Builder<Fluid> tag(@Nonnull ITag.INamedTag<Fluid> tag)
+	{
+		return super.tag(tag);
+	}
 
 }

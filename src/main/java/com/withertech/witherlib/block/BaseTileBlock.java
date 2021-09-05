@@ -53,157 +53,180 @@ import java.util.List;
  */
 public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends ContainerBlock
 {
-    private final boolean saveTileData;
+	private final boolean saveTileData;
 
-    public BaseTileBlock(boolean saveTileData, Properties properties)
-    {
-        super(properties);
-        this.saveTileData = saveTileData;
-    }
+	public BaseTileBlock(boolean saveTileData, Properties properties)
+	{
+		super(properties);
+		this.saveTileData = saveTileData;
+	}
 
-    @Nonnull
-    @Override
-    public BlockRenderType getRenderShape(@Nonnull BlockState state)
-    {
-        return BlockRenderType.MODEL;
-    }
+	@Nonnull
+	@Override
+	public BlockRenderType getRenderShape(@Nonnull BlockState state)
+	{
+		return BlockRenderType.MODEL;
+	}
 
 
-    @SuppressWarnings("deprecation")
-    @Override
-    @Nonnull
-    public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult)
-    {
-        if (!world.isClientSide() && hasContainer())
-        {
-            NetworkHooks.openGui((ServerPlayerEntity) player, new INamedContainerProvider()
-            {
-                @Nonnull
-                @Override
-                public ITextComponent getDisplayName()
-                {
-                    return BaseTileBlock.this.getDisplayName((T) world.getBlockEntity(pos));
-                }
+	@SuppressWarnings("deprecation")
+	@Override
+	@Nonnull
+	public ActionResultType use(
+			@Nonnull BlockState state,
+			World world,
+			@Nonnull BlockPos pos,
+			@Nonnull PlayerEntity player,
+			@Nonnull Hand hand,
+			@Nonnull BlockRayTraceResult rayTraceResult
+	)
+	{
+		if (!world.isClientSide() && hasContainer())
+		{
+			NetworkHooks.openGui((ServerPlayerEntity) player, new INamedContainerProvider()
+			{
+				@Nonnull
+				@Override
+				public ITextComponent getDisplayName()
+				{
+					return BaseTileBlock.this.getDisplayName((T) world.getBlockEntity(pos));
+				}
 
-                @Override
-                public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity player)
-                {
-                    return BaseTileBlock.this.createMenu(id, player, pos);
-                }
-            }, pos);
-        }
-        return ActionResultType.CONSUME;
-    }
+				@Override
+				public Container createMenu(
+						int id,
+						@Nonnull PlayerInventory playerInventory,
+						@Nonnull PlayerEntity player
+				)
+				{
+					return BaseTileBlock.this.createMenu(id, player, pos);
+				}
+			}, pos);
+		}
+		return ActionResultType.CONSUME;
+	}
 
-    protected abstract boolean hasContainer();
+	protected abstract boolean hasContainer();
 
-    protected abstract Container createMenu(int id, PlayerEntity player, BlockPos pos);
+	protected abstract Container createMenu(int id, PlayerEntity player, BlockPos pos);
 
-    protected abstract ITextComponent getDisplayName(T tile);
+	protected abstract ITextComponent getDisplayName(T tile);
 
-    @Override
-    public void setPlacedBy(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, LivingEntity placer, @Nonnull ItemStack stack)
-    {
-        if (!this.saveTileData)
-        {
-            return;
-        }
+	@Override
+	public void setPlacedBy(
+			@Nonnull World worldIn,
+			@Nonnull BlockPos pos,
+			@Nonnull BlockState state,
+			LivingEntity placer,
+			@Nonnull ItemStack stack
+	)
+	{
+		if (!this.saveTileData)
+		{
+			return;
+		}
 
-        CompoundNBT tag = stack.getTag();
-        tag = tag == null ? null : tag.contains("tileData") ? tag.getCompound("tileData") : null;
-        if (tag == null || tag.isEmpty())
-        {
-            return;
-        }
+		CompoundNBT tag = stack.getTag();
+		tag = tag == null ? null : tag.contains("tileData") ? tag.getCompound("tileData") : null;
+		if (tag == null || tag.isEmpty())
+		{
+			return;
+		}
 
-        TileEntity tile = worldIn.getBlockEntity(pos);
-        if (tile instanceof BaseTileEntity)
-        {
-            ((BaseTileEntity) tile).readData(tag);
-        }
-    }
+		TileEntity tile = worldIn.getBlockEntity(pos);
+		if (tile instanceof BaseTileEntity)
+		{
+			((BaseTileEntity) tile).readData(tag);
+		}
+	}
 
-    @SuppressWarnings("deprecation")
-    @Nonnull
-    @Override
-    public List<ItemStack> getDrops(@Nonnull BlockState state, @Nonnull LootContext.Builder builder)
-    {
-        List<ItemStack> items = super.getDrops(state, builder);
+	@SuppressWarnings("deprecation")
+	@Nonnull
+	@Override
+	public List<ItemStack> getDrops(@Nonnull BlockState state, @Nonnull LootContext.Builder builder)
+	{
+		List<ItemStack> items = super.getDrops(state, builder);
 
-        if (!this.saveTileData)
-        {
-            return items;
-        }
+		if (!this.saveTileData)
+		{
+			return items;
+		}
 
-        TileEntity tile = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
-        if (!(tile instanceof BaseTileEntity))
-        {
-            return items;
-        }
+		TileEntity tile = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
+		if (!(tile instanceof BaseTileEntity))
+		{
+			return items;
+		}
 
-        CompoundNBT tileTag = ((BaseTileEntity) tile).writeItemStackData();
-        if (tileTag == null || tileTag.isEmpty())
-        {
-            return items;
-        }
+		CompoundNBT tileTag = ((BaseTileEntity) tile).writeItemStackData();
+		if (tileTag == null || tileTag.isEmpty())
+		{
+			return items;
+		}
 
-        CompoundNBT tag = new CompoundNBT();
-        tag.put("tileData", tileTag);
+		CompoundNBT tag = new CompoundNBT();
+		tag.put("tileData", tileTag);
 
-        for (ItemStack stack : items)
-        {
-            if (stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() == this)
-            {
-                stack.setTag(tag);
-            }
-        }
+		for (ItemStack stack : items)
+		{
+			if (stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() == this)
+			{
+				stack.setTag(tag);
+			}
+		}
 
-        return items;
-    }
+		return items;
+	}
 
-    @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player)
-    {
-        ItemStack stack = super.getPickBlock(state, target, world, pos, player);
+	@Override
+	public ItemStack getPickBlock(
+			BlockState state,
+			RayTraceResult target,
+			IBlockReader world,
+			BlockPos pos,
+			PlayerEntity player
+	)
+	{
+		ItemStack stack = super.getPickBlock(state, target, world, pos, player);
 
-        if (!this.saveTileData)
-        {
-            return stack;
-        }
+		if (!this.saveTileData)
+		{
+			return stack;
+		}
 
-        TileEntity tile = world.getBlockEntity(pos);
-        if (!(tile instanceof BaseTileEntity))
-        {
-            return stack;
-        }
+		TileEntity tile = world.getBlockEntity(pos);
+		if (!(tile instanceof BaseTileEntity))
+		{
+			return stack;
+		}
 
-        CompoundNBT tileTag = ((BaseTileEntity) tile).writeItemStackData();
-        if (tileTag == null || tileTag.isEmpty())
-        {
-            return stack;
-        }
+		CompoundNBT tileTag = ((BaseTileEntity) tile).writeItemStackData();
+		if (tileTag == null || tileTag.isEmpty())
+		{
+			return stack;
+		}
 
-        CompoundNBT tag = new CompoundNBT();
-        tag.put("tileData", tileTag);
+		CompoundNBT tag = new CompoundNBT();
+		tag.put("tileData", tileTag);
 
-        if (stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() == this)
-        {
-            stack.setTag(tag);
-        }
+		if (stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() == this)
+		{
+			stack.setTag(tag);
+		}
 
-        return stack;
-    }
+		return stack;
+	}
 
-    @Override
-    public boolean hasTileEntity(BlockState state)
-    {
-        return true;
-    }
+	@Override
+	public boolean hasTileEntity(BlockState state)
+	{
+		return true;
+	}
 
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
-    {
-        return newBlockEntity(world);
-    }
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	{
+		return newBlockEntity(world);
+	}
 }

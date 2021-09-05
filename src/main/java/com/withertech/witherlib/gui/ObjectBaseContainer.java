@@ -30,46 +30,46 @@ import javax.annotation.Nullable;
 public abstract class ObjectBaseContainer<T> extends BaseContainer
 {
 
-    public ObjectBaseContainer(ContainerType<?> type, int id, PlayerEntity player)
-    {
-        super(type, id, player);
-    }
+	public ObjectBaseContainer(ContainerType<?> type, int id, PlayerEntity player)
+	{
+		super(type, id, player);
+	}
 
-    @Override
-    protected void addSlots(PlayerEntity player)
-    {
-        T object = this.getObjectOrClose();
-        if (object != null)
-        {
-            this.addSlots(player, object);
-        }
-    }
+	@Override
+	protected void addSlots(PlayerEntity player)
+	{
+		T object = this.getObjectOrClose();
+		if (object != null)
+		{
+			this.addSlots(player, object);
+		}
+	}
 
-    /**
-     * Adds slots to the container
-     */
-    protected abstract void addSlots(PlayerEntity player, @Nonnull T object);
+	/**
+	 * Adds slots to the container
+	 */
+	protected abstract void addSlots(PlayerEntity player, @Nonnull T object);
 
-    /**
-     * Gets the object from {@link #getObject()}, if {@code null} the screen
-     * will be closed, the object from {@link #getObject()} will be returned.
-     *
-     * @return the object from {@link #getObject()} or {@code null}
-     */
-    @Nullable
-    protected T getObjectOrClose()
-    {
-        T object = this.getObject();
-        if (object == null)
-        {
-            this.player.closeContainer();
-        }
-        return object;
-    }
+	/**
+	 * Gets the object from {@link #getObject()}, if {@code null} the screen
+	 * will be closed, the object from {@link #getObject()} will be returned.
+	 *
+	 * @return the object from {@link #getObject()} or {@code null}
+	 */
+	@Nullable
+	protected T getObjectOrClose()
+	{
+		T object = this.getObject();
+		if (object == null)
+		{
+			this.player.closeContainer();
+		}
+		return object;
+	}
 
-    /**
-     * @return the object required for the container to remain open
-     */
-    @Nullable
-    protected abstract T getObject();
+	/**
+	 * @return the object required for the container to remain open
+	 */
+	@Nullable
+	protected abstract T getObject();
 }

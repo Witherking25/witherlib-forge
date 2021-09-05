@@ -32,27 +32,28 @@ import java.util.function.Supplier;
 public abstract class ItemBaseContainer extends ObjectBaseContainer<ItemStack>
 {
 
-    private final Supplier<ItemStack> stackSupplier;
+	private final Supplier<ItemStack> stackSupplier;
 
-    private ItemBaseContainer(ContainerType<?> type, int id, PlayerEntity player, Supplier<ItemStack> itemStackSupplier)
-    {
-        super(type, id, player);
-        this.stackSupplier = itemStackSupplier;
-    }
+	private ItemBaseContainer(ContainerType<?> type, int id, PlayerEntity player,
+	                          Supplier<ItemStack> itemStackSupplier)
+	{
+		super(type, id, player);
+		this.stackSupplier = itemStackSupplier;
+	}
 
-    protected ItemBaseContainer(ContainerType<?> type, int id, PlayerEntity player, int playerSlot)
-    {
-        this(type, id, player, () -> player.inventory.getItem(playerSlot));
-    }
+	protected ItemBaseContainer(ContainerType<?> type, int id, PlayerEntity player, int playerSlot)
+	{
+		this(type, id, player, () -> player.inventory.getItem(playerSlot));
+	}
 
-    protected ItemBaseContainer(ContainerType<?> type, int id, PlayerEntity player, Hand hand)
-    {
-        this(type, id, player, () -> ClientUtils.getPlayer().getItemInHand(hand));
-    }
+	protected ItemBaseContainer(ContainerType<?> type, int id, PlayerEntity player, Hand hand)
+	{
+		this(type, id, player, () -> ClientUtils.getPlayer().getItemInHand(hand));
+	}
 
-    @Override
-    protected ItemStack getObject()
-    {
-        return this.stackSupplier.get();
-    }
+	@Override
+	protected ItemStack getObject()
+	{
+		return this.stackSupplier.get();
+	}
 }

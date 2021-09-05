@@ -16,36 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.nbt;
+package com.withertech.witherlib.nbt.wrappers;
 
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-import java.util.function.Predicate;
-
-public class SerializableFluidTank extends FluidTank implements INBTSerializable<CompoundNBT>
+public class FluidTankNBTWrapper extends AbstractNBTWrapper<FluidTank, CompoundNBT>
 {
-    public SerializableFluidTank(int capacity)
-    {
-        super(capacity);
-    }
+	public FluidTankNBTWrapper(FluidTank value)
+	{
+		super(value);
+	}
 
-    public SerializableFluidTank(int capacity, Predicate<FluidStack> validator)
-    {
-        super(capacity, validator);
-    }
+	@Override
+	public CompoundNBT serializeNBT()
+	{
+		return get().writeToNBT(new CompoundNBT());
+	}
 
-    @Override
-    public CompoundNBT serializeNBT()
-    {
-        return writeToNBT(new CompoundNBT());
-    }
-
-    @Override
-    public void deserializeNBT(CompoundNBT nbt)
-    {
-        readFromNBT(nbt);
-    }
+	@Override
+	public void deserializeNBT(CompoundNBT nbt)
+	{
+		set(get().readFromNBT(nbt));
+	}
 }

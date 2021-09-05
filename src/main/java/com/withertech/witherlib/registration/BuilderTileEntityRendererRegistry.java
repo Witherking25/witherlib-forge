@@ -26,46 +26,46 @@ import java.util.Map;
 
 public class BuilderTileEntityRendererRegistry
 {
-    private final Map<String, ITileEntityRendererFactory<?>> TILES;
+	private final Map<String, ITileEntityRendererFactory<?>> TILES;
 
-    private BuilderTileEntityRendererRegistry(Builder builder)
-    {
-        TILES = builder.TILES;
-    }
+	private BuilderTileEntityRendererRegistry(Builder builder)
+	{
+		TILES = builder.TILES;
+	}
 
-    public static Builder builder()
-    {
-        return new Builder();
-    }
+	public static Builder builder()
+	{
+		return new Builder();
+	}
 
-    public ITileEntityRendererFactory<?> get(String key)
-    {
-        return TILES.get(key);
-    }
+	public ITileEntityRendererFactory<?> get(String key)
+	{
+		return TILES.get(key);
+	}
 
-    public boolean containsKey(String key)
-    {
-        return TILES.containsKey(key);
-    }
+	public boolean containsKey(String key)
+	{
+		return TILES.containsKey(key);
+	}
 
-    public static class Builder
-    {
-        private final Map<String, ITileEntityRendererFactory<?>> TILES = new HashMap<>();
+	public static class Builder
+	{
+		private final Map<String, ITileEntityRendererFactory<?>> TILES = new HashMap<>();
 
-        private Builder()
-        {
-        }
+		private Builder()
+		{
+		}
 
-        public <T extends BaseTileEntity<T>> Builder add(String name, ITileEntityRendererFactory<T> renderer)
-        {
-            TILES.put(name, renderer);
-            return this;
-        }
+		public <T extends BaseTileEntity<T>> Builder add(String name, ITileEntityRendererFactory<T> renderer)
+		{
+			TILES.put(name, renderer);
+			return this;
+		}
 
-        public BuilderTileEntityRendererRegistry build()
-        {
-            return new BuilderTileEntityRendererRegistry(this);
-        }
+		public BuilderTileEntityRendererRegistry build()
+		{
+			return new BuilderTileEntityRendererRegistry(this);
+		}
 
-    }
+	}
 }

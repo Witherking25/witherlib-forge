@@ -26,47 +26,47 @@ import java.util.Map;
 
 public class BuilderEntityRendererRegistry
 {
-    private final Map<String, IRenderFactory<?>> ENTITIES;
+	private final Map<String, IRenderFactory<?>> ENTITIES;
 
-    private BuilderEntityRendererRegistry(Builder builder)
-    {
-        ENTITIES = builder.ENTITIES;
-    }
+	private BuilderEntityRendererRegistry(Builder builder)
+	{
+		ENTITIES = builder.ENTITIES;
+	}
 
-    public static Builder builder()
-    {
-        return new Builder();
-    }
+	public static Builder builder()
+	{
+		return new Builder();
+	}
 
-    public IRenderFactory<?> get(String key)
-    {
-        return ENTITIES.get(key);
-    }
+	public IRenderFactory<?> get(String key)
+	{
+		return ENTITIES.get(key);
+	}
 
-    public boolean containsKey(String key)
-    {
-        return ENTITIES.containsKey(key);
-    }
+	public boolean containsKey(String key)
+	{
+		return ENTITIES.containsKey(key);
+	}
 
-    public static class Builder
-    {
-        private final Map<String, IRenderFactory<?>> ENTITIES = new HashMap<>();
+	public static class Builder
+	{
+		private final Map<String, IRenderFactory<?>> ENTITIES = new HashMap<>();
 
-        private Builder()
-        {
+		private Builder()
+		{
 
-        }
+		}
 
-        public <T extends Entity> Builder add(String name, IRenderFactory<T> renderer)
-        {
-            ENTITIES.put(name, renderer);
-            return this;
-        }
+		public <T extends Entity> Builder add(String name, IRenderFactory<T> renderer)
+		{
+			ENTITIES.put(name, renderer);
+			return this;
+		}
 
-        public BuilderEntityRendererRegistry build()
-        {
-            return new BuilderEntityRendererRegistry(this);
-        }
+		public BuilderEntityRendererRegistry build()
+		{
+			return new BuilderEntityRendererRegistry(this);
+		}
 
-    }
+	}
 }

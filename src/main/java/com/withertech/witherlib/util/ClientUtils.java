@@ -34,72 +34,73 @@ import net.minecraft.world.World;
 public class ClientUtils
 {
 
-    public static Minecraft getMinecraft()
-    {
-        return Minecraft.getInstance();
-    }
+	public static Minecraft getMinecraft()
+	{
+		return Minecraft.getInstance();
+	}
 
-    public static TextureManager getTextureManager()
-    {
-        return getMinecraft().getTextureManager();
-    }
+	public static TextureManager getTextureManager()
+	{
+		return getMinecraft().getTextureManager();
+	}
 
-    public static FontRenderer getFontRenderer()
-    {
-        return getMinecraft().font;
-    }
+	public static FontRenderer getFontRenderer()
+	{
+		return getMinecraft().font;
+	}
 
-    public static PlayerEntity getPlayer()
-    {
-        return getMinecraft().player;
-    }
+	public static PlayerEntity getPlayer()
+	{
+		return getMinecraft().player;
+	}
 
-    public static World getWorld()
-    {
-        return getMinecraft().level;
-    }
+	public static World getWorld()
+	{
+		return getMinecraft().level;
+	}
 
-    public static BlockRendererDispatcher getBlockRenderer()
-    {
-        return getMinecraft().getBlockRenderer();
-    }
+	public static BlockRendererDispatcher getBlockRenderer()
+	{
+		return getMinecraft().getBlockRenderer();
+	}
 
-    public static ItemRenderer getItemRenderer()
-    {
-        return getMinecraft().getItemRenderer();
-    }
+	public static ItemRenderer getItemRenderer()
+	{
+		return getMinecraft().getItemRenderer();
+	}
 
-    public static float getPartialTicks()
-    {
-        return getMinecraft().getFrameTime();
-    }
+	public static float getPartialTicks()
+	{
+		return getMinecraft().getFrameTime();
+	}
 
-    /**
-     * Closes the player's opened screen
-     */
-    public static void closeScreen()
-    {
-        getPlayer().closeContainer();
-    }
+	/**
+	 * Closes the player's opened screen
+	 */
+	public static void closeScreen()
+	{
+		getPlayer().closeContainer();
+	}
 
-    /**
-     * Queues the given task on the main thread
-     *
-     * @param task task to be queued
-     */
-    public static void queueTask(Runnable task)
-    {
-        getMinecraft().tell(task);
-    }
+	/**
+	 * Queues the given task on the main thread
+	 *
+	 * @param task
+	 * 		task to be queued
+	 */
+	public static void queueTask(Runnable task)
+	{
+		getMinecraft().tell(task);
+	}
 
-    public static String translate(String translationKey, Object... args)
-    {
-        return I18n.get(translationKey, args);
-    }
+	public static String translate(String translationKey, Object... args)
+	{
+		return I18n.get(translationKey, args);
+	}
 
-    public static void displayScreen(Screen screen)
-    {
-        getMinecraft().setScreen(screen);
-    }
+	public static void displayScreen(Screen screen)
+	{
+		getMinecraft().setScreen(screen);
+	}
 
 }

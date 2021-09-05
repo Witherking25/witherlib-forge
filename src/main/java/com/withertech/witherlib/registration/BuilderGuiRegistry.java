@@ -30,53 +30,59 @@ import java.util.Map;
 
 public class BuilderGuiRegistry
 {
-    private final Map<TypedGuiKey<? extends TileGui<? extends BaseTileBlock<?>, ?, ?, ?>, ?, ?, ?, ?>, TileGui<?, ?, ?, ?>> GUIS;
+	private final Map<TypedGuiKey<? extends TileGui<? extends BaseTileBlock<?>, ?, ?, ?>, ?, ?, ?, ?>, TileGui<?, ?, ?
+			, ?>> GUIS;
 
-    private BuilderGuiRegistry(Builder builder)
-    {
-        GUIS = builder.GUIS;
-    }
+	private BuilderGuiRegistry(Builder builder)
+	{
+		GUIS = builder.GUIS;
+	}
 
-    public static Builder builder()
-    {
-        return new Builder();
-    }
+	public static Builder builder()
+	{
+		return new Builder();
+	}
 
-    public boolean containsKey(TypedGuiKey<?, ?, ?, ?, ?> key)
-    {
-        return GUIS.containsKey(key);
-    }
+	public boolean containsKey(TypedGuiKey<?, ?, ?, ?, ?> key)
+	{
+		return GUIS.containsKey(key);
+	}
 
-    @SuppressWarnings("unchecked")
-    public <B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>> TileGui<B, T, C, S> get(TypedGuiKey<TileGui<B, T, C, S>, B, T, C, S> key)
-    {
-        return (TileGui<B, T, C, S>) GUIS.get(key);
-    }
+	@SuppressWarnings("unchecked")
+	public <B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>,
+			S extends TileEntityBaseContainerScreen<T, C>> TileGui<B, T, C, S> get(
+			TypedGuiKey<TileGui<B, T, C, S>, B, T, C, S> key
+	)
+	{
+		return (TileGui<B, T, C, S>) GUIS.get(key);
+	}
 
-    public Map<TypedGuiKey<? extends TileGui<? extends BaseTileBlock<?>, ?, ?, ?>, ?, ?, ?, ?>, TileGui<?, ?, ?, ?>> getGUIS()
-    {
-        return GUIS;
-    }
+	public Map<TypedGuiKey<? extends TileGui<? extends BaseTileBlock<?>, ?, ?, ?>, ?, ?, ?, ?>, TileGui<?, ?, ?, ?>> getGUIS()
+	{
+		return GUIS;
+	}
 
-    public static class Builder
-    {
-        private final Map<TypedGuiKey<? extends TileGui<?, ?, ?, ?>, ?, ?, ?, ?>, TileGui<?, ?, ?, ?>> GUIS = new HashMap<>();
+	public static class Builder
+	{
+		private final Map<TypedGuiKey<? extends TileGui<?, ?, ?, ?>, ?, ?, ?, ?>, TileGui<?, ?, ?, ?>> GUIS =
+				new HashMap<>();
 
-        public <B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>>
-        Builder add(
-                TypedGuiKey<? extends TileGui<B, T, C, S>, B, T, C, S> id,
-                TileGui<B, T, C, S> tileGui
-        )
-        {
-            GUIS.put(id, tileGui);
-            return this;
-        }
+		public <B extends BaseTileBlock<T>, T extends BaseTileEntity<T>, C extends TileEntityBaseContainer<C, T>,
+				S extends TileEntityBaseContainerScreen<T, C>>
+		Builder add(
+				TypedGuiKey<? extends TileGui<B, T, C, S>, B, T, C, S> id,
+				TileGui<B, T, C, S> tileGui
+		)
+		{
+			GUIS.put(id, tileGui);
+			return this;
+		}
 
-        public BuilderGuiRegistry build()
-        {
-            return new BuilderGuiRegistry(this);
-        }
+		public BuilderGuiRegistry build()
+		{
+			return new BuilderGuiRegistry(this);
+		}
 
 
-    }
+	}
 }

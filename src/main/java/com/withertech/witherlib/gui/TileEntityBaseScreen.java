@@ -29,41 +29,42 @@ import net.minecraft.util.text.ITextComponent;
 public abstract class TileEntityBaseScreen<T extends TileEntity> extends ObjectBaseScreen<T>
 {
 
-    protected final BlockPos tilePos;
+	protected final BlockPos tilePos;
 
-    protected TileEntityBaseScreen(ITextComponent title, BlockPos tilePos)
-    {
-        super(title);
-        this.tilePos = tilePos;
-    }
+	protected TileEntityBaseScreen(ITextComponent title, BlockPos tilePos)
+	{
+		super(title);
+		this.tilePos = tilePos;
+	}
 
-    protected TileEntityBaseScreen(ITextComponent title)
-    {
-        this(title, null);
-    }
+	protected TileEntityBaseScreen(ITextComponent title)
+	{
+		this(title, null);
+	}
 
-    @Override
-    protected T getObject()
-    {
-        return this.getTileEntity();
-    }
+	@Override
+	protected T getObject()
+	{
+		return this.getTileEntity();
+	}
 
-    @SuppressWarnings("unchecked")
-    protected T getTileEntity()
-    {
-        TileEntity tile = ClientUtils.getWorld().getBlockEntity(this.tilePos);
+	@SuppressWarnings("unchecked")
+	protected T getTileEntity()
+	{
+		TileEntity tile = ClientUtils.getWorld().getBlockEntity(this.tilePos);
 
-        if (tile == null)
-        {
-            return null;
-        }
+		if (tile == null)
+		{
+			return null;
+		}
 
-        try
-        {
-            return (T) tile;
-        } catch (ClassCastException ignore)
-        {
-        }
-        return null;
-    }
+		try
+		{
+			return (T) tile;
+		}
+		catch (ClassCastException ignore)
+		{
+		}
+		return null;
+	}
 }

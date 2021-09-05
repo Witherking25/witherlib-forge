@@ -16,13 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.nbt;
+package com.withertech.witherlib.nbt.wrappers;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
 
-public interface NBTSerializer<T>
+public class BlockStateNBTWrapper extends AbstractNBTWrapper<BlockState, CompoundNBT>
 {
-	T read(CompoundNBT tags);
+	public BlockStateNBTWrapper(BlockState value)
+	{
+		super(value);
+	}
 
-	void write(CompoundNBT tags, T obj);
+	@Override
+	public CompoundNBT serializeNBT()
+	{
+		return NBTUtil.writeBlockState(get());
+	}
+
+	@Override
+	public void deserializeNBT(CompoundNBT nbt)
+	{
+		set(NBTUtil.readBlockState(nbt));
+	}
 }

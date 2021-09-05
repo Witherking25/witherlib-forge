@@ -31,37 +31,37 @@ import java.util.Objects;
 public abstract class BuilderItemModelProvider extends ItemModelProvider
 {
 
-    public BuilderItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper)
-    {
-        super(generator, modid, existingFileHelper);
-    }
+	public BuilderItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper)
+	{
+		super(generator, modid, existingFileHelper);
+	}
 
-    public void blockBuilder(@Nonnull Block block)
-    {
-        String name = Objects.requireNonNull(block.getRegistryName()).getPath();
-        withExistingParent(name, modLoc("block/" + name));
-    }
+	public void blockBuilder(@Nonnull Block block)
+	{
+		String name = Objects.requireNonNull(block.getRegistryName()).getPath();
+		withExistingParent(name, modLoc("block/" + name));
+	}
 
-    public void builder(@Nonnull IItemProvider item, ModelFile parent)
-    {
-        String name = Objects.requireNonNull(item.asItem().getRegistryName()).getPath();
-        builder(item, parent, "item/" + name);
-    }
+	public void builder(@Nonnull IItemProvider item, ModelFile parent)
+	{
+		String name = Objects.requireNonNull(item.asItem().getRegistryName()).getPath();
+		builder(item, parent, "item/" + name);
+	}
 
-    public void builder(@Nonnull IItemProvider item, ModelFile parent, String texture)
-    {
-        getBuilder(Objects.requireNonNull(item.asItem().getRegistryName()).getPath())
-                .parent(parent)
-                .texture("layer0", modLoc(texture));
-    }
+	public void builder(@Nonnull IItemProvider item, ModelFile parent, String texture)
+	{
+		getBuilder(Objects.requireNonNull(item.asItem().getRegistryName()).getPath())
+				.parent(parent)
+				.texture("layer0", modLoc(texture));
+	}
 
-    public ModelFile getGenerated()
-    {
-        return getExistingFile(mcLoc("item/generated"));
-    }
+	public ModelFile getGenerated()
+	{
+		return getExistingFile(mcLoc("item/generated"));
+	}
 
-    public ModelFile getHandheld()
-    {
-        return getExistingFile(mcLoc("item/handheld"));
-    }
+	public ModelFile getHandheld()
+	{
+		return getExistingFile(mcLoc("item/handheld"));
+	}
 }

@@ -16,13 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.nbt;
+package com.withertech.witherlib.nbt.wrappers;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 
-public interface NBTSerializer<T>
+public abstract class AbstractNBTWrapper<T, X extends INBT> implements INBTWrapper<T, X>
 {
-	T read(CompoundNBT tags);
+	protected T value;
 
-	void write(CompoundNBT tags, T obj);
+	public AbstractNBTWrapper(T value)
+	{
+		this.value = value;
+	}
+
+	@Override
+	public T get()
+	{
+		return value;
+	}
+
+	@Override
+	public void set(T value)
+	{
+		this.value = value;
+	}
 }

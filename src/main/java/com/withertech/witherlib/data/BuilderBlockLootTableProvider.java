@@ -25,10 +25,10 @@ import javax.annotation.Nonnull;
 
 public abstract class BuilderBlockLootTableProvider extends BlockLootTables
 {
-    @Override
-    protected abstract void addTables();
+	@Override
+	protected abstract void addTables();
 
-    @Nonnull
-    @Override
-    protected abstract Iterable<Block> getKnownBlocks();
+	@Nonnull
+	@Override
+	protected abstract Iterable<Block> getKnownBlocks();
 }

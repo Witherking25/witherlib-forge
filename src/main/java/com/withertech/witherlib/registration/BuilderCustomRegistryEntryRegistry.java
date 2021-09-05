@@ -26,52 +26,53 @@ import java.util.Map;
 
 public class BuilderCustomRegistryEntryRegistry
 {
-    private final Map<TypedRegKey<? extends IForgeRegistryEntry<?>>, BuilderForgeRegistry<?>> REGISTRIES;
+	private final Map<TypedRegKey<? extends IForgeRegistryEntry<?>>, BuilderForgeRegistry<?>> REGISTRIES;
 
-    private BuilderCustomRegistryEntryRegistry(Builder builder)
-    {
-        REGISTRIES = builder.REGISTRIES;
-    }
+	private BuilderCustomRegistryEntryRegistry(Builder builder)
+	{
+		REGISTRIES = builder.REGISTRIES;
+	}
 
-    public static Builder builder()
-    {
-        return new Builder();
-    }
+	public static Builder builder()
+	{
+		return new Builder();
+	}
 
-    public boolean containsKey(TypedRegKey<?> key)
-    {
-        return REGISTRIES.containsKey(key);
-    }
+	public boolean containsKey(TypedRegKey<?> key)
+	{
+		return REGISTRIES.containsKey(key);
+	}
 
-    @SuppressWarnings("unchecked")
-    public <T extends IForgeRegistryEntry<T>> BuilderForgeRegistry<T> get(TypedRegKey<T> type)
-    {
-        return (BuilderForgeRegistry<T>) REGISTRIES.get(type);
-    }
+	@SuppressWarnings("unchecked")
+	public <T extends IForgeRegistryEntry<T>> BuilderForgeRegistry<T> get(TypedRegKey<T> type)
+	{
+		return (BuilderForgeRegistry<T>) REGISTRIES.get(type);
+	}
 
-    public void register(IEventBus bus)
-    {
-        REGISTRIES.forEach((typedRegKey, builderForgeRegistry) ->
-                builderForgeRegistry.register(bus));
-    }
+	public void register(IEventBus bus)
+	{
+		REGISTRIES.forEach((typedRegKey, builderForgeRegistry) ->
+				                   builderForgeRegistry.register(bus));
+	}
 
-    public static class Builder
-    {
-        private final Map<TypedRegKey<? extends IForgeRegistryEntry<?>>, BuilderForgeRegistry<?>> REGISTRIES = new HashMap<>();
+	public static class Builder
+	{
+		private final Map<TypedRegKey<? extends IForgeRegistryEntry<?>>, BuilderForgeRegistry<?>> REGISTRIES =
+				new HashMap<>();
 
-        private Builder()
-        {
-        }
+		private Builder()
+		{
+		}
 
-        public <T extends IForgeRegistryEntry<T>> Builder add(TypedRegKey<T> type, BuilderForgeRegistry<T> registry)
-        {
-            REGISTRIES.put(type, registry);
-            return this;
-        }
+		public <T extends IForgeRegistryEntry<T>> Builder add(TypedRegKey<T> type, BuilderForgeRegistry<T> registry)
+		{
+			REGISTRIES.put(type, registry);
+			return this;
+		}
 
-        public BuilderCustomRegistryEntryRegistry build()
-        {
-            return new BuilderCustomRegistryEntryRegistry(this);
-        }
-    }
+		public BuilderCustomRegistryEntryRegistry build()
+		{
+			return new BuilderCustomRegistryEntryRegistry(this);
+		}
+	}
 }

@@ -26,47 +26,47 @@ import java.util.function.Supplier;
 
 public class BuilderEntityAttributeRegistry
 {
-    private final Map<String, Supplier<AttributeModifierMap.MutableAttribute>> ENTITIES;
+	private final Map<String, Supplier<AttributeModifierMap.MutableAttribute>> ENTITIES;
 
-    private BuilderEntityAttributeRegistry(Builder builder)
-    {
-        ENTITIES = builder.ENTITIES;
-    }
+	private BuilderEntityAttributeRegistry(Builder builder)
+	{
+		ENTITIES = builder.ENTITIES;
+	}
 
-    public static Builder builder()
-    {
-        return new Builder();
-    }
+	public static Builder builder()
+	{
+		return new Builder();
+	}
 
-    public AttributeModifierMap.MutableAttribute get(String key)
-    {
-        return ENTITIES.get(key).get();
-    }
+	public AttributeModifierMap.MutableAttribute get(String key)
+	{
+		return ENTITIES.get(key).get();
+	}
 
-    public boolean containsKey(String key)
-    {
-        return ENTITIES.containsKey(key);
-    }
+	public boolean containsKey(String key)
+	{
+		return ENTITIES.containsKey(key);
+	}
 
-    public static class Builder
-    {
-        private final Map<String, Supplier<AttributeModifierMap.MutableAttribute>> ENTITIES = new HashMap<>();
+	public static class Builder
+	{
+		private final Map<String, Supplier<AttributeModifierMap.MutableAttribute>> ENTITIES = new HashMap<>();
 
-        private Builder()
-        {
+		private Builder()
+		{
 
-        }
+		}
 
-        public Builder add(String name, Supplier<AttributeModifierMap.MutableAttribute> attributes)
-        {
-            ENTITIES.put(name, attributes);
-            return this;
-        }
+		public Builder add(String name, Supplier<AttributeModifierMap.MutableAttribute> attributes)
+		{
+			ENTITIES.put(name, attributes);
+			return this;
+		}
 
-        public BuilderEntityAttributeRegistry build()
-        {
-            return new BuilderEntityAttributeRegistry(this);
-        }
+		public BuilderEntityAttributeRegistry build()
+		{
+			return new BuilderEntityAttributeRegistry(this);
+		}
 
-    }
+	}
 }

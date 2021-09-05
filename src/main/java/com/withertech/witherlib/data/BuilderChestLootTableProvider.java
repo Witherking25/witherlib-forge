@@ -27,6 +27,6 @@ import java.util.function.BiConsumer;
 
 public abstract class BuilderChestLootTableProvider extends ChestLootTables
 {
-    @Override
-    public abstract void accept(@Nonnull BiConsumer<ResourceLocation, LootTable.Builder> consumer);
+	@Override
+	public abstract void accept(@Nonnull BiConsumer<ResourceLocation, LootTable.Builder> consumer);
 }

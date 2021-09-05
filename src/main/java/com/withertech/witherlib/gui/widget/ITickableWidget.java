@@ -24,5 +24,5 @@ package com.withertech.witherlib.gui.widget;
 public interface ITickableWidget
 {
 
-    void tick();
+	void tick();
 }

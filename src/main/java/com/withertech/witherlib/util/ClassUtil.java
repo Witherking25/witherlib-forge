@@ -20,9 +20,9 @@ package com.withertech.witherlib.util;
 
 public class ClassUtil
 {
-    @SuppressWarnings("unchecked")
-    public static <X> Class<X> castClass(Class<?> clazz)
-    {
-        return (Class<X>) clazz;
-    }
+	@SuppressWarnings("unchecked")
+	public static <X> Class<X> castClass(Class<?> clazz)
+	{
+		return (Class<X>) clazz;
+	}
 }

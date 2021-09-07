@@ -302,10 +302,10 @@ public @interface SyncVariable
 								} else if (field.getType() == byte.class)
 								{
 									tags.putByte(name, field.getByte(obj));
-								} else if (ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class).isAssignableFrom(
+								} else if (ClassUtil.<LazyOptional<INBTSerializable<INBT>>>castClass(LazyOptional.class).isAssignableFrom(
 										field.getType()))
 								{
-									((LazyOptional<INBTSerializable<CompoundNBT>>) field.get(obj)).ifPresent(
+									((LazyOptional<INBTSerializable<INBT>>) field.get(obj)).ifPresent(
 											compoundNBTINBTSerializable ->
 													tags.put(name, compoundNBTINBTSerializable.serializeNBT()));
 								} else if (ClassUtil.<INBTSerializable<INBT>>castClass(INBTSerializable.class).isAssignableFrom(

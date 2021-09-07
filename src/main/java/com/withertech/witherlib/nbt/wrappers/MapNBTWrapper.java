@@ -50,6 +50,7 @@ public class MapNBTWrapper<T extends INBTSerializable<INBT>> extends AbstractNBT
 	@Override
 	public void deserializeNBT(@Nonnull CompoundNBT nbt)
 	{
+		this.value.clear();
 		nbt.getAllKeys().stream().collect(Collectors.toMap(Function.identity(), nbt::getCompound)).forEach((key, nbtValue) ->
         {
             T objValue = factory.get();

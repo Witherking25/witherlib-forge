@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class ListNBTWrapper<T extends INBTSerializable<CompoundNBT>> extends AbstractNBTWrapper<List<T>, ListNBT>
+public class ListNBTWrapper<T extends INBTSerializable<X>, X extends INBT> extends AbstractNBTWrapper<List<T>, ListNBT>
 {
 	private final Supplier<T> factory;
 
@@ -54,7 +54,7 @@ public class ListNBTWrapper<T extends INBTSerializable<CompoundNBT>> extends Abs
 		new ArrayList<>(list).forEach(nbt ->
 		{
 			T value = factory.get();
-			value.deserializeNBT((CompoundNBT) nbt);
+			value.deserializeNBT((X) nbt);
 			this.value.add(value);
 		});
 	}

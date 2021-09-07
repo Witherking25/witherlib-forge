@@ -28,7 +28,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class MapNBTWrapper<T extends INBTSerializable<INBT>> extends AbstractNBTWrapper<Map<String, T>, CompoundNBT>
+public class MapNBTWrapper<T extends INBTSerializable<CompoundNBT>> extends AbstractNBTWrapper<Map<String, T>, CompoundNBT>
 {
 	private final Supplier<T> factory;
 

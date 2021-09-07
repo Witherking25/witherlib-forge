@@ -18,16 +18,18 @@
 
 package com.withertech.witherlib.nbt.wrappers;
 
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class ListNBTWrapper<T extends INBTSerializable<INBT>> extends AbstractNBTWrapper<List<T>, ListNBT>
+public class ListNBTWrapper<T extends INBTSerializable<CompoundNBT>> extends AbstractNBTWrapper<List<T>, ListNBT>
 {
 	private final Supplier<T> factory;
 
@@ -52,7 +54,7 @@ public class ListNBTWrapper<T extends INBTSerializable<INBT>> extends AbstractNB
 		new ArrayList<>(list).forEach(nbt ->
 		{
 			T value = factory.get();
-			value.deserializeNBT(nbt);
+			value.deserializeNBT((CompoundNBT) nbt);
 			this.value.add(value);
 		});
 	}

@@ -44,7 +44,7 @@ public class PacketContext
 	public CoreSide getHandlingSide()
 	{
 		return this.context.getDirection().getReceptionSide() == LogicalSide.CLIENT ? CoreSide.CLIENT :
-		       CoreSide.SERVER;
+				CoreSide.SERVER;
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class PacketContext
 	public CoreSide getOriginatingSide()
 	{
 		return this.context.getDirection().getOriginationSide() == LogicalSide.CLIENT ? CoreSide.CLIENT :
-		       CoreSide.SERVER;
+				CoreSide.SERVER;
 	}
 
 	public PlayerEntity getSendingPlayer()
@@ -74,8 +74,7 @@ public class PacketContext
 		if (this.getHandlingSide() == CoreSide.SERVER)
 		{
 			this.context.enqueueWork(task);
-		}
-		else
+		} else
 		{
 			ClientUtils.queueTask(task);
 		}

@@ -28,7 +28,7 @@ import java.util.Map;
 public class BuilderCustomRegistryRegistry
 {
 	private final Map<TypedRegKey<? extends IForgeRegistryEntry<?>>, RegistryBuilder<?>> BUILDERS;
-	private final Map<TypedRegKey<? extends IForgeRegistryEntry<?>>, ForgeRegistry<?>>   REGISTRIES = new HashMap<>();
+	private final Map<TypedRegKey<? extends IForgeRegistryEntry<?>>, ForgeRegistry<?>> REGISTRIES = new HashMap<>();
 
 	private BuilderCustomRegistryRegistry(Builder builder)
 	{
@@ -64,16 +64,16 @@ public class BuilderCustomRegistryRegistry
 	public void register()
 	{
 		BUILDERS.forEach((typedRegKey, registryBuilder) ->
-		                 {
-			                 REGISTRIES.put(typedRegKey, (ForgeRegistry<?>) registryBuilder.create());
-		                 });
+		{
+			REGISTRIES.put(typedRegKey, (ForgeRegistry<?>) registryBuilder.create());
+		});
 	}
 
 	public static class Builder
 	{
 		private final Map<TypedRegKey<? extends IForgeRegistryEntry<?>>, RegistryBuilder<?>> BUILDERS =
 				new HashMap<>();
-		private final ModData                                                                MOD;
+		private final ModData MOD;
 
 		private Builder(ModData mod)
 		{

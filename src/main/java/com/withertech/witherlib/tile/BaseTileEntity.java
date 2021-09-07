@@ -88,8 +88,7 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
 	 * Reads data stored by {@link #writeData()}, {@link #writeClientData()},
 	 * and {@link #writeItemStackData()}.
 	 *
-	 * @param tag
-	 * 		data to be read
+	 * @param tag data to be read
 	 */
 	public void readData(CompoundNBT tag)
 	{
@@ -120,7 +119,7 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
 	@Override
 	public CompoundNBT getUpdateTag()
 	{
-		CompoundNBT tag  = super.save(new CompoundNBT());
+		CompoundNBT tag = super.save(new CompoundNBT());
 		CompoundNBT data = this.writeClientData();
 		if (data != null && !data.isEmpty())
 		{

@@ -42,7 +42,7 @@ import java.util.OptionalDouble;
 public class RenderUtils
 {
 
-	private static final RenderState.LayerState        VIEW_OFFSET_Z_LAYERING   = new RenderState.LayerState(
+	private static final RenderState.LayerState VIEW_OFFSET_Z_LAYERING = new RenderState.LayerState(
 			"view_offset_z_layering",
 			() ->
 			{
@@ -69,7 +69,7 @@ public class RenderUtils
 				RenderSystem.defaultBlendFunc();
 			}
 	);
-	private static final RenderType                    LINES_NO_DEPTH           = RenderType.create(
+	private static final RenderType LINES_NO_DEPTH = RenderType.create(
 			"witherlib:highlight",
 			DefaultVertexFormats.POSITION_COLOR,
 			GL11.GL_LINES,
@@ -80,9 +80,9 @@ public class RenderUtils
 					false
 			)).setDepthTestState(new RenderState.DepthTestState("no_depth", GL11.GL_ALWAYS)).createCompositeState(false)
 	);
-	private static final IRenderTypeBuffer.Impl        LINE_BUFFER              =
+	private static final IRenderTypeBuffer.Impl LINE_BUFFER =
 			IRenderTypeBuffer.immediate(new BufferBuilder(
-			128));
+					128));
 
 	public static void enableDepthTest()
 	{
@@ -122,23 +122,23 @@ public class RenderUtils
 		Vector3d camera = getCameraPosition();
 		matrixStack.translate(x - camera.x, y - camera.y, z - camera.z);
 
-		IVertexBuilder builder  = LINE_BUFFER.getBuffer(LINES_NO_DEPTH);
-		Matrix4f       matrix4f = matrixStack.last().pose();
+		IVertexBuilder builder = LINE_BUFFER.getBuffer(LINES_NO_DEPTH);
+		Matrix4f matrix4f = matrixStack.last().pose();
 		shape.forEachEdge((x1, y1, z1, x2, y2, z2) ->
-		                  {
-			                  builder.vertex(matrix4f, (float) x1, (float) y1, (float) z1).color(
-					                  red,
-					                  green,
-					                  blue,
-					                  alpha
-			                  ).endVertex();
-			                  builder.vertex(matrix4f, (float) x2, (float) y2, (float) z2).color(
-					                  red,
-					                  green,
-					                  blue,
-					                  alpha
-			                  ).endVertex();
-		                  });
+		{
+			builder.vertex(matrix4f, (float) x1, (float) y1, (float) z1).color(
+					red,
+					green,
+					blue,
+					alpha
+			).endVertex();
+			builder.vertex(matrix4f, (float) x2, (float) y2, (float) z2).color(
+					red,
+					green,
+					blue,
+					alpha
+			).endVertex();
+		});
 		LINE_BUFFER.endBatch();
 
 		matrixStack.popPose();
@@ -210,7 +210,7 @@ public class RenderUtils
 	)
 	{
 		renderShape(matrixStack, BlockShape.create(shape), pos.getX(), pos.getY(), pos.getZ(), red, green, blue,
-		            alpha);
+				alpha);
 	}
 
 	/**

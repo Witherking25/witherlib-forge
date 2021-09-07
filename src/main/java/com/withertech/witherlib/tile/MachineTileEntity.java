@@ -91,8 +91,7 @@ public abstract class MachineTileEntity<T extends MachineTileEntity<T>> extends 
 					onStart();
 					progress++;
 					needUpdate = true;
-				}
-				else if (progress < getMaxProgress())
+				} else if (progress < getMaxProgress())
 				{
 					onTick(progress);
 					progress++;
@@ -100,17 +99,15 @@ public abstract class MachineTileEntity<T extends MachineTileEntity<T>> extends 
 					{
 						needUpdate = true;
 					}
-				}
-				else if (progress >= getMaxProgress())
+				} else if (progress >= getMaxProgress())
 				{
 					onFinish();
-					progress   = 0;
+					progress = 0;
 					needUpdate = true;
 				}
-			}
-			else
+			} else
 			{
-				progress   = 0;
+				progress = 0;
 				needUpdate = true;
 			}
 			if (needUpdate)

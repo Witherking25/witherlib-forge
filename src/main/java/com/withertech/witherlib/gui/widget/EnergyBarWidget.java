@@ -43,7 +43,7 @@ public class EnergyBarWidget extends AbstractButtonWidget implements IHoverTextW
 	public EnergyBarWidget(int x, int y, int width, int height, Supplier<Integer> energy, Supplier<Integer> capacity)
 	{
 		super(x, y, width, height, () -> EnergyFormat.cycleEnergyType(!Screen.hasShiftDown()));
-		this.energy   = energy;
+		this.energy = energy;
 		this.capacity = capacity;
 	}
 
@@ -63,8 +63,8 @@ public class EnergyBarWidget extends AbstractButtonWidget implements IHoverTextW
 				1 / 11f,
 				1
 		);
-		int   energy     = this.energy.get();
-		int   capacity   = this.capacity.get();
+		int energy = this.energy.get();
+		int capacity = this.capacity.get();
 		float percentage = capacity == 0 ? 1 : Math.max(Math.min(energy / (float) capacity, 1), 0);
 		if (percentage != 0)
 		{
@@ -85,7 +85,7 @@ public class EnergyBarWidget extends AbstractButtonWidget implements IHoverTextW
 	@Override
 	public ITextComponent getHoverText()
 	{
-		int energy   = this.energy.get();
+		int energy = this.energy.get();
 		int capacity = this.capacity.get();
 		return new StringTextComponent(EnergyFormat.formatCapacity(energy, capacity));
 	}

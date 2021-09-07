@@ -61,8 +61,7 @@ public abstract class TileEntityBaseScreen<T extends TileEntity> extends ObjectB
 		try
 		{
 			return (T) tile;
-		}
-		catch (ClassCastException ignore)
+		} catch (ClassCastException ignore)
 		{
 		}
 		return null;

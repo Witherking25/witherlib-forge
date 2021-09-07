@@ -30,15 +30,15 @@ import java.util.function.Supplier;
 
 public class BuilderForgeRegistry<T extends IForgeRegistryEntry<T>>
 {
-	protected final ModData                                MOD;
-	protected final DeferredRegister<T>                    REGISTRY;
+	protected final ModData MOD;
+	protected final DeferredRegister<T> REGISTRY;
 	protected final Map<TypedRegKey<?>, RegistryObject<T>> ENTRIES;
 
 	protected BuilderForgeRegistry(Builder<T> builder)
 	{
-		MOD      = builder.mod;
+		MOD = builder.mod;
 		REGISTRY = builder.REGISTRY;
-		ENTRIES  = builder.ENTRIES;
+		ENTRIES = builder.ENTRIES;
 	}
 
 	public static <T extends IForgeRegistryEntry<T>> Builder<T> builder(ModData mod, Class<T> type)
@@ -79,8 +79,8 @@ public class BuilderForgeRegistry<T extends IForgeRegistryEntry<T>>
 
 	public static class Builder<T extends IForgeRegistryEntry<T>>
 	{
-		private final ModData                                mod;
-		private final DeferredRegister<T>                    REGISTRY;
+		private final ModData mod;
+		private final DeferredRegister<T> REGISTRY;
 		private final Map<TypedRegKey<?>, RegistryObject<T>> ENTRIES = new HashMap<>();
 
 		private Builder(ModData mod, Class<T> registry)

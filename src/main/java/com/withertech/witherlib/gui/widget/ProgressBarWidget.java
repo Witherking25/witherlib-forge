@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 public class ProgressBarWidget extends Widget
 {
 	private static final ResourceLocation PROGRESS = WitherLib.INSTANCE.MOD.modLocation("textures/gui/progress_bar"
-	                                                                                    + ".png");
+			+ ".png");
 
 	private final Supplier<Integer> progress;
 	private final Supplier<Integer> maxProgress;

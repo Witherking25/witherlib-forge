@@ -123,16 +123,16 @@ public class BlockShape
 	public void forEachCorner(PointConsumer action)
 	{
 		this.shape.forAllBoxes((x1, y1, z1, x2, y2, z2) ->
-		                       {
-			                       action.apply(x1, y1, z1);
-			                       action.apply(x2, y1, z1);
-			                       action.apply(x1, y1, z2);
-			                       action.apply(x2, y1, z2);
-			                       action.apply(x1, y2, z1);
-			                       action.apply(x2, y2, z1);
-			                       action.apply(x1, y2, z2);
-			                       action.apply(x2, y2, z2);
-		                       });
+		{
+			action.apply(x1, y1, z1);
+			action.apply(x2, y1, z1);
+			action.apply(x1, y1, z2);
+			action.apply(x2, y1, z2);
+			action.apply(x1, y2, z1);
+			action.apply(x2, y2, z1);
+			action.apply(x1, y2, z2);
+			action.apply(x2, y2, z2);
+		});
 	}
 
 	/**
@@ -226,8 +226,8 @@ public class BlockShape
 		}
 
 		return this.maxX() > shape.minX() && this.minX() < shape.maxX() &&
-		       this.maxY() > shape.minY() && this.minY() < shape.maxY() &&
-		       this.maxZ() > shape.minZ() && this.minZ() < shape.maxZ();
+				this.maxY() > shape.minY() && this.minY() < shape.maxY() &&
+				this.maxZ() > shape.minZ() && this.minZ() < shape.maxZ();
 	}
 
 	public BlockShape grow(double amount)

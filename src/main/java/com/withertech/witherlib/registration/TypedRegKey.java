@@ -40,7 +40,7 @@ import java.util.Objects;
 public class TypedRegKey<X>
 {
 	private final Class<X> type;
-	private final String   id;
+	private final String id;
 
 	private TypedRegKey(String id, Class<X> type)
 	{

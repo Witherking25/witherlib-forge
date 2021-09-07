@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 public class ToggleButtonWidget extends AbstractButtonWidget
 {
 	private final Supplier<Boolean> getState;
-	private       ITextComponent    text;
+	private ITextComponent text;
 
 	public ToggleButtonWidget(
 			int x,

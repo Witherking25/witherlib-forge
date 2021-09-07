@@ -44,16 +44,16 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 {
 
 	private final BiConsumer<String, String> changeListener;
-	protected     int                        maxLength;
-	protected     boolean                    focused;
-	protected     int                        lineScrollOffset;
-	protected     int                        cursorPosition;
-	protected     int                        selectionPos;
-	protected     boolean                    drawBackground  = true;
-	protected     int                        activeTextColor = 14737632, inactiveTextColor = 7368816;
+	protected int maxLength;
+	protected boolean focused;
+	protected int lineScrollOffset;
+	protected int cursorPosition;
+	protected int selectionPos;
+	protected boolean drawBackground = true;
+	protected int activeTextColor = 14737632, inactiveTextColor = 7368816;
 	private String text;
 	private String suggestion = "";
-	private int    cursorBlinkCounter;
+	private int cursorBlinkCounter;
 
 	public TextFieldWidget(
 			int x,
@@ -66,8 +66,8 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 	)
 	{
 		super(x, y, width, height);
-		this.text           = defaultText;
-		this.maxLength      = maxLength;
+		this.text = defaultText;
+		this.maxLength = maxLength;
 		this.changeListener = changeListener;
 		this.cursorPosition = this.selectionPos = defaultText.length();
 	}
@@ -118,19 +118,19 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 			this.drawBackground(matrixStack);
 		}
 
-		int          textColor         = this.active ? this.activeTextColor : this.inactiveTextColor;
-		int          relativeCursor    = this.cursorPosition - this.lineScrollOffset;
-		int          relativeSelection = this.selectionPos - this.lineScrollOffset;
-		FontRenderer fontRenderer      = Minecraft.getInstance().font;
-		String       s                 = fontRenderer.plainSubstrByWidth(
+		int textColor = this.active ? this.activeTextColor : this.inactiveTextColor;
+		int relativeCursor = this.cursorPosition - this.lineScrollOffset;
+		int relativeSelection = this.selectionPos - this.lineScrollOffset;
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		String s = fontRenderer.plainSubstrByWidth(
 				this.text.substring(this.lineScrollOffset),
 				this.width - 8
 		);
-		boolean      cursorInView      = relativeCursor >= 0 && relativeCursor <= s.length();
-		boolean      shouldBlink       = this.focused && this.cursorBlinkCounter / 8 % 2 == 0 && cursorInView;
-		int          left              = this.x + 4;
-		int          top               = this.y + (this.height - 8) / 2;
-		int          leftOffset        = left;
+		boolean cursorInView = relativeCursor >= 0 && relativeCursor <= s.length();
+		boolean shouldBlink = this.focused && this.cursorBlinkCounter / 8 % 2 == 0 && cursorInView;
+		int left = this.x + 4;
+		int top = this.y + (this.height - 8) / 2;
+		int leftOffset = left;
 
 		if (relativeSelection > s.length())
 		{
@@ -144,13 +144,12 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 		}
 
 		boolean cursorAtEnd = this.cursorPosition < this.text.length();
-		int     cursorX     = leftOffset;
+		int cursorX = leftOffset;
 
 		if (!cursorInView)
 		{
 			cursorX = relativeCursor > 0 ? left + this.width : left;
-		}
-		else if (cursorAtEnd)
+		} else if (cursorAtEnd)
 		{
 			cursorX = leftOffset - 1;
 			leftOffset--;
@@ -183,8 +182,7 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 			if (cursorAtEnd)
 			{
 				ScreenUtils.fillRect(matrixStack, cursorX - 0.5f, top - 1, 1, fontRenderer.lineHeight, -3092272);
-			}
-			else
+			} else
 			{
 				fontRenderer.drawShadow(matrixStack, "_", cursorX, top, textColor);
 			}
@@ -209,14 +207,14 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 		{
 			int i = startX;
 			startX = endX;
-			endX   = i;
+			endX = i;
 		}
 
 		if (startY < endY)
 		{
 			int j = startY;
 			startY = endY;
-			endY   = j;
+			endY = j;
 		}
 
 		if (endX > this.x + this.width)
@@ -229,8 +227,8 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 			startX = this.x + this.width;
 		}
 
-		Matrix4f      matrix        = matrixStack.last().pose();
-		Tessellator   tessellator   = Tessellator.getInstance();
+		Matrix4f matrix = matrixStack.last().pose();
+		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuilder();
 		RenderSystem.color4f(0.0F, 0.0F, 255.0F, 255.0F);
 		RenderSystem.disableTexture();
@@ -276,16 +274,15 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 		if (text == null)
 		{
 			text = "";
-		}
-		else if (text.length() > this.maxLength)
+		} else if (text.length() > this.maxLength)
 		{
 			text = SharedConstants.filterText(text.substring(0, this.maxLength));
 		}
 
 		this.lineScrollOffset = 0;
-		this.cursorPosition   = 0;
-		this.selectionPos     = 0;
-		this.text             = text;
+		this.cursorPosition = 0;
+		this.selectionPos = 0;
+		this.text = text;
 	}
 
 	protected void addTextAtCursor(String text)
@@ -300,9 +297,9 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 
 		int min = Math.min(this.cursorPosition, this.selectionPos);
 		int max = Math.max(this.cursorPosition, this.selectionPos);
-		this.text           = this.text.substring(0, min) + text + this.text.substring(max);
+		this.text = this.text.substring(0, min) + text + this.text.substring(max);
 		this.cursorPosition = min + text.length();
-		this.selectionPos   = this.cursorPosition;
+		this.selectionPos = this.cursorPosition;
 		this.moveLineOffsetToCursor();
 
 		if (!oldText.equals(this.text))
@@ -322,19 +319,17 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 		String oldText = text;
 		if (this.cursorPosition != this.selectionPos)
 		{
-			this.text           = this.text.substring(
+			this.text = this.text.substring(
 					0,
 					Math.min(this.cursorPosition, this.selectionPos)
 			) + this.text.substring(Math.max(this.cursorPosition, this.selectionPos));
 			this.cursorPosition = this.selectionPos = Math.min(this.cursorPosition, this.selectionPos);
-		}
-		else if (left && this.cursorPosition > 0)
+		} else if (left && this.cursorPosition > 0)
 		{
 			this.text = this.text.substring(0, this.cursorPosition - 1) + this.text.substring(this.cursorPosition);
 			this.cursorPosition -= 1;
 			this.selectionPos -= 1;
-		}
-		else if (!left && this.cursorPosition < this.text.length())
+		} else if (!left && this.cursorPosition < this.text.length())
 		{
 			this.text = this.text.substring(0, this.cursorPosition) + this.text.substring(this.cursorPosition + 1);
 		}
@@ -348,11 +343,11 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 
 	protected void moveLineOffsetToCursor()
 	{
-		FontRenderer fontRenderer   = Minecraft.getInstance().font;
-		int          availableWidth = this.width - 8 - (
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		int availableWidth = this.width - 8 - (
 				this.cursorPosition == this.text.length() ? fontRenderer.width("_") : 0
 		);
-		int          min            = Math.min(
+		int min = Math.min(
 				this.cursorPosition + 1,
 				this.text.length()
 		) - fontRenderer.plainSubstrByWidth(new StringBuilder(this.text.substring(
@@ -362,14 +357,14 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 						this.cursorPosition + 2
 				)
 		)).reverse().toString(), availableWidth).length();
-		int          max            = Math.max(
+		int max = Math.max(
 				this.cursorPosition - 1,
 				0
 		) + fontRenderer.plainSubstrByWidth(
 				this.text.substring(Math.max(this.cursorPosition - 1, 0)),
 				availableWidth
 		).length();
-		max                   = max - fontRenderer.plainSubstrByWidth(
+		max = max - fontRenderer.plainSubstrByWidth(
 				new StringBuilder(this.text.substring(0, max)).reverse().toString(),
 				availableWidth
 		).length();
@@ -409,7 +404,7 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 
 	public void setTextColors(int activeTextColor, int inactiveTextColor)
 	{
-		this.activeTextColor   = activeTextColor;
+		this.activeTextColor = activeTextColor;
 		this.inactiveTextColor = inactiveTextColor;
 	}
 
@@ -440,27 +435,22 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 		if (keyCode == 256)
 		{
 			this.setFocused(false);
-		}
-		else if (Screen.isSelectAll(keyCode))
+		} else if (Screen.isSelectAll(keyCode))
 		{
 			this.lineScrollOffset = 0;
-			this.cursorPosition   = this.text.length();
-			this.selectionPos     = 0;
-		}
-		else if (Screen.isCopy(keyCode))
+			this.cursorPosition = this.text.length();
+			this.selectionPos = 0;
+		} else if (Screen.isCopy(keyCode))
 		{
 			Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
-		}
-		else if (Screen.isPaste(keyCode))
+		} else if (Screen.isPaste(keyCode))
 		{
 			this.addTextAtCursor(Minecraft.getInstance().keyboardHandler.getClipboard());
-		}
-		else if (Screen.isCut(keyCode))
+		} else if (Screen.isCut(keyCode))
 		{
 			Minecraft.getInstance().keyboardHandler.setClipboard(this.getSelectedText());
 			this.addTextAtCursor("");
-		}
-		else
+		} else
 		{
 			switch (keyCode)
 			{
@@ -481,8 +471,7 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 					if (!shift && this.cursorPosition != this.selectionPos)
 					{
 						this.cursorPosition = this.selectionPos = Math.max(this.cursorPosition, this.selectionPos);
-					}
-					else if (this.cursorPosition < this.text.length())
+					} else if (this.cursorPosition < this.text.length())
 					{
 						this.cursorPosition = this.cursorPosition + 1;
 						if (!shift)
@@ -496,8 +485,7 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 					if (!shift && this.cursorPosition != this.selectionPos)
 					{
 						this.cursorPosition = this.selectionPos = Math.min(this.cursorPosition, this.selectionPos);
-					}
-					else if (this.cursorPosition > 0)
+					} else if (this.cursorPosition > 0)
 					{
 						this.cursorPosition = this.cursorPosition - 1;
 						if (!shift)
@@ -549,13 +537,12 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 			if (button == 1)
 			{
 				this.clear();
-			}
-			else
+			} else
 			{
 				int offset = MathHelper.floor(mouseX) - this.x - 4;
 
 				FontRenderer font = Minecraft.getInstance().font;
-				String       s    = font.plainSubstrByWidth(
+				String s = font.plainSubstrByWidth(
 						this.text.substring(this.lineScrollOffset),
 						Math.min(offset, this.width - 8)
 				);

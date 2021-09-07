@@ -18,7 +18,6 @@
 
 package com.withertech.witherlib.nbt.wrappers;
 
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -51,7 +50,7 @@ public class ListNBTWrapper<T extends INBTSerializable<INBT>> extends AbstractNB
 	{
 		value.clear();
 		new ArrayList<>(list).forEach(nbt ->
-        {
+		{
 			T value = factory.get();
 			value.deserializeNBT(nbt);
 			this.value.add(value);

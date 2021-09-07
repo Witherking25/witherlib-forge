@@ -41,10 +41,8 @@ public abstract class TileEntityBasePacket<T extends TileEntity> extends BlockPo
 	/**
 	 * Grabs the tile entity in {@code dimension} at {@code pos}.
 	 *
-	 * @param dimension
-	 * 		dimension of the tile entity
-	 * @param pos
-	 * 		position of the tile entity
+	 * @param dimension dimension of the tile entity
+	 * @param pos       position of the tile entity
 	 */
 	public TileEntityBasePacket(RegistryKey<World> dimension, BlockPos pos)
 	{
@@ -55,10 +53,8 @@ public abstract class TileEntityBasePacket<T extends TileEntity> extends BlockPo
 	/**
 	 * Grabs the tile entity in {@code world} at {@code pos}.
 	 *
-	 * @param world
-	 * 		world the tile entity is in
-	 * @param pos
-	 * 		position of the tile entity
+	 * @param world world the tile entity is in
+	 * @param pos   position of the tile entity
 	 */
 	public TileEntityBasePacket(World world, BlockPos pos)
 	{
@@ -68,8 +64,7 @@ public abstract class TileEntityBasePacket<T extends TileEntity> extends BlockPo
 	/**
 	 * Grabs the tile entity at {@code pos} in the relevant player's dimension.
 	 *
-	 * @param pos
-	 * 		position of the tile entity
+	 * @param pos position of the tile entity
 	 */
 	public TileEntityBasePacket(BlockPos pos)
 	{
@@ -119,9 +114,9 @@ public abstract class TileEntityBasePacket<T extends TileEntity> extends BlockPo
 	private T getTileEntity(PacketContext context)
 	{
 		World world = this.dimension == null ? context.getWorld() :
-		              context.getHandlingSide() == CoreSide.CLIENT ?
-		              context.getWorld().dimension() == this.dimension ? context.getWorld() : null :
-		              context.getWorld().getServer().getLevel(this.dimension);
+				context.getHandlingSide() == CoreSide.CLIENT ?
+						context.getWorld().dimension() == this.dimension ? context.getWorld() : null :
+						context.getWorld().getServer().getLevel(this.dimension);
 
 		if (world == null)
 		{
@@ -138,8 +133,7 @@ public abstract class TileEntityBasePacket<T extends TileEntity> extends BlockPo
 		try
 		{
 			return (T) tile;
-		}
-		catch (ClassCastException ignore)
+		} catch (ClassCastException ignore)
 		{
 		}
 		return null;

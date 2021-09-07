@@ -44,7 +44,7 @@ public abstract class TileEntityBaseContainer<X extends TileEntityBaseContainer<
 	{
 		super(type, id, player);
 		this.tileWorld = tileWorld;
-		this.tilePos   = tilePos;
+		this.tilePos = tilePos;
 	}
 
 	public TileEntityBaseContainer(ContainerType<X> type, int id, PlayerEntity player, BlockPos tilePos)
@@ -77,8 +77,7 @@ public abstract class TileEntityBaseContainer<X extends TileEntityBaseContainer<
 		try
 		{
 			return (T) tile;
-		}
-		catch (ClassCastException ignore)
+		} catch (ClassCastException ignore)
 		{
 		}
 		return null;

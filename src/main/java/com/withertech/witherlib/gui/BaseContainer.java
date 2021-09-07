@@ -31,13 +31,13 @@ public abstract class BaseContainer extends Container
 {
 
 	public final PlayerEntity player;
-	public final World        world;
+	public final World world;
 
 	public BaseContainer(ContainerType<?> type, int id, PlayerEntity player)
 	{
 		super(type, id);
 		this.player = player;
-		this.world  = player.level;
+		this.world = player.level;
 	}
 
 
@@ -57,10 +57,8 @@ public abstract class BaseContainer extends Container
 	/**
 	 * Adds the player's slots to the container at the given {@code x} and {@code y}.
 	 *
-	 * @param x
-	 * 		the x-coordinate of the left side of the left most slots
-	 * @param y
-	 * 		the y-coordinate of the top edge of the top most slots
+	 * @param x the x-coordinate of the left side of the left most slots
+	 * @param y the y-coordinate of the top edge of the top most slots
 	 */
 	protected void addPlayerSlots(int x, int y)
 	{

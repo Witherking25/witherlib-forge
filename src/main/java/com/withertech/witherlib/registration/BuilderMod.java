@@ -40,40 +40,38 @@ public abstract class BuilderMod
 	/**
 	 * The ModData for your mod
 	 */
-	public final ModData     MOD;
+	public final ModData MOD;
 
-	private BuilderCustomRegistryRegistry      CUSTOM_REGISTRIES;
+	private BuilderCustomRegistryRegistry CUSTOM_REGISTRIES;
 	private BuilderCustomRegistryEntryRegistry CUSTOM_REGISTRY_ENTRIES;
 
-	private BuilderForgeRegistry<Block>             BLOCKS;
-	private BuilderForgeRegistry<Item>              ITEMS;
+	private BuilderForgeRegistry<Block> BLOCKS;
+	private BuilderForgeRegistry<Item> ITEMS;
 	private BuilderForgeRegistry<TileEntityType<?>> TILES;
-	private BuilderForgeRegistry<ContainerType<?>>  CONTAINERS;
-	private BuilderForgeRegistry<Fluid>             FLUIDS;
-	private BuilderForgeRegistry<EntityType<?>>     ENTITIES;
+	private BuilderForgeRegistry<ContainerType<?>> CONTAINERS;
+	private BuilderForgeRegistry<Fluid> FLUIDS;
+	private BuilderForgeRegistry<EntityType<?>> ENTITIES;
 
-	private BuilderEntityAttributeRegistry    ENTITY_ATTRIBUTES;
-	private BuilderEntityRendererRegistry     ENTITY_RENDERERS;
+	private BuilderEntityAttributeRegistry ENTITY_ATTRIBUTES;
+	private BuilderEntityRendererRegistry ENTITY_RENDERERS;
 	private BuilderTileEntityRendererRegistry TILE_RENDERERS;
-	private BuilderDataGenerator              DATA_GENERATORS;
-	private BuilderTagRegistry                TAGS;
-	private BuilderTabRegistry                TABS;
-	private BuilderGuiRegistry                GUIS;
-	private BuilderNetworkRegistry            NETS;
-	private BuilderConfigRegistry             CONFIGS;
+	private BuilderDataGenerator DATA_GENERATORS;
+	private BuilderTagRegistry TAGS;
+	private BuilderTabRegistry TABS;
+	private BuilderGuiRegistry GUIS;
+	private BuilderNetworkRegistry NETS;
+	private BuilderConfigRegistry CONFIGS;
 
 
 	/**
 	 * The constructor you should override for your Mod class
 	 *
-	 * @param mod
-	 * 		Your Mod's {@link ModData}
-	 *
+	 * @param mod Your Mod's {@link ModData}
 	 * @see com.withertech.witherlib.WitherLib
 	 */
 	protected BuilderMod(ModData mod)
 	{
-		MOD      = mod;
+		MOD = mod;
 		REGISTRY = new ModRegistry
 				(
 						MOD,

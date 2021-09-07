@@ -36,8 +36,7 @@ public abstract class BlockPosBasePacket implements BasePacket
 	/**
 	 * Stores the given {@code pos} with the packet data.
 	 *
-	 * @param pos
-	 * 		position to be stored
+	 * @param pos position to be stored
 	 */
 	public BlockPosBasePacket(BlockPos pos)
 	{

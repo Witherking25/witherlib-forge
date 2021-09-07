@@ -30,7 +30,7 @@ import java.util.function.Function;
 public class BuilderConfigRegistry
 {
 	private final Map<TypedRegKey<? extends BaseConfig>, Function<ForgeConfigSpec.Builder, BaseConfig>> FACTORIES;
-	private final Map<TypedRegKey<? extends BaseConfig>, Pair<BaseConfig, ForgeConfigSpec>>             CONFIGS =
+	private final Map<TypedRegKey<? extends BaseConfig>, Pair<BaseConfig, ForgeConfigSpec>> CONFIGS =
 			new HashMap<>();
 
 	private final ModData MOD;
@@ -38,7 +38,7 @@ public class BuilderConfigRegistry
 	public BuilderConfigRegistry(Builder builder)
 	{
 		FACTORIES = builder.CONFIGS;
-		MOD       = builder.MOD;
+		MOD = builder.MOD;
 	}
 
 	public static Builder builder(ModData mod)
@@ -86,26 +86,26 @@ public class BuilderConfigRegistry
 	public void register()
 	{
 		FACTORIES.forEach((typedRegKey, builderBaseConfigFunction) ->
-		                  {
-			                  Pair<BaseConfig, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(
-					                  builderBaseConfigFunction);
-			                  CONFIGS.put(typedRegKey, pair);
-			                  ModLoadingContext.get().registerConfig(
-					                  pair.getLeft().getType(),
-					                  pair.getRight(),
-					                  String.format("%s-%s.toml",
-					                                MOD.MODID,
-					                                typedRegKey.getId()
-					                  )
-			                  );
-		                  });
+		{
+			Pair<BaseConfig, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(
+					builderBaseConfigFunction);
+			CONFIGS.put(typedRegKey, pair);
+			ModLoadingContext.get().registerConfig(
+					pair.getLeft().getType(),
+					pair.getRight(),
+					String.format("%s-%s.toml",
+							MOD.MODID,
+							typedRegKey.getId()
+					)
+			);
+		});
 	}
 
 	public static class Builder
 	{
 		private final Map<TypedRegKey<? extends BaseConfig>, Function<ForgeConfigSpec.Builder, BaseConfig>> CONFIGS =
 				new HashMap<>();
-		private final ModData                                                                               MOD;
+		private final ModData MOD;
 
 		private Builder(ModData mod)
 		{

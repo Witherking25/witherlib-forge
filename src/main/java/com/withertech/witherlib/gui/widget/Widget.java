@@ -31,16 +31,16 @@ public abstract class Widget
 
 	public int x, y;
 	public int width, height;
-	public boolean active  = true;
+	public boolean active = true;
 	public boolean hovered = false, wasHovered = false;
-	public    float blitOffset    = 0;
-	protected long  nextNarration = Long.MAX_VALUE;
+	public float blitOffset = 0;
+	protected long nextNarration = Long.MAX_VALUE;
 
 	public Widget(int x, int y, int width, int height)
 	{
-		this.x      = x;
-		this.y      = y;
-		this.width  = width;
+		this.x = x;
+		this.y = y;
+		this.width = width;
 		this.height = height;
 	}
 
@@ -54,7 +54,7 @@ public abstract class Widget
 		if (this.active && this.hovered && Util.getMillis() > this.nextNarration)
 		{
 			ITextComponent message = this.getNarrationMessage();
-			String         s       = message == null ? "" : message.getString();
+			String s = message == null ? "" : message.getString();
 			if (!s.isEmpty())
 			{
 				NarratorChatListener.INSTANCE.sayNow(s);

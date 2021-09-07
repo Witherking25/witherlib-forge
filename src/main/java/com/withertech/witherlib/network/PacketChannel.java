@@ -42,14 +42,14 @@ import java.util.function.Supplier;
 public class PacketChannel
 {
 
-	private final SimpleChannel                                    channel;
-	private final HashMap<Class<? extends BasePacket>, Integer>    packet_to_index  = new HashMap<>();
-	private final IntObjectHashMap<Supplier<? extends BasePacket>> index_to_packet  = new IntObjectHashMap<>();
+	private final SimpleChannel channel;
+	private final HashMap<Class<? extends BasePacket>, Integer> packet_to_index = new HashMap<>();
+	private final IntObjectHashMap<Supplier<? extends BasePacket>> index_to_packet = new IntObjectHashMap<>();
 	/**
 	 * Whether a packet should be handled on the main thread or off thread
 	 */
-	private final HashMap<Class<? extends BasePacket>, Boolean>    packet_to_queued = new HashMap<>();
-	private       int                                              index            = 0;
+	private final HashMap<Class<? extends BasePacket>, Boolean> packet_to_queued = new HashMap<>();
+	private int index = 0;
 
 	private PacketChannel(String modid, String name)
 	{
@@ -60,22 +60,18 @@ public class PacketChannel
 				"1"::equals
 		);
 		this.channel.registerMessage(0, InternalPacket.class,
-		                             (message, buffer) -> InternalPacket.write(this, message, buffer),
-		                             buffer -> InternalPacket.read(this, buffer),
-		                             (message, context) -> InternalPacket.handle(this, message, context)
+				(message, buffer) -> InternalPacket.write(this, message, buffer),
+				buffer -> InternalPacket.read(this, buffer),
+				(message, context) -> InternalPacket.handle(this, message, context)
 		);
 	}
 
 	/**
 	 * Creates a channel with the given {@code registryName}.
 	 *
-	 * @param registryName
-	 * 		registry name of the channel
-	 *
+	 * @param registryName registry name of the channel
 	 * @return a new channel with the given {@code registryName}
-	 *
-	 * @throws IllegalArgumentException
-	 * 		if {@code registryName == null}
+	 * @throws IllegalArgumentException if {@code registryName == null}
 	 */
 	public static PacketChannel create(String modid, String registryName)
 	{
@@ -109,12 +105,9 @@ public class PacketChannel
 	/**
 	 * Registers a packet for this channel
 	 *
-	 * @param packetClass
-	 * 		class of the packet
-	 * @param packetSupplier
-	 * 		supplier for new packet instances
-	 * @param shouldBeQueued
-	 * 		whether the packet should be handled on the main thread
+	 * @param packetClass    class of the packet
+	 * @param packetSupplier supplier for new packet instances
+	 * @param shouldBeQueued whether the packet should be handled on the main thread
 	 */
 	public <T extends BasePacket> void registerMessage(
 			Class<T> packetClass,
@@ -136,8 +129,7 @@ public class PacketChannel
 	/**
 	 * Sends the given {@code packet} to the server. Must only be used client-side.
 	 *
-	 * @param packet
-	 * 		packet to be send
+	 * @param packet packet to be send
 	 */
 	public void sendToServer(BasePacket packet)
 	{
@@ -148,10 +140,8 @@ public class PacketChannel
 	/**
 	 * Sends the given {@code packet} to the server. Must only be used server-side.
 	 *
-	 * @param player
-	 * 		player to send the packet to
-	 * @param packet
-	 * 		packet to be send
+	 * @param player player to send the packet to
+	 * @param packet packet to be send
 	 */
 	public void sendToPlayer(PlayerEntity player, BasePacket packet)
 	{
@@ -169,8 +159,7 @@ public class PacketChannel
 	/**
 	 * Sends the given {@code packet} to all players. Must only be used server-side.
 	 *
-	 * @param packet
-	 * 		packet to be send
+	 * @param packet packet to be send
 	 */
 	public void sendToAllPlayers(BasePacket packet)
 	{
@@ -181,10 +170,8 @@ public class PacketChannel
 	/**
 	 * Sends the given {@code packet} to all players in the given {@code dimension}. Must only be used server-side.
 	 *
-	 * @param dimension
-	 * 		dimension to send the packet to
-	 * @param packet
-	 * 		packet to be send
+	 * @param dimension dimension to send the packet to
+	 * @param packet    packet to be send
 	 */
 	public void sendToDimension(RegistryKey<World> dimension, BasePacket packet)
 	{
@@ -195,10 +182,8 @@ public class PacketChannel
 	/**
 	 * Sends the given {@code packet} to all players in the given {@code world}. Must only be used server-side.
 	 *
-	 * @param world
-	 * 		world to send the packet to
-	 * @param packet
-	 * 		packet to be send
+	 * @param world  world to send the packet to
+	 * @param packet packet to be send
 	 */
 	public void sendToDimension(World world, BasePacket packet)
 	{
@@ -212,10 +197,8 @@ public class PacketChannel
 	/**
 	 * Sends the given {@code packet} to all players tracking the given {@code entity}. Must only be used server-side.
 	 *
-	 * @param entity
-	 * 		entity which should be tracked
-	 * @param packet
-	 * 		packet to be send
+	 * @param entity entity which should be tracked
+	 * @param packet packet to be send
 	 */
 	public void sendToAllTrackingEntity(Entity entity, BasePacket packet)
 	{
@@ -225,15 +208,14 @@ public class PacketChannel
 		}
 		this.checkRegistration(packet);
 		this.channel.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity),
-		                  new InternalPacket().setPacket(packet));
+				new InternalPacket().setPacket(packet));
 	}
 
 	/**
 	 * Sends the given {@code packet} to all players tracking the given position in the given {@code world}. Must only
 	 * be used server-side.
 	 *
-	 * @param packet
-	 * 		packet to be send
+	 * @param packet packet to be send
 	 */
 	public void sendToAllNear(RegistryKey<World> world, double x, double y, double z, double radius, BasePacket packet)
 	{
@@ -248,8 +230,7 @@ public class PacketChannel
 	 * Sends the given {@code packet} to all players tracking the given position in the given {@code world}. Must only
 	 * be used server-side.
 	 *
-	 * @param packet
-	 * 		packet to be send
+	 * @param packet packet to be send
 	 */
 	public void sendToAllNear(RegistryKey<World> world, BlockPos pos, double radius, BasePacket packet)
 	{
@@ -260,8 +241,7 @@ public class PacketChannel
 	 * Sends the given {@code packet} to all players tracking the given position in the given {@code world}. Must only
 	 * be used server-side.
 	 *
-	 * @param packet
-	 * 		packet to be send
+	 * @param packet packet to be send
 	 */
 	public void sendToAllNear(World world, double x, double y, double z, double radius, BasePacket packet)
 	{
@@ -276,8 +256,7 @@ public class PacketChannel
 	 * Sends the given {@code packet} to all players tracking the given position in the given {@code world}. Must only
 	 * be used server-side.
 	 *
-	 * @param packet
-	 * 		packet to be send
+	 * @param packet packet to be send
 	 */
 	public void sendToAllNear(World world, BlockPos pos, double radius, BasePacket packet)
 	{
@@ -326,8 +305,7 @@ public class PacketChannel
 			if (this.packet_to_queued.get(packet.getClass()))
 			{
 				context.queueTask(() -> packet.handle(context));
-			}
-			else
+			} else
 			{
 				packet.handle(context);
 			}

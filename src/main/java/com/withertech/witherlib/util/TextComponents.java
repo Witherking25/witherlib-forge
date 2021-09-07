@@ -199,12 +199,12 @@ public class TextComponents
 						0,
 						i
 				) + ' ' + (
-						                i + 2 < dimensionName.length() ? dimensionName.substring(
-								                i + 1,
-								                i + 2
-						                ).toUpperCase() + dimensionName.substring(i + 2) :
-						                dimensionName.substring(i + 1).toUpperCase()
-				                );
+						i + 2 < dimensionName.length() ? dimensionName.substring(
+								i + 1,
+								i + 2
+						).toUpperCase() + dimensionName.substring(i + 2) :
+								dimensionName.substring(i + 1).toUpperCase()
+				);
 			}
 		}
 		return string(dimensionName);
@@ -228,7 +228,7 @@ public class TextComponents
 		private TextComponentBuilder(IFormattableTextComponent textComponent, TextComponentBuilder parent)
 		{
 			this.textComponent = textComponent;
-			this.parent        = parent;
+			this.parent = parent;
 		}
 
 		private TextComponentBuilder(IFormattableTextComponent textComponent)

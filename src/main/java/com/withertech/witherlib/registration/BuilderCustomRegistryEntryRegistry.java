@@ -52,7 +52,7 @@ public class BuilderCustomRegistryEntryRegistry
 	public void register(IEventBus bus)
 	{
 		REGISTRIES.forEach((typedRegKey, builderForgeRegistry) ->
-				                   builderForgeRegistry.register(bus));
+				builderForgeRegistry.register(bus));
 	}
 
 	public static class Builder

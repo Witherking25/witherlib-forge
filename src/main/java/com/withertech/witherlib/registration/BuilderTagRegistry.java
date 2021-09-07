@@ -33,13 +33,13 @@ import java.util.Map;
 public class BuilderTagRegistry
 {
 	private final Map<String, ITag.INamedTag<Block>> BLOCKS;
-	private final Map<String, ITag.INamedTag<Item>>  ITEMS;
+	private final Map<String, ITag.INamedTag<Item>> ITEMS;
 	private final Map<String, ITag.INamedTag<Fluid>> FLUIDS;
 
 	private BuilderTagRegistry(Builder builder)
 	{
 		BLOCKS = builder.BLOCKS;
-		ITEMS  = builder.ITEMS;
+		ITEMS = builder.ITEMS;
 		FLUIDS = builder.FLUIDS;
 	}
 
@@ -83,7 +83,7 @@ public class BuilderTagRegistry
 		private final String MODID;
 
 		private final Map<String, ITag.INamedTag<Block>> BLOCKS = new HashMap<>();
-		private final Map<String, ITag.INamedTag<Item>>  ITEMS  = new HashMap<>();
+		private final Map<String, ITag.INamedTag<Item>> ITEMS = new HashMap<>();
 		private final Map<String, ITag.INamedTag<Fluid>> FLUIDS = new HashMap<>();
 
 		private Builder(ModData mod)

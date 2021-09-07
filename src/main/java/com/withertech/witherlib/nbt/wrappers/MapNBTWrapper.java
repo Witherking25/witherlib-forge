@@ -43,7 +43,7 @@ public class MapNBTWrapper<T extends INBTSerializable<INBT>> extends AbstractNBT
 	{
 		CompoundNBT nbt = new CompoundNBT();
 		value.forEach((key, value) ->
-				             nbt.put(key, value.serializeNBT()));
+				nbt.put(key, value.serializeNBT()));
 		return nbt;
 	}
 
@@ -52,10 +52,10 @@ public class MapNBTWrapper<T extends INBTSerializable<INBT>> extends AbstractNBT
 	{
 		this.value.clear();
 		nbt.getAllKeys().stream().collect(Collectors.toMap(Function.identity(), nbt::getCompound)).forEach((key, nbtValue) ->
-        {
-            T objValue = factory.get();
-            objValue.deserializeNBT(nbtValue);
-            this.value.put(key, objValue);
-        });
+		{
+			T objValue = factory.get();
+			objValue.deserializeNBT(nbtValue);
+			this.value.put(key, objValue);
+		});
 	}
 }

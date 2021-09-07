@@ -35,32 +35,32 @@ import java.util.function.Consumer;
 
 public class BuilderDataGenerator
 {
-	private final List<Consumer<BuilderBlockStateProvider>>                                                 BLOCK_STATES;
-	private final List<Consumer<BuilderItemModelProvider>>                                                  ITEM_MODELS;
-	private final List<Consumer<BuilderBlockTagsProvider>>                                                  BLOCK_TAGS;
-	private final List<Consumer<BuilderItemTagsProvider>>                                                   ITEM_TAGS;
-	private final List<Consumer<BuilderFluidTagsProvider>>                                                  FLUID_TAGS;
-	private final List<Pair<Consumer<BuilderBlockLootTableProvider>, List<RegistryObject<Block>>>>          BLOCK_LOOT_TABLES;
-	private final List<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>                           CHEST_LOOT_TABLES;
+	private final List<Consumer<BuilderBlockStateProvider>> BLOCK_STATES;
+	private final List<Consumer<BuilderItemModelProvider>> ITEM_MODELS;
+	private final List<Consumer<BuilderBlockTagsProvider>> BLOCK_TAGS;
+	private final List<Consumer<BuilderItemTagsProvider>> ITEM_TAGS;
+	private final List<Consumer<BuilderFluidTagsProvider>> FLUID_TAGS;
+	private final List<Pair<Consumer<BuilderBlockLootTableProvider>, List<RegistryObject<Block>>>> BLOCK_LOOT_TABLES;
+	private final List<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>> CHEST_LOOT_TABLES;
 	private final List<Pair<Consumer<BuilderEntityLootTableProvider>, List<RegistryObject<EntityType<?>>>>> ENTITY_LOOT_TABLES;
-	private final List<Consumer<Consumer<IFinishedRecipe>>>                                                 RECIPES;
-	private final List<Consumer<BuilderLangProvider>>                                                       LANGS;
-	private final ModData                                                                                   MOD;
+	private final List<Consumer<Consumer<IFinishedRecipe>>> RECIPES;
+	private final List<Consumer<BuilderLangProvider>> LANGS;
+	private final ModData MOD;
 
 	private BuilderDataGenerator(Builder builder)
 	{
 		MOD = builder.MOD;
 
-		BLOCK_STATES       = builder.BLOCK_STATES;
-		ITEM_MODELS        = builder.ITEM_MODELS;
-		BLOCK_TAGS         = builder.BLOCK_TAGS;
-		ITEM_TAGS          = builder.ITEM_TAGS;
-		FLUID_TAGS         = builder.FLUID_TAGS;
-		BLOCK_LOOT_TABLES  = builder.BLOCK_LOOT_TABLES;
-		CHEST_LOOT_TABLES  = builder.CHEST_LOOT_TABLES;
+		BLOCK_STATES = builder.BLOCK_STATES;
+		ITEM_MODELS = builder.ITEM_MODELS;
+		BLOCK_TAGS = builder.BLOCK_TAGS;
+		ITEM_TAGS = builder.ITEM_TAGS;
+		FLUID_TAGS = builder.FLUID_TAGS;
+		BLOCK_LOOT_TABLES = builder.BLOCK_LOOT_TABLES;
+		CHEST_LOOT_TABLES = builder.CHEST_LOOT_TABLES;
 		ENTITY_LOOT_TABLES = builder.ENTITY_LOOT_TABLES;
-		RECIPES            = builder.RECIPES;
-		LANGS              = builder.LANGS;
+		RECIPES = builder.RECIPES;
+		LANGS = builder.LANGS;
 	}
 
 	public static Builder builder(ModData mod)
@@ -174,16 +174,16 @@ public class BuilderDataGenerator
 	{
 		private final ModData MOD;
 
-		private final List<Consumer<BuilderBlockStateProvider>>                                                 BLOCK_STATES       = new ArrayList<>();
-		private final List<Consumer<BuilderItemModelProvider>>                                                  ITEM_MODELS        = new ArrayList<>();
-		private final List<Consumer<BuilderBlockTagsProvider>>                                                  BLOCK_TAGS         = new ArrayList<>();
-		private final List<Consumer<BuilderItemTagsProvider>>                                                   ITEM_TAGS          = new ArrayList<>();
-		private final List<Consumer<BuilderFluidTagsProvider>>                                                  FLUID_TAGS         = new ArrayList<>();
-		private final List<Pair<Consumer<BuilderBlockLootTableProvider>, List<RegistryObject<Block>>>>          BLOCK_LOOT_TABLES  = new ArrayList<>();
-		private final List<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>                           CHEST_LOOT_TABLES  = new ArrayList<>();
+		private final List<Consumer<BuilderBlockStateProvider>> BLOCK_STATES = new ArrayList<>();
+		private final List<Consumer<BuilderItemModelProvider>> ITEM_MODELS = new ArrayList<>();
+		private final List<Consumer<BuilderBlockTagsProvider>> BLOCK_TAGS = new ArrayList<>();
+		private final List<Consumer<BuilderItemTagsProvider>> ITEM_TAGS = new ArrayList<>();
+		private final List<Consumer<BuilderFluidTagsProvider>> FLUID_TAGS = new ArrayList<>();
+		private final List<Pair<Consumer<BuilderBlockLootTableProvider>, List<RegistryObject<Block>>>> BLOCK_LOOT_TABLES = new ArrayList<>();
+		private final List<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>> CHEST_LOOT_TABLES = new ArrayList<>();
 		private final List<Pair<Consumer<BuilderEntityLootTableProvider>, List<RegistryObject<EntityType<?>>>>> ENTITY_LOOT_TABLES = new ArrayList<>();
-		private final List<Consumer<Consumer<IFinishedRecipe>>>                                                 RECIPES            = new ArrayList<>();
-		private final List<Consumer<BuilderLangProvider>>                                                       LANGS              = new ArrayList<>();
+		private final List<Consumer<Consumer<IFinishedRecipe>>> RECIPES = new ArrayList<>();
+		private final List<Consumer<BuilderLangProvider>> LANGS = new ArrayList<>();
 
 		private Builder(ModData mod)
 		{

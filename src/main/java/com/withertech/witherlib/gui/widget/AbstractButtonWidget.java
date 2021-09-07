@@ -31,9 +31,8 @@ public abstract class AbstractButtonWidget extends Widget
 	private final Runnable pressable;
 
 	/**
-	 * @param onPress
-	 * 		the action which will called when the user clicks the
-	 * 		widget
+	 * @param onPress the action which will called when the user clicks the
+	 *                widget
 	 */
 	public AbstractButtonWidget(int x, int y, int width, int height, Runnable onPress)
 	{

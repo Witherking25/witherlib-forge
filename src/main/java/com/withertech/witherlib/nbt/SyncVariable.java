@@ -128,10 +128,8 @@ public @interface SyncVariable
 		 * Reads sync variables for the object. This method will attempt to read a value from NBT
 		 * and assign that value for any field marked with the SyncVariable annotation.
 		 *
-		 * @param obj
-		 * 		The object with SyncVariable fields.
-		 * @param tags
-		 * 		The NBT to read values from.
+		 * @param obj  The object with SyncVariable fields.
+		 * @param tags The NBT to read values from.
 		 */
 		public static <T> void readSyncVars(T obj, CompoundNBT tags)
 		{
@@ -142,12 +140,9 @@ public @interface SyncVariable
 		 * Reads sync variables for the object. This method will attempt to read a value from NBT
 		 * and assign that value for any field marked with the SyncVariable annotation.
 		 *
-		 * @param clazz
-		 * 		The class to search for fields in
-		 * @param obj
-		 * 		The object with SyncVariable fields.
-		 * @param tags
-		 * 		The NBT to read values from.
+		 * @param clazz The class to search for fields in
+		 * @param obj   The object with SyncVariable fields.
+		 * @param tags  The NBT to read values from.
 		 */
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		public static <T> void readSyncVars(@Nonnull Class<? extends T> clazz, T obj, CompoundNBT tags)
@@ -175,68 +170,55 @@ public @interface SyncVariable
 							if (field.getType() == int.class)
 							{
 								field.setInt(obj, tags.getInt(name));
-							}
-							else if (field.getType() == float.class)
+							} else if (field.getType() == float.class)
 							{
 								field.setFloat(obj, tags.getFloat(name));
-							}
-							else if (field.getType() == String.class)
+							} else if (field.getType() == String.class)
 							{
 								field.set(obj, tags.getString(name));
-							}
-							else if (field.getType() == boolean.class)
+							} else if (field.getType() == boolean.class)
 							{
 								field.setBoolean(obj, tags.getBoolean(name));
-							}
-							else if (field.getType() == double.class)
+							} else if (field.getType() == double.class)
 							{
 								field.setDouble(obj, tags.getDouble(name));
-							}
-							else if (field.getType() == long.class)
+							} else if (field.getType() == long.class)
 							{
 								field.setLong(obj, tags.getLong(name));
-							}
-							else if (field.getType() == short.class)
+							} else if (field.getType() == short.class)
 							{
 								field.setShort(obj, tags.getShort(name));
-							}
-							else if (field.getType() == byte.class)
+							} else if (field.getType() == byte.class)
 							{
 								field.setByte(obj, tags.getByte(name));
-							}
-							else if (ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class).isAssignableFrom(
+							} else if (ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class).isAssignableFrom(
 									field.getType()))
 							{
 								((LazyOptional<INBTSerializable<CompoundNBT>>) field.get(obj)).ifPresent(
 										compoundNBTINBTSerializable -> compoundNBTINBTSerializable.deserializeNBT(tags.getCompound(
 												name)));
-							}
-							else if (ClassUtil.<INBTSerializable<ListNBT>>castClass(INBTSerializable.class).isAssignableFrom(
+							} else if (ClassUtil.<INBTSerializable<ListNBT>>castClass(INBTSerializable.class).isAssignableFrom(
 									field.getType()))
 							{
 								((INBTSerializable<ListNBT>) field.get(obj)).deserializeNBT(tags.getList(
 										name,
 										new CompoundNBT().getId()
 								));
-							}
-							else if (ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class).isAssignableFrom(
+							} else if (ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class).isAssignableFrom(
 									field.getType()))
 							{
 								((INBTSerializable<CompoundNBT>) field.get(obj)).deserializeNBT(tags.getCompound(name));
-							}
-							else if (SERIALIZERS.containsKey(field.getType()))
+							} else if (SERIALIZERS.containsKey(field.getType()))
 							{
 								NBTSerializer serializer = SERIALIZERS.get(field.getType());
-								CompoundNBT   compound   = tags.getCompound(name);
+								CompoundNBT compound = tags.getCompound(name);
 								field.set(obj, serializer.read(compound));
-							}
-							else
+							} else
 							{
 								throw new IllegalArgumentException("Don't know how to read type " + field.getType() +
-								                                   " from NBT!");
+										" from NBT!");
 							}
-						}
-						catch (IllegalAccessException | IllegalArgumentException ex)
+						} catch (IllegalAccessException | IllegalArgumentException ex)
 						{
 							ex.printStackTrace();
 						}
@@ -249,13 +231,9 @@ public @interface SyncVariable
 		 * Writes sync variables for the object. This method will take the values in all fields
 		 * marked with the SyncVariable annotation and save them to NBT.
 		 *
-		 * @param obj
-		 * 		The object with SyncVariable fields.
-		 * @param tags
-		 * 		The NBT to save values to.
-		 * @param syncType
-		 * 		The sync type (WRITE or PACKET).
-		 *
+		 * @param obj      The object with SyncVariable fields.
+		 * @param tags     The NBT to save values to.
+		 * @param syncType The sync type (WRITE or PACKET).
 		 * @return The modified tags.
 		 */
 		public static <T> CompoundNBT writeSyncVars(T obj, CompoundNBT tags, Type syncType)
@@ -267,15 +245,10 @@ public @interface SyncVariable
 		 * Writes sync variables for the object. This method will take the values in all fields
 		 * marked with the SyncVariable annotation and save them to NBT.
 		 *
-		 * @param clazz
-		 * 		The class to search for fields in.
-		 * @param obj
-		 * 		The object with SyncVariable fields.
-		 * @param tags
-		 * 		The NBT to save values to.
-		 * @param syncType
-		 * 		The sync type (WRITE or PACKET).
-		 *
+		 * @param clazz    The class to search for fields in.
+		 * @param obj      The object with SyncVariable fields.
+		 * @param tags     The NBT to save values to.
+		 * @param syncType The sync type (WRITE or PACKET).
 		 * @return The modified tags.
 		 */
 		@SuppressWarnings({"unchecked", "rawtypes"}) // from serializer
@@ -299,7 +272,7 @@ public @interface SyncVariable
 
 						// Does variable allow writing in this case?
 						if (syncType == Type.WRITE && sync.onSave()
-						    || syncType == Type.PACKET && sync.onPacket())
+								|| syncType == Type.PACKET && sync.onPacket())
 						{
 							try
 							{
@@ -314,65 +287,52 @@ public @interface SyncVariable
 								if (field.getType() == int.class)
 								{
 									tags.putInt(name, field.getInt(obj));
-								}
-								else if (field.getType() == float.class)
+								} else if (field.getType() == float.class)
 								{
 									tags.putFloat(name, field.getFloat(obj));
-								}
-								else if (field.getType() == String.class)
+								} else if (field.getType() == String.class)
 								{
 									tags.putString(name, (String) field.get(obj));
-								}
-								else if (field.getType() == boolean.class)
+								} else if (field.getType() == boolean.class)
 								{
 									tags.putBoolean(name, field.getBoolean(obj));
-								}
-								else if (field.getType() == double.class)
+								} else if (field.getType() == double.class)
 								{
 									tags.putDouble(name, field.getDouble(obj));
-								}
-								else if (field.getType() == long.class)
+								} else if (field.getType() == long.class)
 								{
 									tags.putLong(name, field.getLong(obj));
-								}
-								else if (field.getType() == short.class)
+								} else if (field.getType() == short.class)
 								{
 									tags.putShort(name, field.getShort(obj));
-								}
-								else if (field.getType() == byte.class)
+								} else if (field.getType() == byte.class)
 								{
 									tags.putByte(name, field.getByte(obj));
-								}
-								else if (ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class).isAssignableFrom(
+								} else if (ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class).isAssignableFrom(
 										field.getType()))
 								{
 									((LazyOptional<INBTSerializable<CompoundNBT>>) field.get(obj)).ifPresent(
 											compoundNBTINBTSerializable ->
 													tags.put(name, compoundNBTINBTSerializable.serializeNBT()));
-								}
-								else if (ClassUtil.<INBTSerializable<ListNBT>>castClass(INBTSerializable.class).isAssignableFrom(
+								} else if (ClassUtil.<INBTSerializable<ListNBT>>castClass(INBTSerializable.class).isAssignableFrom(
 										field.getType()))
 								{
 									tags.put(name, ((INBTSerializable<ListNBT>) field.get(obj)).serializeNBT());
-								}
-								else if (ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class).isAssignableFrom(
+								} else if (ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class).isAssignableFrom(
 										field.getType()))
 								{
 									tags.put(name, ((INBTSerializable<CompoundNBT>) field.get(obj)).serializeNBT());
-								}
-								else if (SERIALIZERS.containsKey(field.getType()))
+								} else if (SERIALIZERS.containsKey(field.getType()))
 								{
-									CompoundNBT   compound   = new CompoundNBT();
+									CompoundNBT compound = new CompoundNBT();
 									NBTSerializer serializer = SERIALIZERS.get(field.getType());
 									serializer.write(compound, field.get(obj));
 									tags.put(name, compound);
-								}
-								else
+								} else
 								{
 									throw new IllegalArgumentException("Don't know how to write type " + field.getType() + " to NBT!");
 								}
-							}
-							catch (IllegalAccessException | IllegalArgumentException ex)
+							} catch (IllegalAccessException | IllegalArgumentException ex)
 							{
 								ex.printStackTrace();
 							}

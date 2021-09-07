@@ -409,9 +409,9 @@ public class ScreenUtils
 	{
 		GlStateManager._color4f(1, 1, 1, 1);
 
-		Matrix4f      matrix      = matrixStack.last().pose();
-		Tessellator   tessellator = Tessellator.getInstance();
-		BufferBuilder buffer      = tessellator.getBuilder();
+		Matrix4f matrix = matrixStack.last().pose();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuilder();
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		buffer.vertex(matrix, x, y + height, 0).uv(tx, ty + theight).endVertex();
 		buffer.vertex(matrix, x + width, y + height, 0).uv(tx + twidth, ty + theight).endVertex();
@@ -423,9 +423,9 @@ public class ScreenUtils
 	public static void fillRect(MatrixStack matrixStack, float x, float y, float width, float height, int color)
 	{
 		float alpha = (float) (color >> 24 & 255) / 255.0F;
-		float red   = (float) (color >> 16 & 255) / 255.0F;
+		float red = (float) (color >> 16 & 255) / 255.0F;
 		float green = (float) (color >> 8 & 255) / 255.0F;
-		float blue  = (float) (color & 255) / 255.0F;
+		float blue = (float) (color & 255) / 255.0F;
 		fillRect(matrixStack, x, y, width, height, red, green, blue, alpha);
 	}
 
@@ -445,9 +445,9 @@ public class ScreenUtils
 		RenderSystem.disableTexture();
 		RenderSystem.defaultBlendFunc();
 
-		Matrix4f      matrix      = matrixStack.last().pose();
-		Tessellator   tessellator = Tessellator.getInstance();
-		BufferBuilder buffer      = tessellator.getBuilder();
+		Matrix4f matrix = matrixStack.last().pose();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuilder();
 		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
 		buffer.vertex(matrix, x, y + height, 0).color(red, green, blue, alpha).endVertex();
 		buffer.vertex(matrix, x + width, y + height, 0).color(red, green, blue, alpha).endVertex();

@@ -30,8 +30,7 @@ public interface BasePacket
 	 * Writes the data in the packet to the given {@code buffer}.
 	 * The written data will be decoded in {@link #read(PacketBuffer)}.
 	 *
-	 * @param buffer
-	 * 		data buffer to write to
+	 * @param buffer data buffer to write to
 	 */
 	void write(PacketBuffer buffer);
 
@@ -39,8 +38,7 @@ public interface BasePacket
 	 * Reads data written by {@link #write(PacketBuffer)} from the given
 	 * {@code buffer} into the packet.
 	 *
-	 * @param buffer
-	 * 		data buffer to read from
+	 * @param buffer data buffer to read from
 	 */
 	void read(PacketBuffer buffer);
 

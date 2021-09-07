@@ -30,13 +30,13 @@ import java.util.function.Supplier;
 
 public class BuilderNetworkRegistry
 {
-	private final Map<String, PacketChannel>           CHANNELS;
+	private final Map<String, PacketChannel> CHANNELS;
 	private final Map<String, List<Channel.Packet<?>>> PACKETS;
 
 	private BuilderNetworkRegistry(Builder builder)
 	{
 		CHANNELS = builder.CHANNELS;
-		PACKETS  = builder.PACKETS;
+		PACKETS = builder.PACKETS;
 	}
 
 	public static Builder builder(ModData mod)
@@ -72,15 +72,15 @@ public class BuilderNetworkRegistry
 	public void register()
 	{
 		getCHANNELS().forEach((id, packetChannel) ->
-				                      ((containsPacket(id)) ? getPACKETS().get(id) :
-				                       new ArrayList<Channel.Packet<?>>()).forEach(
-						                      (packet) ->
-								                      registerPacket(
-										                      packetChannel,
-										                      packet.getPacketClass(),
-										                      packet.getPacketSupplier(),
-										                      packet.isShouldBeQueued()
-								                      )));
+				((containsPacket(id)) ? getPACKETS().get(id) :
+						new ArrayList<Channel.Packet<?>>()).forEach(
+						(packet) ->
+								registerPacket(
+										packetChannel,
+										packet.getPacketClass(),
+										packet.getPacketSupplier(),
+										packet.isShouldBeQueued()
+								)));
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -91,9 +91,9 @@ public class BuilderNetworkRegistry
 
 	public static class Builder
 	{
-		private final Map<String, PacketChannel>           CHANNELS = new HashMap<>();
-		private final Map<String, List<Channel.Packet<?>>> PACKETS  = new HashMap<>();
-		private final ModData                              mod;
+		private final Map<String, PacketChannel> CHANNELS = new HashMap<>();
+		private final Map<String, List<Channel.Packet<?>>> PACKETS = new HashMap<>();
+		private final ModData mod;
 
 		private Builder(ModData mod)
 		{
@@ -156,14 +156,14 @@ public class BuilderNetworkRegistry
 
 		public static class Packet<T extends BasePacket>
 		{
-			private final Class<T>    packetClass;
+			private final Class<T> packetClass;
 			private final Supplier<T> packetSupplier;
-			private final boolean     shouldBeQueued;
+			private final boolean shouldBeQueued;
 
 			private Packet(Class<T> packetClass, Supplier<T> packetSupplier, boolean shouldBeQueued)
 			{
 
-				this.packetClass    = packetClass;
+				this.packetClass = packetClass;
 				this.packetSupplier = packetSupplier;
 				this.shouldBeQueued = shouldBeQueued;
 			}

@@ -37,12 +37,11 @@ import java.util.List;
 public abstract class BaseScreen extends Screen
 {
 
-	private final List<Widget>          widgets         = new LinkedList<>();
+	private final List<Widget> widgets = new LinkedList<>();
 	private final List<ITickableWidget> tickableWidgets = new LinkedList<>();
 
 	/**
-	 * @param title
-	 * 		title to be read by the narrator and to be displayed in the gui
+	 * @param title title to be read by the narrator and to be displayed in the gui
 	 */
 	protected BaseScreen(ITextComponent title)
 	{
@@ -91,9 +90,7 @@ public abstract class BaseScreen extends Screen
 	/**
 	 * Add the given {@code widget} to the screen.
 	 *
-	 * @param widget
-	 * 		widget to be added
-	 *
+	 * @param widget widget to be added
 	 * @return the given {@code widget}
 	 */
 	protected <T extends Widget> T addWidget(T widget)
@@ -109,9 +106,7 @@ public abstract class BaseScreen extends Screen
 	/**
 	 * Removes the given {@code widget} from the screen.
 	 *
-	 * @param widget
-	 * 		widget to be removed
-	 *
+	 * @param widget widget to be removed
 	 * @return the given {@code widget}
 	 */
 	protected <T extends Widget> T removeWidget(T widget)
@@ -146,8 +141,8 @@ public abstract class BaseScreen extends Screen
 		{
 			widget.blitOffset = this.getBlitOffset();
 			widget.wasHovered = widget.hovered;
-			widget.hovered    = mouseX > widget.x && mouseX < widget.x + widget.width &&
-			                    mouseY > widget.y && mouseY < widget.y + widget.height;
+			widget.hovered = mouseX > widget.x && mouseX < widget.x + widget.width &&
+					mouseY > widget.y && mouseY < widget.y + widget.height;
 			widget.render(matrixStack, mouseX, mouseY, partialTicks);
 			widget.narrate();
 		}

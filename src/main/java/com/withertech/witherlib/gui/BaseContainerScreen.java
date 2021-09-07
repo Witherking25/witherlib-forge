@@ -43,28 +43,26 @@ import java.util.List;
 public abstract class BaseContainerScreen<T extends BaseContainer> extends ContainerScreen<T>
 {
 
-	private static final ResourceLocation      SLOT_TEXTURE    = WitherLib.INSTANCE.MOD.modLocation(
+	private static final ResourceLocation SLOT_TEXTURE = WitherLib.INSTANCE.MOD.modLocation(
 			"textures/gui/slot.png");
 	/**
 	 * Have this because it replaced my variable name with an srg name for some reason
 	 **/
 	@Deprecated
-	protected final      T                     field_147002_h;
-	protected final      T                     container;
-	private final        List<Widget>          widgets         = new LinkedList<>();
-	private final        List<ITickableWidget> tickableWidgets = new LinkedList<>();
-	private              boolean               drawSlots       = true;
+	protected final T field_147002_h;
+	protected final T container;
+	private final List<Widget> widgets = new LinkedList<>();
+	private final List<ITickableWidget> tickableWidgets = new LinkedList<>();
+	private boolean drawSlots = true;
 
 	/**
-	 * @param screenContainer
-	 * 		container the screen will be attached to
-	 * @param title
-	 * 		title to be read by the narrator and to be displayed in the gui
+	 * @param screenContainer container the screen will be attached to
+	 * @param title           title to be read by the narrator and to be displayed in the gui
 	 */
 	public BaseContainerScreen(T screenContainer, ITextComponent title)
 	{
 		super(screenContainer, screenContainer.player.inventory, title);
-		this.container      = screenContainer;
+		this.container = screenContainer;
 		this.field_147002_h = screenContainer;
 	}
 
@@ -121,8 +119,7 @@ public abstract class BaseContainerScreen<T extends BaseContainer> extends Conta
 	/**
 	 * Sets whether slots should be drawn by the {@link BaseContainerScreen}.
 	 *
-	 * @param drawSlots
-	 * 		whether slots should be drawn
+	 * @param drawSlots whether slots should be drawn
 	 */
 	protected void setDrawSlots(boolean drawSlots)
 	{
@@ -132,7 +129,7 @@ public abstract class BaseContainerScreen<T extends BaseContainer> extends Conta
 	@Override
 	public void init()
 	{
-		this.imageWidth  = this.sizeX();
+		this.imageWidth = this.sizeX();
 		this.imageHeight = this.sizeY();
 		super.init();
 
@@ -149,9 +146,7 @@ public abstract class BaseContainerScreen<T extends BaseContainer> extends Conta
 	/**
 	 * Add the given {@code widget} to the screen.
 	 *
-	 * @param widget
-	 * 		widget to be added
-	 *
+	 * @param widget widget to be added
 	 * @return the given {@code widget}
 	 */
 	protected <T extends Widget> T addWidget(T widget)
@@ -167,9 +162,7 @@ public abstract class BaseContainerScreen<T extends BaseContainer> extends Conta
 	/**
 	 * Removes the given {@code widget} from the screen.
 	 *
-	 * @param widget
-	 * 		widget to be removed
-	 *
+	 * @param widget widget to be removed
 	 * @return the given {@code widget}
 	 */
 	protected <T extends Widget> T removeWidget(T widget)
@@ -223,8 +216,8 @@ public abstract class BaseContainerScreen<T extends BaseContainer> extends Conta
 		{
 			widget.blitOffset = this.getBlitOffset();
 			widget.wasHovered = widget.hovered;
-			widget.hovered    = mouseX - this.left() > widget.x && mouseX - this.left() < widget.x + widget.width &&
-			                    mouseY - this.top() > widget.y && mouseY - this.top() < widget.y + widget.height;
+			widget.hovered = mouseX - this.left() > widget.x && mouseX - this.left() < widget.x + widget.width &&
+					mouseY - this.top() > widget.y && mouseY - this.top() < widget.y + widget.height;
 			widget.render(matrixStack, mouseX - this.left(), mouseY - this.top(), partialTicks);
 			widget.narrate();
 		}

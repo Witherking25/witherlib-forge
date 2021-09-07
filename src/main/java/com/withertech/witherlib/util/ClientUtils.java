@@ -85,8 +85,7 @@ public class ClientUtils
 	/**
 	 * Queues the given task on the main thread
 	 *
-	 * @param task
-	 * 		task to be queued
+	 * @param task task to be queued
 	 */
 	public static void queueTask(Runnable task)
 	{

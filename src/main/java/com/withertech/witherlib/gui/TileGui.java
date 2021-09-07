@@ -28,10 +28,10 @@ import net.minecraftforge.fml.RegistryObject;
 public abstract class TileGui<B extends BaseTileBlock<T>, T extends BaseTileEntity<T>,
 		C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>>
 {
-	protected final RegistryObject<B>                 block     = registerBlock();
-	protected final RegistryObject<TileEntityType<T>> tile      = registerTile();
-	protected final RegistryObject<ContainerType<C>>  container = registerContainer();
-	protected final IScreenFactory<C, S>              screen    = registerScreen();
+	protected final RegistryObject<B> block = registerBlock();
+	protected final RegistryObject<TileEntityType<T>> tile = registerTile();
+	protected final RegistryObject<ContainerType<C>> container = registerContainer();
+	protected final IScreenFactory<C, S> screen = registerScreen();
 
 	protected abstract RegistryObject<B> registerBlock();
 

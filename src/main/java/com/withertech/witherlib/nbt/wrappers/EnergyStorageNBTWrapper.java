@@ -21,6 +21,8 @@ package com.withertech.witherlib.nbt.wrappers;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.energy.EnergyStorage;
 
+import java.lang.reflect.Field;
+
 public class EnergyStorageNBTWrapper extends AbstractNBTWrapper<EnergyStorage, CompoundNBT>
 {
 	public EnergyStorageNBTWrapper(EnergyStorage value)
@@ -34,16 +36,26 @@ public class EnergyStorageNBTWrapper extends AbstractNBTWrapper<EnergyStorage, C
 		CompoundNBT nbt = new CompoundNBT();
 		try
 		{
-			int energy     = get().getEnergyStored();
-			int capacity   = get().getMaxEnergyStored();
-			int maxReceive = value.getClass().getDeclaredField("maxReceive").getInt(value);
-			int maxExtract = value.getClass().getDeclaredField("maxExtract").getInt(value);
+			Field energyField = value.getClass().getDeclaredField("energy");
+			Field capacityField = value.getClass().getDeclaredField("capacity");
+			Field maxReceiveField = value.getClass().getDeclaredField("maxReceive");
+			Field maxExtractField = value.getClass().getDeclaredField("maxExtract");
+
+			energyField.setAccessible(true);
+			capacityField.setAccessible(true);
+			maxReceiveField.setAccessible(true);
+			maxExtractField.setAccessible(true);
+
+			int energy = energyField.getInt(value);
+			int capacity = capacityField.getInt(value);
+			int maxReceive = maxReceiveField.getInt(value);
+			int maxExtract = maxExtractField.getInt(value);
+
 			nbt.putInt("energy", energy);
 			nbt.putInt("capacity", capacity);
 			nbt.putInt("maxReceive", maxReceive);
 			nbt.putInt("maxExtract", maxExtract);
-		}
-		catch (NoSuchFieldException | IllegalAccessException e)
+		} catch (NoSuchFieldException | IllegalAccessException e)
 		{
 			e.printStackTrace();
 		}
@@ -53,10 +65,31 @@ public class EnergyStorageNBTWrapper extends AbstractNBTWrapper<EnergyStorage, C
 	@Override
 	public void deserializeNBT(CompoundNBT nbt)
 	{
-		int energy     = nbt.getInt("energy");
-		int capacity   = nbt.getInt("capacity");
-		int maxReceive = nbt.getInt("maxReceive");
-		int maxExtract = nbt.getInt("maxExtract");
-		set(new EnergyStorage(capacity, maxReceive, maxExtract, energy));
+		try
+		{
+			Field energyField = value.getClass().getDeclaredField("energy");
+			Field capacityField = value.getClass().getDeclaredField("capacity");
+			Field maxReceiveField = value.getClass().getDeclaredField("maxReceive");
+			Field maxExtractField = value.getClass().getDeclaredField("maxExtract");
+
+			energyField.setAccessible(true);
+			capacityField.setAccessible(true);
+			maxReceiveField.setAccessible(true);
+			maxExtractField.setAccessible(true);
+
+			int energy = nbt.getInt("energy");
+			int capacity = nbt.getInt("capacity");
+			int maxReceive = nbt.getInt("maxReceive");
+			int maxExtract = nbt.getInt("maxExtract");
+
+			energyField.setInt(value, energy);
+			capacityField.setInt(value, capacity);
+			maxReceiveField.setInt(value, maxReceive);
+			maxExtractField.setInt(value, maxExtract);
+
+		} catch (NoSuchFieldException | IllegalAccessException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

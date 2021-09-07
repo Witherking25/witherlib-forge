@@ -124,24 +124,24 @@ public class ModRegistry
 			Supplier<BuilderConfigRegistry> configs
 	)
 	{
-		MOD                     = mod;
-		REGISTRIES              = registries;
+		MOD = mod;
+		REGISTRIES = registries;
 		CUSTOM_REGISTRY_ENTRIES = custom_registry_entries;
-		BLOCKS                  = blocks;
-		ITEMS                   = items;
-		TILES                   = tiles;
-		CONTAINERS              = containers;
-		FLUIDS                  = fluids;
-		ENTITIES                = entities;
-		ENTITY_ATTRIBUTES       = entity_attributes;
-		ENTITY_RENDERERS        = entity_renderers;
-		TILE_RENDERERS          = tile_renderers;
-		DATA_GENERATOR          = data_generator;
-		TAGS                    = tags;
-		TABS                    = tabs;
-		GUIS                    = guis;
-		NETS                    = nets;
-		CONFIGS                 = configs;
+		BLOCKS = blocks;
+		ITEMS = items;
+		TILES = tiles;
+		CONTAINERS = containers;
+		FLUIDS = fluids;
+		ENTITIES = entities;
+		ENTITY_ATTRIBUTES = entity_attributes;
+		ENTITY_RENDERERS = entity_renderers;
+		TILE_RENDERERS = tile_renderers;
+		DATA_GENERATOR = data_generator;
+		TAGS = tags;
+		TABS = tabs;
+		GUIS = guis;
+		NETS = nets;
+		CONFIGS = configs;
 
 		MOD.MOD_EVENT_BUS.addListener(this::onGatherData);
 		MOD.MOD_EVENT_BUS.addListener(this::onClientSetup);
@@ -257,27 +257,27 @@ public class ModRegistry
 	public void onClientSetup(FMLClientSetupEvent event)
 	{
 		ENTITIES.get().getENTRIES().forEach((key, entityTypeRegistryObject) ->
-		                                    {
-			                                    if (ENTITY_RENDERERS.get().containsKey(key.getId()))
-			                                    {
-				                                    registerEntityRenderingHandler(
-						                                    entityTypeRegistryObject.get(),
-						                                    ENTITY_RENDERERS.get().get(key.getId())
-				                                    );
-			                                    }
-		                                    });
+		{
+			if (ENTITY_RENDERERS.get().containsKey(key.getId()))
+			{
+				registerEntityRenderingHandler(
+						entityTypeRegistryObject.get(),
+						ENTITY_RENDERERS.get().get(key.getId())
+				);
+			}
+		});
 		TILES.get().getENTRIES().forEach((key, tileEntityTypeRegistryObject) ->
-		                                 {
-			                                 if (TILE_RENDERERS.get().containsKey(key.getId()))
-			                                 {
-				                                 bindTileEntityRenderer(
-						                                 tileEntityTypeRegistryObject.get(),
-						                                 TILE_RENDERERS.get().get(key.getId())
-				                                 );
-			                                 }
-		                                 });
+		{
+			if (TILE_RENDERERS.get().containsKey(key.getId()))
+			{
+				bindTileEntityRenderer(
+						tileEntityTypeRegistryObject.get(),
+						TILE_RENDERERS.get().get(key.getId())
+				);
+			}
+		});
 		GUIS.get().getGUIS().forEach((key, tileGui) ->
-				                             registerScreen(tileGui.getContainer().get(), tileGui.getScreen()));
+				registerScreen(tileGui.getContainer().get(), tileGui.getScreen()));
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -302,15 +302,15 @@ public class ModRegistry
 	public void onEntityAttributeCreation(EntityAttributeCreationEvent event)
 	{
 		ENTITIES.get().getENTRIES().forEach((key, entityTypeRegistryObject) ->
-		                                    {
-			                                    if (ENTITY_ATTRIBUTES.get().containsKey(key.getId()))
-			                                    {
-				                                    event.put(
-						                                    (EntityType<? extends LivingEntity>) entityTypeRegistryObject.get(),
-						                                    ENTITY_ATTRIBUTES.get().get(key.getId()).build()
-				                                    );
-			                                    }
-		                                    });
+		{
+			if (ENTITY_ATTRIBUTES.get().containsKey(key.getId()))
+			{
+				event.put(
+						(EntityType<? extends LivingEntity>) entityTypeRegistryObject.get(),
+						ENTITY_ATTRIBUTES.get().get(key.getId()).build()
+				);
+			}
+		});
 	}
 
 	@SubscribeEvent
@@ -321,7 +321,7 @@ public class ModRegistry
 
 	public void onGatherData(GatherDataEvent event)
 	{
-		DataGenerator      dataGenerator      = event.getGenerator();
+		DataGenerator dataGenerator = event.getGenerator();
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 		dataGenerator.addProvider(new BuilderBlockStateProvider(dataGenerator, MOD.MODID, existingFileHelper)
 		{
@@ -331,7 +331,7 @@ public class ModRegistry
 				if (!DATA_GENERATOR.get().isBlockStatesEmpty())
 				{
 					DATA_GENERATOR.get().forEachBlockStates(builderBlockStateGeneratorConsumer ->
-							                                        builderBlockStateGeneratorConsumer.accept(this));
+							builderBlockStateGeneratorConsumer.accept(this));
 				}
 			}
 
@@ -351,7 +351,7 @@ public class ModRegistry
 				if (!DATA_GENERATOR.get().isItemModelsEmpty())
 				{
 					DATA_GENERATOR.get().forEachItemModels(builderItemModelProviderConsumer ->
-							                                       builderItemModelProviderConsumer.accept(this));
+							builderItemModelProviderConsumer.accept(this));
 				}
 			}
 
@@ -375,7 +375,7 @@ public class ModRegistry
 				if (!DATA_GENERATOR.get().isBlockTagsEmpty())
 				{
 					DATA_GENERATOR.get().forEachBlockTags(builderBlockTagsProviderConsumer ->
-							                                      builderBlockTagsProviderConsumer.accept(this));
+							builderBlockTagsProviderConsumer.accept(this));
 				}
 			}
 
@@ -401,7 +401,7 @@ public class ModRegistry
 				if (!DATA_GENERATOR.get().isItemTagsEmpty())
 				{
 					DATA_GENERATOR.get().forEachItemTags(builderItemTagsProviderConsumer ->
-							                                     builderItemTagsProviderConsumer.accept(this));
+							builderItemTagsProviderConsumer.accept(this));
 				}
 			}
 
@@ -421,7 +421,7 @@ public class ModRegistry
 				if (!DATA_GENERATOR.get().isFluidTagsEmpty())
 				{
 					DATA_GENERATOR.get().forEachFluidTags(builderFluidTagsProviderConsumer ->
-							                                      builderFluidTagsProviderConsumer.accept(this));
+							builderFluidTagsProviderConsumer.accept(this));
 				}
 			}
 
@@ -449,8 +449,8 @@ public class ModRegistry
 						{
 
 							DATA_GENERATOR.get().forEachBlockLootTables(consumerIterablePair ->
-									                                            consumerIterablePair.getFirst().accept(
-											                                            this));
+									consumerIterablePair.getFirst().accept(
+											this));
 						}
 
 						@Nonnull
@@ -459,9 +459,9 @@ public class ModRegistry
 						{
 							Stream.Builder<Block> knownBlocks = Stream.builder();
 							DATA_GENERATOR.get().forEachBlockLootTables(consumerIterablePair ->
-									                                            consumerIterablePair.getSecond().stream().map(
-											                                            RegistryObject::get).forEach(
-											                                            knownBlocks::add));
+									consumerIterablePair.getSecond().stream().map(
+											RegistryObject::get).forEach(
+											knownBlocks::add));
 							return knownBlocks.build().collect(Collectors.toList());
 						}
 					}, LootParameterSets.BLOCK));
@@ -474,7 +474,7 @@ public class ModRegistry
 						public void accept(@Nonnull BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 						{
 							DATA_GENERATOR.get().forEachChestLootTables(biConsumerConsumer ->
-									                                            biConsumerConsumer.accept(consumer));
+									biConsumerConsumer.accept(consumer));
 						}
 					}, LootParameterSets.CHEST));
 				}
@@ -487,8 +487,8 @@ public class ModRegistry
 						{
 
 							DATA_GENERATOR.get().forEachEntityLootTables(consumerIterablePair ->
-									                                             consumerIterablePair.getFirst().accept(
-											                                             this));
+									consumerIterablePair.getFirst().accept(
+											this));
 						}
 
 						@Nonnull
@@ -497,9 +497,9 @@ public class ModRegistry
 						{
 							Stream.Builder<EntityType<?>> knownEntities = Stream.builder();
 							DATA_GENERATOR.get().forEachEntityLootTables(consumerIterablePair ->
-									                                             consumerIterablePair.getSecond().stream().map(
-											                                             RegistryObject::get).forEach(
-											                                             knownEntities::add));
+									consumerIterablePair.getSecond().stream().map(
+											RegistryObject::get).forEach(
+											knownEntities::add));
 							return knownEntities.build().collect(Collectors.toList());
 						}
 					}, LootParameterSets.ENTITY));
@@ -523,7 +523,7 @@ public class ModRegistry
 				if (!DATA_GENERATOR.get().isRecipesEmpty())
 				{
 					DATA_GENERATOR.get().forEachRecipes(consumerConsumer ->
-							                                    consumerConsumer.accept(consumer));
+							consumerConsumer.accept(consumer));
 				}
 			}
 
@@ -543,7 +543,7 @@ public class ModRegistry
 				if (!DATA_GENERATOR.get().isLangsEmpty())
 				{
 					DATA_GENERATOR.get().forEachLangs(builderLangProviderConsumer ->
-							                                  builderLangProviderConsumer.accept(this));
+							builderLangProviderConsumer.accept(this));
 				}
 			}
 

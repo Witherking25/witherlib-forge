@@ -33,8 +33,7 @@ public class LabelWidget extends Widget
 	private final Supplier<ITextComponent> text;
 
 	/**
-	 * @param text
-	 * 		the text to be displayed on the label
+	 * @param text the text to be displayed on the label
 	 */
 	public LabelWidget(int x, int y, int width, int height, Supplier<ITextComponent> text)
 	{
@@ -43,8 +42,7 @@ public class LabelWidget extends Widget
 	}
 
 	/**
-	 * @param text
-	 * 		the text to be displayed on the label
+	 * @param text the text to be displayed on the label
 	 */
 	public LabelWidget(int x, int y, int width, int height, ITextComponent text)
 	{

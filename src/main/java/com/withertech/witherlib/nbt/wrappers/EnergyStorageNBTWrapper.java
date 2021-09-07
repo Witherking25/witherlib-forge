@@ -36,10 +36,10 @@ public class EnergyStorageNBTWrapper extends AbstractNBTWrapper<EnergyStorage, C
 		CompoundNBT nbt = new CompoundNBT();
 		try
 		{
-			Field energyField = value.getClass().getDeclaredField("energy");
-			Field capacityField = value.getClass().getDeclaredField("capacity");
-			Field maxReceiveField = value.getClass().getDeclaredField("maxReceive");
-			Field maxExtractField = value.getClass().getDeclaredField("maxExtract");
+			Field energyField = EnergyStorage.class.getDeclaredField("energy");
+			Field capacityField = EnergyStorage.class.getDeclaredField("capacity");
+			Field maxReceiveField = EnergyStorage.class.getDeclaredField("maxReceive");
+			Field maxExtractField = EnergyStorage.class.getDeclaredField("maxExtract");
 
 			energyField.setAccessible(true);
 			capacityField.setAccessible(true);
@@ -67,10 +67,10 @@ public class EnergyStorageNBTWrapper extends AbstractNBTWrapper<EnergyStorage, C
 	{
 		try
 		{
-			Field energyField = value.getClass().getDeclaredField("energy");
-			Field capacityField = value.getClass().getDeclaredField("capacity");
-			Field maxReceiveField = value.getClass().getDeclaredField("maxReceive");
-			Field maxExtractField = value.getClass().getDeclaredField("maxExtract");
+			Field energyField = EnergyStorage.class.getDeclaredField("energy");
+			Field capacityField = EnergyStorage.class.getDeclaredField("capacity");
+			Field maxReceiveField = EnergyStorage.class.getDeclaredField("maxReceive");
+			Field maxExtractField = EnergyStorage.class.getDeclaredField("maxExtract");
 
 			energyField.setAccessible(true);
 			capacityField.setAccessible(true);

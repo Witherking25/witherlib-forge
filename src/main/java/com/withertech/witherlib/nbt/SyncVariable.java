@@ -20,6 +20,7 @@ package com.withertech.witherlib.nbt;
 
 import com.withertech.witherlib.util.ClassUtil;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -191,23 +192,16 @@ public @interface SyncVariable
 							} else if (field.getType() == byte.class)
 							{
 								field.setByte(obj, tags.getByte(name));
-							} else if (ClassUtil.<LazyOptional<INBTSerializable<CompoundNBT>>>castClass(LazyOptional.class).isAssignableFrom(
+							} else if (ClassUtil.<LazyOptional<INBTSerializable<INBT>>>castClass(LazyOptional.class).isAssignableFrom(
 									field.getType()))
 							{
-								((LazyOptional<INBTSerializable<CompoundNBT>>) field.get(obj)).ifPresent(
+								((LazyOptional<INBTSerializable<INBT>>) field.get(obj)).ifPresent(
 										compoundNBTINBTSerializable -> compoundNBTINBTSerializable.deserializeNBT(tags.getCompound(
 												name)));
-							} else if (ClassUtil.<INBTSerializable<ListNBT>>castClass(INBTSerializable.class).isAssignableFrom(
+							} else if (ClassUtil.<INBTSerializable<INBT>>castClass(INBTSerializable.class).isAssignableFrom(
 									field.getType()))
 							{
-								((INBTSerializable<ListNBT>) field.get(obj)).deserializeNBT(tags.getList(
-										name,
-										new CompoundNBT().getId()
-								));
-							} else if (ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class).isAssignableFrom(
-									field.getType()))
-							{
-								((INBTSerializable<CompoundNBT>) field.get(obj)).deserializeNBT(tags.getCompound(name));
+								((INBTSerializable<INBT>) field.get(obj)).deserializeNBT(tags.getCompound(name));
 							} else if (SERIALIZERS.containsKey(field.getType()))
 							{
 								NBTSerializer serializer = SERIALIZERS.get(field.getType());
@@ -314,14 +308,10 @@ public @interface SyncVariable
 									((LazyOptional<INBTSerializable<CompoundNBT>>) field.get(obj)).ifPresent(
 											compoundNBTINBTSerializable ->
 													tags.put(name, compoundNBTINBTSerializable.serializeNBT()));
-								} else if (ClassUtil.<INBTSerializable<ListNBT>>castClass(INBTSerializable.class).isAssignableFrom(
+								} else if (ClassUtil.<INBTSerializable<INBT>>castClass(INBTSerializable.class).isAssignableFrom(
 										field.getType()))
 								{
-									tags.put(name, ((INBTSerializable<ListNBT>) field.get(obj)).serializeNBT());
-								} else if (ClassUtil.<INBTSerializable<CompoundNBT>>castClass(INBTSerializable.class).isAssignableFrom(
-										field.getType()))
-								{
-									tags.put(name, ((INBTSerializable<CompoundNBT>) field.get(obj)).serializeNBT());
+									tags.put(name, ((INBTSerializable<INBT>) field.get(obj)).serializeNBT());
 								} else if (SERIALIZERS.containsKey(field.getType()))
 								{
 									CompoundNBT compound = new CompoundNBT();

@@ -28,7 +28,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class MapNBTWrapper<T extends INBTSerializable<X>, X extends INBT> extends AbstractNBTWrapper<Map<String, T>, CompoundNBT>
+public class MapNBTWrapper<T extends INBTSerializable<CompoundNBT>> extends AbstractNBTWrapper<Map<String, T>, CompoundNBT>
 {
 	private final Supplier<T> factory;
 
@@ -51,10 +51,10 @@ public class MapNBTWrapper<T extends INBTSerializable<X>, X extends INBT> extend
 	public void deserializeNBT(@Nonnull CompoundNBT nbt)
 	{
 		this.value.clear();
-		nbt.getAllKeys().stream().collect(Collectors.toMap(Function.identity(), nbt::get)).forEach((key, nbtValue) ->
+		nbt.getAllKeys().stream().collect(Collectors.toMap(Function.identity(), nbt::getCompound)).forEach((key, nbtValue) ->
 		{
 			T objValue = factory.get();
-			objValue.deserializeNBT((X) nbtValue);
+			objValue.deserializeNBT(nbtValue);
 			this.value.put(key, objValue);
 		});
 	}

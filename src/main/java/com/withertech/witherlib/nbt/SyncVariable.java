@@ -196,12 +196,12 @@ public @interface SyncVariable
 									field.getType()))
 							{
 								((LazyOptional<INBTSerializable<INBT>>) field.get(obj)).ifPresent(
-										compoundNBTINBTSerializable -> compoundNBTINBTSerializable.deserializeNBT(tags.getCompound(
+										compoundNBTINBTSerializable -> compoundNBTINBTSerializable.deserializeNBT(tags.get(
 												name)));
 							} else if (ClassUtil.<INBTSerializable<INBT>>castClass(INBTSerializable.class).isAssignableFrom(
 									field.getType()))
 							{
-								((INBTSerializable<INBT>) field.get(obj)).deserializeNBT(tags.getCompound(name));
+								((INBTSerializable<INBT>) field.get(obj)).deserializeNBT(tags.get(name));
 							} else if (SERIALIZERS.containsKey(field.getType()))
 							{
 								NBTSerializer serializer = SERIALIZERS.get(field.getType());

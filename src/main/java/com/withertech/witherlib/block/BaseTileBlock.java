@@ -19,9 +19,9 @@
 package com.withertech.witherlib.block;
 
 import com.withertech.witherlib.tile.BaseTileEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -51,7 +51,7 @@ import java.util.List;
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
-public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends ContainerBlock
+public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Block
 {
 	private final boolean saveTileData;
 
@@ -61,6 +61,7 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Contain
 		this.saveTileData = saveTileData;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Nonnull
 	@Override
 	public BlockRenderType getRenderShape(@Nonnull BlockState state)
@@ -69,41 +70,49 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Contain
 	}
 
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({"deprecation", "unchecked"})
 	@Override
 	@Nonnull
 	public ActionResultType use(
 			@Nonnull BlockState state,
-			World world,
+			@Nonnull World world,
 			@Nonnull BlockPos pos,
 			@Nonnull PlayerEntity player,
 			@Nonnull Hand hand,
 			@Nonnull BlockRayTraceResult rayTraceResult
 	)
 	{
-		if (!world.isClientSide() && hasContainer())
+		if (hasContainer())
 		{
-			NetworkHooks.openGui((ServerPlayerEntity) player, new INamedContainerProvider()
+			if (!world.isClientSide())
 			{
-				@Nonnull
-				@Override
-				public ITextComponent getDisplayName()
+				NetworkHooks.openGui((ServerPlayerEntity) player, new INamedContainerProvider()
 				{
-					return BaseTileBlock.this.getDisplayName((T) world.getBlockEntity(pos));
-				}
+					@Nonnull
+					@Override
+					public ITextComponent getDisplayName()
+					{
+						return BaseTileBlock.this.getDisplayName((T) world.getBlockEntity(pos));
+					}
 
-				@Override
-				public Container createMenu(
-						int id,
-						@Nonnull PlayerInventory playerInventory,
-						@Nonnull PlayerEntity player
-				)
-				{
-					return BaseTileBlock.this.createMenu(id, player, pos);
-				}
-			}, pos);
+					@Override
+					public Container createMenu(
+							int id,
+							@Nonnull PlayerInventory playerInventory,
+							@Nonnull PlayerEntity player
+					)
+					{
+						return BaseTileBlock.this.createMenu(id, player, pos);
+					}
+				}, pos);
+			}
+			return ActionResultType.CONSUME;
 		}
-		return ActionResultType.CONSUME;
+		else
+		{
+			return ActionResultType.PASS;
+		}
+
 	}
 
 	protected abstract boolean hasContainer();
@@ -112,6 +121,7 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Contain
 
 	protected abstract ITextComponent getDisplayName(T tile);
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void setPlacedBy(
 			@Nonnull World worldIn,
@@ -140,7 +150,7 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Contain
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({"deprecation", "rawtypes"})
 	@Nonnull
 	@Override
 	public List<ItemStack> getDrops(@Nonnull BlockState state, @Nonnull LootContext.Builder builder)
@@ -178,6 +188,7 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Contain
 		return items;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public ItemStack getPickBlock(
 			BlockState state,
@@ -225,8 +236,5 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Contain
 
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
-	{
-		return newBlockEntity(world);
-	}
+	public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
 }

@@ -24,6 +24,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
@@ -58,7 +60,7 @@ public abstract class TileEntityBaseContainer<X extends TileEntityBaseContainer<
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerIn)
+	public boolean stillValid(@Nonnull PlayerEntity playerIn)
 	{
 		return super.stillValid(playerIn);
 	}

@@ -16,13 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlibtest.block;
+package com.withertech.witherlibtest.blocks;
 
-import com.withertech.witherlib.WitherLib;
 import com.withertech.witherlib.block.BaseTileBlock;
 import com.withertech.witherlib.registration.TypedRegKey;
 import com.withertech.witherlibtest.WitherLibTest;
-import com.withertech.witherlibtest.tile.TestTile;
+import com.withertech.witherlibtest.tiles.TestNBTTile;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,9 +33,9 @@ import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
-public class TestBlock extends BaseTileBlock<TestTile>
+public class TestNBTBlock extends BaseTileBlock<TestNBTTile>
 {
-	public TestBlock()
+	public TestNBTBlock()
 	{
 		super(true, Properties.of(Material.METAL));
 	}
@@ -54,7 +53,7 @@ public class TestBlock extends BaseTileBlock<TestTile>
 	}
 
 	@Override
-	protected ITextComponent getDisplayName(TestTile tile)
+	protected ITextComponent getDisplayName(TestNBTTile tile)
 	{
 		return null;
 	}
@@ -63,6 +62,6 @@ public class TestBlock extends BaseTileBlock<TestTile>
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_tile", TestTile.class)).get().create();
+		return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class)).get().create();
 	}
 }

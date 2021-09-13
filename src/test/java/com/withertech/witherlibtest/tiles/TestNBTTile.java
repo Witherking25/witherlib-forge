@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlibtest.tile;
+package com.withertech.witherlibtest.tiles;
 
-import com.withertech.witherlib.WitherLib;
 import com.withertech.witherlib.nbt.SyncVariable;
 import com.withertech.witherlib.nbt.wrappers.BlockPosNBTWrapper;
 import com.withertech.witherlib.nbt.wrappers.ListNBTWrapper;
@@ -33,7 +32,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class TestTile extends BaseTileEntity<TestTile>
+public class TestNBTTile extends BaseTileEntity<TestNBTTile>
 {
 	@SyncVariable(name = "TestList")
 	public final ListNBTWrapper<BlockPosNBTWrapper> blockPosNBTWrapperListNBTWrapper = new ListNBTWrapper<>(new ArrayList<>(Arrays.asList(new BlockPosNBTWrapper(new BlockPos(0, 0, 0)), new BlockPosNBTWrapper(new BlockPos(1, 1, 1)))), () -> new BlockPosNBTWrapper(new BlockPos(0,0,0)));
@@ -48,8 +47,8 @@ public class TestTile extends BaseTileEntity<TestTile>
 		() -> new BlockPosNBTWrapper(new BlockPos(0,0,0))
 	);
 
-	public TestTile()
+	public TestNBTTile()
 	{
-		super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_tile", TestTile.class)).get());
+		super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class)).get());
 	}
 }

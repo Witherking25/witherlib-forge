@@ -21,15 +21,17 @@ package com.withertech.witherlib.nbt.wrappers;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class ListNBTWrapper<T extends INBTSerializable<CompoundNBT>> extends AbstractNBTWrapper<List<T>, ListNBT>
+public class ListNBTWrapper<T extends INBTSerializable<CompoundNBT>> extends AbstractNBTWrapper<List<T>, CompoundNBT>
 {
 	private final Supplier<T> factory;
 
@@ -40,18 +42,20 @@ public class ListNBTWrapper<T extends INBTSerializable<CompoundNBT>> extends Abs
 	}
 
 	@Override
-	public ListNBT serializeNBT()
+	public CompoundNBT serializeNBT()
 	{
-		ListNBT nbt = new ListNBT();
-		nbt.addAll(value.stream().map(INBTSerializable::serializeNBT).collect(Collectors.toList()));
+		CompoundNBT nbt = new CompoundNBT();
+		ListNBT list = new ListNBT();
+		list.addAll(value.stream().map(INBTSerializable::serializeNBT).collect(Collectors.toList()));
+		nbt.put("values", list);
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(ListNBT list)
+	public void deserializeNBT(@Nonnull CompoundNBT list)
 	{
 		value.clear();
-		new ArrayList<>(list).forEach(nbt ->
+		new ArrayList<>(list.getList("values", Constants.NBT.TAG_COMPOUND)).forEach(nbt ->
 		{
 			T value = factory.get();
 			value.deserializeNBT((CompoundNBT) nbt);

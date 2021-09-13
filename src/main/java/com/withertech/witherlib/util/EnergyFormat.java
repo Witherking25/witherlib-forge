@@ -29,6 +29,11 @@ public class EnergyFormat
 
 	private static EnergyType type = EnergyType.RF;
 
+	public static EnergyType getType()
+	{
+		return  type;
+	}
+
 	public static void cycleEnergyType(boolean forward)
 	{
 		type =
@@ -50,7 +55,7 @@ public class EnergyFormat
 		return type.convertEnergy(energy) + " / " + type.convertEnergy(capacity) + " " + type.unit;
 	}
 
-	private enum EnergyType
+	public enum EnergyType
 	{
 		RF("RF")/*, MJ("MJ")*/, FE("FE");
 

@@ -34,6 +34,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -99,9 +101,9 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 	}
 
 	@Override
-	protected ITextComponent getNarrationMessage()
+	protected List<ITextComponent> getNarrationMessage()
 	{
-		return TextComponents.translation("gui.narrate.editBox", this.suggestion, this.text).get();
+		return Collections.singletonList(TextComponents.translation("gui.narrate.editBox", this.suggestion, this.text).get());
 	}
 
 	@Override

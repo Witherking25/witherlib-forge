@@ -27,7 +27,10 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.energy.EnergyStorage;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -38,13 +41,20 @@ public class EnergyBarWidget extends AbstractButtonWidget implements IHoverTextW
 
 	private static final ResourceLocation BARS = WitherLib.INSTANCE.MOD.modLocation("textures/gui/energy_bars.png");
 
-	private final Supplier<Integer> energy, capacity;
+	private static final int WIDTH = 20;
+	private static final int HEIGHT = 52;
 
-	public EnergyBarWidget(int x, int y, int width, int height, Supplier<Integer> energy, Supplier<Integer> capacity)
+	private final Supplier<EnergyStorage> energy;
+
+	public EnergyBarWidget(int x, int y, Supplier<EnergyStorage> energy)
 	{
-		super(x, y, width, height, () -> EnergyFormat.cycleEnergyType(!Screen.hasShiftDown()));
+		this(x, y, 1, energy);
+	}
+
+	public EnergyBarWidget(int x, int y, int scale, Supplier<EnergyStorage> energy)
+	{
+		super(x, y, WIDTH * scale, HEIGHT * scale, () -> EnergyFormat.cycleEnergyType(!Screen.hasShiftDown()));
 		this.energy = energy;
-		this.capacity = capacity;
 	}
 
 	@Override
@@ -63,8 +73,8 @@ public class EnergyBarWidget extends AbstractButtonWidget implements IHoverTextW
 				1 / 11f,
 				1
 		);
-		int energy = this.energy.get();
-		int capacity = this.capacity.get();
+		int energy = this.energy.get().getEnergyStored();
+		int capacity = this.energy.get().getMaxEnergyStored();
 		float percentage = capacity == 0 ? 1 : Math.max(Math.min(energy / (float) capacity, 1), 0);
 		if (percentage != 0)
 		{
@@ -74,7 +84,7 @@ public class EnergyBarWidget extends AbstractButtonWidget implements IHoverTextW
 					this.y + this.height * (1 - percentage),
 					this.width,
 					this.height * percentage,
-					3 / 11f,
+					(EnergyFormat.getType() == EnergyFormat.EnergyType.RF)? 2 / 11f : 3 / 11f,
 					1 - percentage,
 					1 / 11f,
 					percentage
@@ -83,15 +93,15 @@ public class EnergyBarWidget extends AbstractButtonWidget implements IHoverTextW
 	}
 
 	@Override
-	public ITextComponent getHoverText()
+	public List<ITextComponent> getHoverText()
 	{
-		int energy = this.energy.get();
-		int capacity = this.capacity.get();
-		return new StringTextComponent(EnergyFormat.formatCapacity(energy, capacity));
+		int energy = this.energy.get().getEnergyStored();
+		int capacity = this.energy.get().getMaxEnergyStored();
+		return Collections.singletonList(new StringTextComponent(EnergyFormat.formatCapacity(energy, capacity)));
 	}
 
 	@Override
-	protected ITextComponent getNarrationMessage()
+	protected List<ITextComponent> getNarrationMessage()
 	{
 		return this.getHoverText();
 	}

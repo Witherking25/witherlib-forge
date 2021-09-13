@@ -22,6 +22,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.withertech.witherlib.gui.ScreenUtils;
 import net.minecraft.util.text.ITextComponent;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -50,9 +52,9 @@ public class LabelWidget extends Widget
 	}
 
 	@Override
-	protected ITextComponent getNarrationMessage()
+	protected List<ITextComponent> getNarrationMessage()
 	{
-		return this.text.get();
+		return Collections.singletonList(this.text.get());
 	}
 
 	@Override

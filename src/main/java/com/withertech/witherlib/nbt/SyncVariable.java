@@ -18,10 +18,9 @@
 
 package com.withertech.witherlib.nbt;
 
-import com.withertech.witherlib.util.ClassUtil;
+import com.withertech.witherlib.util.ClassUtils;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -192,13 +191,13 @@ public @interface SyncVariable
 							} else if (field.getType() == byte.class)
 							{
 								field.setByte(obj, tags.getByte(name));
-							} else if (ClassUtil.<LazyOptional<INBTSerializable<INBT>>>castClass(LazyOptional.class).isAssignableFrom(
+							} else if (ClassUtils.<LazyOptional<INBTSerializable<INBT>>>castClass(LazyOptional.class).isAssignableFrom(
 									field.getType()))
 							{
 								((LazyOptional<INBTSerializable<INBT>>) field.get(obj)).ifPresent(
 										compoundNBTINBTSerializable -> compoundNBTINBTSerializable.deserializeNBT(tags.get(
 												name)));
-							} else if (ClassUtil.<INBTSerializable<INBT>>castClass(INBTSerializable.class).isAssignableFrom(
+							} else if (ClassUtils.<INBTSerializable<INBT>>castClass(INBTSerializable.class).isAssignableFrom(
 									field.getType()))
 							{
 								((INBTSerializable<INBT>) field.get(obj)).deserializeNBT(tags.get(name));
@@ -302,13 +301,13 @@ public @interface SyncVariable
 								} else if (field.getType() == byte.class)
 								{
 									tags.putByte(name, field.getByte(obj));
-								} else if (ClassUtil.<LazyOptional<INBTSerializable<INBT>>>castClass(LazyOptional.class).isAssignableFrom(
+								} else if (ClassUtils.<LazyOptional<INBTSerializable<INBT>>>castClass(LazyOptional.class).isAssignableFrom(
 										field.getType()))
 								{
 									((LazyOptional<INBTSerializable<INBT>>) field.get(obj)).ifPresent(
 											compoundNBTINBTSerializable ->
 													tags.put(name, compoundNBTINBTSerializable.serializeNBT()));
-								} else if (ClassUtil.<INBTSerializable<INBT>>castClass(INBTSerializable.class).isAssignableFrom(
+								} else if (ClassUtils.<INBTSerializable<INBT>>castClass(INBTSerializable.class).isAssignableFrom(
 										field.getType()))
 								{
 									tags.put(name, ((INBTSerializable<INBT>) field.get(obj)).serializeNBT());

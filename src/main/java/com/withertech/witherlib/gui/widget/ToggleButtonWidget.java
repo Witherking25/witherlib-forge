@@ -23,6 +23,8 @@ import com.withertech.witherlib.gui.ScreenUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class ToggleButtonWidget extends AbstractButtonWidget
@@ -51,9 +53,9 @@ public class ToggleButtonWidget extends AbstractButtonWidget
 	}
 
 	@Override
-	protected ITextComponent getNarrationMessage()
+	protected List<ITextComponent> getNarrationMessage()
 	{
-		return this.text;
+		return Collections.singletonList(this.text);
 	}
 
 	@Override

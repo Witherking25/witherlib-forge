@@ -23,6 +23,9 @@ import com.withertech.witherlib.gui.ScreenUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Created 10/15/2020 by SuperMartijn642
  */
@@ -51,9 +54,9 @@ public class ButtonWidget extends AbstractButtonWidget
 	}
 
 	@Override
-	protected ITextComponent getNarrationMessage()
+	protected List<ITextComponent> getNarrationMessage()
 	{
-		return this.text;
+		return Collections.singletonList(this.text);
 	}
 
 	@Override

@@ -20,6 +20,8 @@ package com.withertech.witherlib.nbt.wrappers;
 
 import net.minecraft.nbt.INBT;
 
+import javax.annotation.Nonnull;
+
 public abstract class AbstractNBTWrapper<T, X extends INBT> implements INBTWrapper<T, X>
 {
 	protected T value;
@@ -29,6 +31,7 @@ public abstract class AbstractNBTWrapper<T, X extends INBT> implements INBTWrapp
 		this.value = value;
 	}
 
+	@Nonnull
 	@Override
 	public T get()
 	{

@@ -18,9 +18,12 @@
 
 package com.withertech.witherlib.data;
 
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+
+import java.util.Objects;
 
 public abstract class BuilderBlockStateProvider extends BlockStateProvider
 {
@@ -28,5 +31,14 @@ public abstract class BuilderBlockStateProvider extends BlockStateProvider
 	public BuilderBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper)
 	{
 		super(gen, modid, exFileHelper);
+	}
+
+	public void fluidBlock(FlowingFluidBlock block)
+	{
+		simpleBlock(
+				block,
+				models().getBuilder(Objects.requireNonNull(block.getFluid().getSource().getRegistryName()).getPath())
+						.texture("particle", block.getFluid().getSource().getAttributes().getStillTexture())
+		);
 	}
 }

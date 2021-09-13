@@ -228,10 +228,10 @@ public abstract class BaseContainerScreen<T extends BaseContainer> extends Conta
 		{
 			if (widget instanceof IHoverTextWidget && widget.isHovered())
 			{
-				ITextComponent text = ((IHoverTextWidget) widget).getHoverText();
+				List<ITextComponent> text = ((IHoverTextWidget) widget).getHoverText();
 				if (text != null)
 				{
-					this.renderTooltip(matrixStack, text, mouseX - this.left(), mouseY - this.top());
+					this.renderComponentTooltip(matrixStack, text, mouseX - this.left(), mouseY - this.top());
 				}
 			}
 		}

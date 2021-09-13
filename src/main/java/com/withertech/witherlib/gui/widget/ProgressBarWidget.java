@@ -25,6 +25,8 @@ import com.withertech.witherlib.util.TextComponents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class ProgressBarWidget extends Widget
@@ -56,9 +58,9 @@ public class ProgressBarWidget extends Widget
 
 
 	@Override
-	protected ITextComponent getNarrationMessage()
+	protected List<ITextComponent> getNarrationMessage()
 	{
-		return TextComponents.string("").get();
+		return Collections.singletonList(TextComponents.string("").get());
 	}
 
 	@Override

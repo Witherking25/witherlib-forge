@@ -24,6 +24,8 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created 1/19/2021 by SuperMartijn642
  */
@@ -79,7 +81,7 @@ public abstract class BaseContainer extends Container
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerIn)
+	public boolean stillValid(@Nonnull PlayerEntity playerIn)
 	{
 		return true;
 	}

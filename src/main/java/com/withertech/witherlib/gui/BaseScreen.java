@@ -150,10 +150,10 @@ public abstract class BaseScreen extends Screen
 		{
 			if (widget instanceof IHoverTextWidget && widget.isHovered())
 			{
-				ITextComponent text = ((IHoverTextWidget) widget).getHoverText();
+				List<ITextComponent> text = ((IHoverTextWidget) widget).getHoverText();
 				if (text != null)
 				{
-					this.renderTooltip(matrixStack, text, mouseX, mouseY);
+					this.renderComponentTooltip(matrixStack, text, mouseX, mouseY);
 				}
 			}
 		}

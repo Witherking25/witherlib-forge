@@ -23,6 +23,8 @@ import net.minecraft.client.gui.chat.NarratorChatListener;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 
+import java.util.List;
+
 /**
  * Created 1/19/2021 by SuperMartijn642
  */
@@ -53,20 +55,22 @@ public abstract class Widget
 
 		if (this.active && this.hovered && Util.getMillis() > this.nextNarration)
 		{
-			ITextComponent message = this.getNarrationMessage();
-			String s = message == null ? "" : message.getString();
-			if (!s.isEmpty())
+			this.getNarrationMessage().forEach(message ->
 			{
-				NarratorChatListener.INSTANCE.sayNow(s);
-				this.nextNarration = Long.MAX_VALUE;
-			}
+				String s = message == null ? "" : message.getString();
+				if (!s.isEmpty())
+				{
+					NarratorChatListener.INSTANCE.sayNow(s);
+					this.nextNarration = Long.MAX_VALUE;
+				}
+			});
 		}
 	}
 
 	/**
 	 * @return the message that should be narrated for the current state of the widget
 	 */
-	protected abstract ITextComponent getNarrationMessage();
+	protected abstract List<ITextComponent> getNarrationMessage();
 
 	/**
 	 * Sets whether the widget is active, i.e. can be interacted with.

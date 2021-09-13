@@ -16,13 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.util;
+package com.withertech.witherlibtest.blocks;
 
-public class ClassUtil
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+
+public class TestBlock extends Block
 {
-	@SuppressWarnings("unchecked")
-	public static <X> Class<X> castClass(Class<?> clazz)
-	{
-		return (Class<X>) clazz;
-	}
+    public TestBlock()
+    {
+        super(AbstractBlock.Properties.of(Material.STONE));
+    }
 }

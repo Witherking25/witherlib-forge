@@ -6,7 +6,9 @@ import com.withertech.witherlib.nbt.wrappers.FluidTankNBTWrapper;
 import com.withertech.witherlib.registration.TypedRegKey;
 import com.withertech.witherlib.tile.BaseTileEntity;
 import com.withertech.witherlibtest.WitherLibTest;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -47,9 +49,9 @@ public class TestEnergyTile extends BaseTileEntity<TestEnergyTile>
         }
     });
 
-    public TestEnergyTile()
+    public TestEnergyTile(BlockPos pos, BlockState state)
     {
-        super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_energy_tile", TestEnergyTile.class)).get());
+        super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_energy_tile", TestEnergyTile.class)).get(), pos, state);
     }
 
     @Nonnull
@@ -68,7 +70,7 @@ public class TestEnergyTile extends BaseTileEntity<TestEnergyTile>
     }
 
     @Override
-    protected void invalidateCaps()
+    public void invalidateCaps()
     {
         super.invalidateCaps();
     }

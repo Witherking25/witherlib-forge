@@ -21,7 +21,7 @@ package com.withertech.witherlibtest.network;
 import com.withertech.witherlib.network.PacketContext;
 import com.withertech.witherlib.network.TileEntityBasePacket;
 import com.withertech.witherlibtest.tiles.TestProgressTile;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public abstract class TestProgressTilePacket extends TileEntityBasePacket<TestProgressTile>
 {

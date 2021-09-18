@@ -25,10 +25,10 @@ import com.withertech.witherlibtest.blocks.TestTileBlock;
 import com.withertech.witherlibtest.containers.TestContainer;
 import com.withertech.witherlibtest.screens.TestScreen;
 import com.withertech.witherlibtest.tiles.TestTile;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.fmllegacy.RegistryObject;
 
 public class TestTileGui extends TileGui<TestTileBlock, TestTile, TestContainer, TestScreen>
 {
@@ -39,19 +39,19 @@ public class TestTileGui extends TileGui<TestTileBlock, TestTile, TestContainer,
     }
 
     @Override
-    protected RegistryObject<TileEntityType<TestTile>> registerTile()
+    protected RegistryObject<BlockEntityType<TestTile>> registerTile()
     {
         return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_tile", TestTile.class));
     }
 
     @Override
-    protected RegistryObject<ContainerType<TestContainer>> registerContainer()
+    protected RegistryObject<MenuType<TestContainer>> registerContainer()
     {
         return WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.container("test_container", TestContainer.class));
     }
 
     @Override
-    protected ScreenManager.IScreenFactory<TestContainer, TestScreen> registerScreen()
+    protected MenuScreens.ScreenConstructor<TestContainer, TestScreen> registerScreen()
     {
         return TestScreen::new;
     }

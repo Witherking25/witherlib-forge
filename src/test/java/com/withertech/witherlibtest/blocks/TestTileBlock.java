@@ -24,56 +24,54 @@ import com.withertech.witherlib.util.TextComponents;
 import com.withertech.witherlibtest.WitherLibTest;
 import com.withertech.witherlibtest.containers.TestContainer;
 import com.withertech.witherlibtest.tiles.TestTile;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class TestTileBlock extends BaseTileBlock<TestTile>
 {
     public TestTileBlock()
     {
-        super(true, AbstractBlock.Properties.of(Material.STONE));
+        super(true, Properties.of(Material.STONE));
     }
 
     @Override
-    protected Container createMenu(int id, PlayerEntity player, BlockPos pos)
+    protected AbstractContainerMenu createMenu(int id, Player player, BlockPos pos)
     {
         return new TestContainer(id, player, pos);
     }
 
+
+
     @Override
-    protected ITextComponent getDisplayName(TestTile tile)
+    protected Component getDisplayName(TestTile tile)
     {
         return TextComponents.block(this).get();
     }
 
+    @Override
+    public BlockEntityType<TestTile> getBlockEntityType()
+    {
+        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_tile", TestTile.class)).get();
+    }
+
     @Nonnull
     @Override
-    public BlockRenderType getRenderShape(@Nonnull BlockState state)
+    public RenderShape getRenderShape(@Nonnull BlockState state)
     {
-        return BlockRenderType.INVISIBLE;
+        return RenderShape.INVISIBLE;
     }
 
     @Override
     protected boolean hasContainer()
     {
         return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
-    {
-        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_tile", TestTile.class)).get().create();
     }
 }

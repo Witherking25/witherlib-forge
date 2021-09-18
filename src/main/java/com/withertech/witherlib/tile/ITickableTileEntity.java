@@ -16,29 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.nbt.wrappers;
+package com.withertech.witherlib.tile;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-
-public class BlockPosNBTWrapper extends AbstractNBTWrapper<BlockPos, CompoundTag>
+public interface ITickableTileEntity
 {
-
-	public BlockPosNBTWrapper(BlockPos value)
-	{
-		super(value);
-	}
-
-	@Override
-	public CompoundTag serializeNBT()
-	{
-		return NbtUtils.writeBlockPos(get());
-	}
-
-	@Override
-	public void deserializeNBT(CompoundTag nbt)
-	{
-		set(NbtUtils.readBlockPos(nbt));
-	}
+	void tick();
 }

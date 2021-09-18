@@ -18,7 +18,7 @@
 
 package com.withertech.witherlib.network;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 /**
  * Created 5/30/2021 by SuperMartijn642
@@ -28,19 +28,19 @@ public interface BasePacket
 
 	/**
 	 * Writes the data in the packet to the given {@code buffer}.
-	 * The written data will be decoded in {@link #read(PacketBuffer)}.
+	 * The written data will be decoded in {@link #read(FriendlyByteBuf)}.
 	 *
 	 * @param buffer data buffer to write to
 	 */
-	void write(PacketBuffer buffer);
+	void write(FriendlyByteBuf buffer);
 
 	/**
-	 * Reads data written by {@link #write(PacketBuffer)} from the given
+	 * Reads data written by {@link #write(FriendlyByteBuf)} from the given
 	 * {@code buffer} into the packet.
 	 *
 	 * @param buffer data buffer to read from
 	 */
-	void read(PacketBuffer buffer);
+	void read(FriendlyByteBuf buffer);
 
 	/**
 	 * Checks whether the received values are valid.

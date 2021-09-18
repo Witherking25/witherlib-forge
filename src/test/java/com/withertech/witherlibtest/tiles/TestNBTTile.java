@@ -25,7 +25,8 @@ import com.withertech.witherlib.nbt.wrappers.MapNBTWrapper;
 import com.withertech.witherlib.registration.TypedRegKey;
 import com.withertech.witherlib.tile.BaseTileEntity;
 import com.withertech.witherlibtest.WitherLibTest;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,8 +48,8 @@ public class TestNBTTile extends BaseTileEntity<TestNBTTile>
 		() -> new BlockPosNBTWrapper(new BlockPos(0,0,0))
 	);
 
-	public TestNBTTile()
+	public TestNBTTile(BlockPos pos, BlockState state)
 	{
-		super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class)).get());
+		super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class)).get(), pos, state);
 	}
 }

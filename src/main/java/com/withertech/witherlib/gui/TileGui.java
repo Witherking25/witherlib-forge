@@ -20,18 +20,18 @@ package com.withertech.witherlib.gui;
 
 import com.withertech.witherlib.block.BaseTileBlock;
 import com.withertech.witherlib.tile.BaseTileEntity;
-import net.minecraft.client.gui.ScreenManager.IScreenFactory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.fmllegacy.RegistryObject;
 
 public abstract class TileGui<B extends BaseTileBlock<T>, T extends BaseTileEntity<T>,
 		C extends TileEntityBaseContainer<C, T>, S extends TileEntityBaseContainerScreen<T, C>>
 {
 	protected final RegistryObject<B> block = registerBlock();
-	protected final RegistryObject<TileEntityType<T>> tile = registerTile();
-	protected final RegistryObject<ContainerType<C>> container = registerContainer();
-	protected final IScreenFactory<C, S> screen = registerScreen();
+	protected final RegistryObject<BlockEntityType<T>> tile = registerTile();
+	protected final RegistryObject<MenuType<C>> container = registerContainer();
+	protected final MenuScreens.ScreenConstructor<C, S> screen = registerScreen();
 
 	protected abstract RegistryObject<B> registerBlock();
 
@@ -40,23 +40,23 @@ public abstract class TileGui<B extends BaseTileBlock<T>, T extends BaseTileEnti
 		return block;
 	}
 
-	protected abstract RegistryObject<TileEntityType<T>> registerTile();
+	protected abstract RegistryObject<BlockEntityType<T>> registerTile();
 
-	public final RegistryObject<TileEntityType<T>> getTile()
+	public final RegistryObject<BlockEntityType<T>> getTile()
 	{
 		return tile;
 	}
 
-	protected abstract RegistryObject<ContainerType<C>> registerContainer();
+	protected abstract RegistryObject<MenuType<C>> registerContainer();
 
-	public final RegistryObject<ContainerType<C>> getContainer()
+	public final RegistryObject<MenuType<C>> getContainer()
 	{
 		return container;
 	}
 
-	protected abstract IScreenFactory<C, S> registerScreen();
+	protected abstract MenuScreens.ScreenConstructor<C, S> registerScreen();
 
-	public final IScreenFactory<C, S> getScreen()
+	public final MenuScreens.ScreenConstructor<C, S> getScreen()
 	{
 		return screen;
 	}

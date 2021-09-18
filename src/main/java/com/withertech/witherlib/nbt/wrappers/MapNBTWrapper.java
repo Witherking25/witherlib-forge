@@ -18,8 +18,7 @@
 
 package com.withertech.witherlib.nbt.wrappers;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
@@ -28,7 +27,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class MapNBTWrapper<T extends INBTSerializable<CompoundNBT>> extends AbstractNBTWrapper<Map<String, T>, CompoundNBT>
+public class MapNBTWrapper<T extends INBTSerializable<CompoundTag>> extends AbstractNBTWrapper<Map<String, T>, CompoundTag>
 {
 	private final Supplier<T> factory;
 
@@ -39,16 +38,16 @@ public class MapNBTWrapper<T extends INBTSerializable<CompoundNBT>> extends Abst
 	}
 
 	@Override
-	public CompoundNBT serializeNBT()
+	public CompoundTag serializeNBT()
 	{
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
 		value.forEach((key, value) ->
 				nbt.put(key, value.serializeNBT()));
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(@Nonnull CompoundNBT nbt)
+	public void deserializeNBT(@Nonnull CompoundTag nbt)
 	{
 		this.value.clear();
 		nbt.getAllKeys().stream().collect(Collectors.toMap(Function.identity(), nbt::getCompound)).forEach((key, nbtValue) ->

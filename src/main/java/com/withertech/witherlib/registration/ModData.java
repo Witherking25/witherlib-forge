@@ -18,7 +18,7 @@
 
 package com.withertech.witherlib.registration;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 
 public class ModData

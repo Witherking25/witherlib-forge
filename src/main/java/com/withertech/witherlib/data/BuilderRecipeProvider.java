@@ -18,17 +18,16 @@
 
 package com.withertech.witherlib.data;
 
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraftforge.common.data.ForgeRecipeProvider;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nonnull;
 
-public abstract class BuilderRecipeProvider extends ForgeRecipeProvider
+public abstract class BuilderRecipeProvider extends RecipeProvider
 {
 	public BuilderRecipeProvider(DataGenerator generatorIn)
 	{
@@ -36,12 +35,12 @@ public abstract class BuilderRecipeProvider extends ForgeRecipeProvider
 	}
 
 
-	public static InventoryChangeTrigger.Instance has(@Nonnull IItemProvider itemProvider)
+	public static InventoryChangeTrigger.TriggerInstance has(@Nonnull ItemLike itemProvider)
 	{
 		return RecipeProvider.has(itemProvider);
 	}
 
-	public static InventoryChangeTrigger.Instance has(@Nonnull ITag<Item> itemTag)
+	public static InventoryChangeTrigger.TriggerInstance has(@Nonnull Tag<Item> itemTag)
 	{
 		return RecipeProvider.has(itemTag);
 	}

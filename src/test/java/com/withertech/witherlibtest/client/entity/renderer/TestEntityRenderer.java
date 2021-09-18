@@ -22,9 +22,9 @@ package com.withertech.witherlibtest.client.entity.renderer;
 import com.withertech.witherlibtest.WitherLibTest;
 import com.withertech.witherlibtest.client.entity.model.TestEntityModel;
 import com.withertech.witherlibtest.entities.TestEntity;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
@@ -32,9 +32,9 @@ public class TestEntityRenderer extends MobRenderer<TestEntity, TestEntityModel<
 {
     protected static final ResourceLocation TEXTURE = WitherLibTest.INSTANCE.MOD.modLocation("textures/entity/test_entity.png");
 
-    public TestEntityRenderer(EntityRendererManager entityRendererManager)
+    public TestEntityRenderer(EntityRendererProvider.Context context)
     {
-        super(entityRendererManager, new TestEntityModel<>(), 0.5f);
+        super(context, new TestEntityModel<>(context.bakeLayer(WitherLibTest.INSTANCE.REGISTRY.getEntityModel("test_entity").getLayers().get("body").getLeft())), 0.5f);
     }
 
     @Nonnull

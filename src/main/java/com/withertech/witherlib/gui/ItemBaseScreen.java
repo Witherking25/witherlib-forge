@@ -19,9 +19,9 @@
 package com.withertech.witherlib.gui;
 
 import com.withertech.witherlib.util.ClientUtils;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;
 
@@ -33,18 +33,18 @@ public abstract class ItemBaseScreen extends ObjectBaseScreen<ItemStack>
 
 	private final Supplier<ItemStack> stackSupplier;
 
-	private ItemBaseScreen(ITextComponent title, Supplier<ItemStack> itemStackSupplier)
+	private ItemBaseScreen(Component title, Supplier<ItemStack> itemStackSupplier)
 	{
 		super(title);
 		this.stackSupplier = itemStackSupplier;
 	}
 
-	protected ItemBaseScreen(ITextComponent title, int playerSlot)
+	protected ItemBaseScreen(Component title, int playerSlot)
 	{
-		this(title, () -> ClientUtils.getPlayer().inventory.getItem(playerSlot));
+		this(title, () -> ClientUtils.getPlayer().getInventory().getItem(playerSlot));
 	}
 
-	protected ItemBaseScreen(ITextComponent title, Hand hand)
+	protected ItemBaseScreen(Component title, InteractionHand hand)
 	{
 		this(title, () -> ClientUtils.getPlayer().getItemInHand(hand));
 	}

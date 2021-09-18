@@ -18,10 +18,10 @@
 
 package com.withertech.witherlib.nbt.wrappers;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-public class FluidTankNBTWrapper extends AbstractNBTWrapper<FluidTank, CompoundNBT>
+public class FluidTankNBTWrapper extends AbstractNBTWrapper<FluidTank, CompoundTag>
 {
 	public FluidTankNBTWrapper(FluidTank value)
 	{
@@ -29,13 +29,13 @@ public class FluidTankNBTWrapper extends AbstractNBTWrapper<FluidTank, CompoundN
 	}
 
 	@Override
-	public CompoundNBT serializeNBT()
+	public CompoundTag serializeNBT()
 	{
-		return get().writeToNBT(new CompoundNBT());
+		return get().writeToNBT(new CompoundTag());
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt)
+	public void deserializeNBT(CompoundTag nbt)
 	{
 		set(get().readFromNBT(nbt));
 	}

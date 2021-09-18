@@ -18,21 +18,18 @@
 
 package com.withertech.witherlib.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
 import com.withertech.witherlib.gui.ScreenUtils;
 import com.withertech.witherlib.util.TextComponents;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.SharedConstants;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 
 import java.util.Collections;
 import java.util.List;
@@ -101,7 +98,7 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 	}
 
 	@Override
-	protected List<ITextComponent> getNarrationMessage()
+	protected List<Component> getNarrationMessage()
 	{
 		return Collections.singletonList(TextComponents.translation("gui.narrate.editBox", this.suggestion, this.text).get());
 	}
@@ -113,17 +110,17 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
 		if (this.drawBackground)
 		{
-			this.drawBackground(matrixStack);
+			this.drawBackground(poseStack);
 		}
 
 		int textColor = this.active ? this.activeTextColor : this.inactiveTextColor;
 		int relativeCursor = this.cursorPosition - this.lineScrollOffset;
 		int relativeSelection = this.selectionPos - this.lineScrollOffset;
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		Font fontRenderer = Minecraft.getInstance().font;
 		String s = fontRenderer.plainSubstrByWidth(
 				this.text.substring(this.lineScrollOffset),
 				this.width - 8
@@ -142,7 +139,7 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 		if (!s.isEmpty())
 		{
 			String s1 = cursorInView ? s.substring(0, relativeCursor) : s;
-			leftOffset = fontRenderer.draw(matrixStack, s1, left, top, textColor) + 1;
+			leftOffset = fontRenderer.draw(poseStack, s1, left, top, textColor) + 1;
 		}
 
 		boolean cursorAtEnd = this.cursorPosition < this.text.length();
@@ -160,14 +157,14 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 		// draw text
 		if (!s.isEmpty() && cursorInView && relativeCursor < s.length())
 		{
-			fontRenderer.draw(matrixStack, s.substring(relativeCursor), leftOffset, top, textColor);
+			fontRenderer.draw(poseStack, s.substring(relativeCursor), leftOffset, top, textColor);
 		}
 
 		// draw suggestion
 		if (!this.suggestion.isEmpty() && this.text.isEmpty())
 		{
 			fontRenderer.drawShadow(
-					matrixStack,
+					poseStack,
 					fontRenderer.plainSubstrByWidth(
 							this.suggestion,
 							this.width - 8 - fontRenderer.width("...")
@@ -183,27 +180,27 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 		{
 			if (cursorAtEnd)
 			{
-				ScreenUtils.fillRect(matrixStack, cursorX - 0.5f, top - 1, 1, fontRenderer.lineHeight, -3092272);
+				ScreenUtils.fillRect(poseStack, cursorX - 0.5f, top - 1, 1, fontRenderer.lineHeight, -3092272);
 			} else
 			{
-				fontRenderer.drawShadow(matrixStack, "_", cursorX, top, textColor);
+				fontRenderer.drawShadow(poseStack, "_", cursorX, top, textColor);
 			}
 		}
 
 		if (relativeSelection != relativeCursor)
 		{
 			int l1 = left + fontRenderer.width(s.substring(0, relativeSelection));
-			this.drawSelectionBox(matrixStack, cursorX, top - 1, l1 - 1, top + 1 + fontRenderer.lineHeight);
+			this.drawSelectionBox(poseStack, cursorX, top - 1, l1 - 1, top + 1 + fontRenderer.lineHeight);
 		}
 	}
 
-	protected void drawBackground(MatrixStack matrixStack)
+	protected void drawBackground(PoseStack poseStack)
 	{
-		ScreenUtils.fillRect(matrixStack, this.x, this.y, this.width, this.height, this.focused ? -1 : -6250336);
-		ScreenUtils.fillRect(matrixStack, this.x + 1, this.y + 1, this.width - 2, this.height - 2, -16777216);
+		ScreenUtils.fillRect(poseStack, this.x, this.y, this.width, this.height, this.focused ? -1 : -6250336);
+		ScreenUtils.fillRect(poseStack, this.x + 1, this.y + 1, this.width - 2, this.height - 2, -16777216);
 	}
 
-	protected void drawSelectionBox(MatrixStack matrixStack, int startX, int startY, int endX, int endY)
+	protected void drawSelectionBox(PoseStack poseStack, int startX, int startY, int endX, int endY)
 	{
 		if (startX < endX)
 		{
@@ -229,19 +226,19 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 			startX = this.x + this.width;
 		}
 
-		Matrix4f matrix = matrixStack.last().pose();
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuilder();
-		RenderSystem.color4f(0.0F, 0.0F, 255.0F, 255.0F);
+		Matrix4f matrix = poseStack.last().pose();
+		Tesselator tesselator = Tesselator.getInstance();
+		BufferBuilder bufferbuilder = tesselator.getBuilder();
+		RenderSystem.setShaderColor(0.0F, 0.0F, 255.0F, 255.0F);
 		RenderSystem.disableTexture();
 		RenderSystem.enableColorLogicOp();
 		RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
-		bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+		bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		bufferbuilder.vertex(matrix, startX, endY, 0).endVertex();
 		bufferbuilder.vertex(matrix, endX, endY, 0).endVertex();
 		bufferbuilder.vertex(matrix, endX, startY, 0).endVertex();
 		bufferbuilder.vertex(matrix, startX, startY, 0).endVertex();
-		tessellator.end();
+		tesselator.end();
 		RenderSystem.disableColorLogicOp();
 		RenderSystem.enableTexture();
 	}
@@ -345,7 +342,7 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 
 	protected void moveLineOffsetToCursor()
 	{
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		Font fontRenderer = Minecraft.getInstance().font;
 		int availableWidth = this.width - 8 - (
 				this.cursorPosition == this.text.length() ? fontRenderer.width("_") : 0
 		);
@@ -541,9 +538,9 @@ public class TextFieldWidget extends Widget implements ITickableWidget
 				this.clear();
 			} else
 			{
-				int offset = MathHelper.floor(mouseX) - this.x - 4;
+				int offset = Mth.floor(mouseX) - this.x - 4;
 
-				FontRenderer font = Minecraft.getInstance().font;
+				Font font = Minecraft.getInstance().font;
 				String s = font.plainSubstrByWidth(
 						this.text.substring(this.lineScrollOffset),
 						Math.min(offset, this.width - 8)

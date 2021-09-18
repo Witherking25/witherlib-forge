@@ -18,12 +18,12 @@
 
 package com.withertech.witherlib.nbt.wrappers;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.energy.EnergyStorage;
 
 import java.lang.reflect.Field;
 
-public class EnergyStorageNBTWrapper extends AbstractNBTWrapper<EnergyStorage, CompoundNBT>
+public class EnergyStorageNBTWrapper extends AbstractNBTWrapper<EnergyStorage, CompoundTag>
 {
 	public EnergyStorageNBTWrapper(EnergyStorage value)
 	{
@@ -31,9 +31,9 @@ public class EnergyStorageNBTWrapper extends AbstractNBTWrapper<EnergyStorage, C
 	}
 
 	@Override
-	public CompoundNBT serializeNBT()
+	public CompoundTag serializeNBT()
 	{
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
 		try
 		{
 			Field energyField = EnergyStorage.class.getDeclaredField("energy");
@@ -63,7 +63,7 @@ public class EnergyStorageNBTWrapper extends AbstractNBTWrapper<EnergyStorage, C
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt)
+	public void deserializeNBT(CompoundTag nbt)
 	{
 		try
 		{

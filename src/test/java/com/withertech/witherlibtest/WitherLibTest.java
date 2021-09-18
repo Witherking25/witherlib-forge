@@ -22,6 +22,7 @@ import com.withertech.witherlib.data.BuilderDataGenerator;
 import com.withertech.witherlib.data.BuilderRecipeProvider;
 import com.withertech.witherlib.registration.*;
 import com.withertech.witherlibtest.blocks.*;
+import com.withertech.witherlibtest.client.entity.model.TestEntityModel;
 import com.withertech.witherlibtest.client.entity.renderer.TestEntityRenderer;
 import com.withertech.witherlibtest.client.tile.renderer.TestTileEntityRenderer;
 import com.withertech.witherlibtest.configs.ClientConfig;
@@ -43,26 +44,33 @@ import com.withertech.witherlibtest.tiles.TestEnergyTile;
 import com.withertech.witherlibtest.tiles.TestNBTTile;
 import com.withertech.witherlibtest.tiles.TestProgressTile;
 import com.withertech.witherlibtest.tiles.TestTile;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.*;
-import net.minecraft.loot.*;
-import net.minecraft.loot.functions.EnchantRandomly;
-import net.minecraft.loot.functions.SetCount;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -106,7 +114,7 @@ public class WitherLibTest extends BuilderMod
 	{
 		return BuilderForgeRegistry.builder(MOD, ForgeRegistries.BLOCKS)
 				.add(TypedRegKey.block("test_block", TestBlock.class), TestBlock::new)
-				.add(TypedRegKey.block("test_fluid", FlowingFluidBlock.class), () -> new FlowingFluidBlock(() -> getFluids().get(TypedRegKey.fluid("test_fluid", TestFluid.Source.class)).get(), AbstractBlock.Properties.of(Material.WATER).strength(100.0F).noDrops()))
+				.add(TypedRegKey.block("test_fluid", LiquidBlock.class), () -> new TestLiquidBlock(() -> getFluids().get(TypedRegKey.fluid("test_fluid", TestFluid.Source.class)).get(), Block.Properties.of(Material.WATER).strength(100.0F).noDrops()))
 				.add(TypedRegKey.block("test_tile_block", TestTileBlock.class), TestTileBlock::new)
 				.add(TypedRegKey.block("test_energy_block", TestEnergyBlock.class), TestEnergyBlock::new)
 				.add(TypedRegKey.block("test_progress_block", TestProgressBlock.class), TestProgressBlock::new)
@@ -141,23 +149,23 @@ public class WitherLibTest extends BuilderMod
 	protected BuilderForgeRegistry<EntityType<?>> registerEntities()
 	{
 		return BuilderForgeRegistry.builder(MOD, ForgeRegistries.ENTITIES)
-				.add(TypedRegKey.entity("test_entity", TestEntity.class), () -> EntityType.Builder.of(TestEntity::new, EntityClassification.CREATURE).sized(0.9f, 1.3f).build(MOD.modLocation("test_entity").toString()))
+				.add(TypedRegKey.entity("test_entity", TestEntity.class), () -> EntityType.Builder.of(TestEntity::new, MobCategory.CREATURE).sized(0.9f, 1.3f).build(MOD.modLocation("test_entity").toString()))
 				.build();
 	}
 
 	@Override
-	protected BuilderForgeRegistry<TileEntityType<?>> registerTiles()
+	protected BuilderForgeRegistry<BlockEntityType<?>> registerTiles()
 	{
-		return BuilderForgeRegistry.builder(MOD, ForgeRegistries.TILE_ENTITIES)
-				.add(TypedRegKey.tile("test_tile", TestTile.class), () -> TileEntityType.Builder.of(TestTile::new, getBlocks().get(TypedRegKey.block("test_tile_block", TestTileBlock.class)).get()).build(null))
-				.add(TypedRegKey.tile("test_energy_tile", TestEnergyTile.class), () -> TileEntityType.Builder.of(TestEnergyTile::new, getBlocks().get(TypedRegKey.block("test_energy_block", TestEnergyBlock.class)).get()).build(null))
-				.add(TypedRegKey.tile("test_progress_tile", TestProgressTile.class), () -> TileEntityType.Builder.of(TestProgressTile::new, getBlocks().get(TypedRegKey.block("test_progress_block", TestProgressBlock.class)).get()).build(null))
-				.add(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class), () -> TileEntityType.Builder.of(TestNBTTile::new, getBlocks().get(TypedRegKey.block("test_nbt_block", TestNBTBlock.class)).get()).build(null))
+		return BuilderForgeRegistry.builder(MOD, ForgeRegistries.BLOCK_ENTITIES)
+				.add(TypedRegKey.tile("test_tile", TestTile.class), () -> BlockEntityType.Builder.of(TestTile::new, getBlocks().get(TypedRegKey.block("test_tile_block", TestTileBlock.class)).get()).build(null))
+				.add(TypedRegKey.tile("test_energy_tile", TestEnergyTile.class), () -> BlockEntityType.Builder.of(TestEnergyTile::new, getBlocks().get(TypedRegKey.block("test_energy_block", TestEnergyBlock.class)).get()).build(null))
+				.add(TypedRegKey.tile("test_progress_tile", TestProgressTile.class), () -> BlockEntityType.Builder.of(TestProgressTile::new, getBlocks().get(TypedRegKey.block("test_progress_block", TestProgressBlock.class)).get()).build(null))
+				.add(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class), () -> BlockEntityType.Builder.of(TestNBTTile::new, getBlocks().get(TypedRegKey.block("test_nbt_block", TestNBTBlock.class)).get()).build(null))
 				.build();
 	}
 
 	@Override
-	protected BuilderForgeRegistry<ContainerType<?>> registerContainers()
+	protected BuilderForgeRegistry<MenuType<?>> registerContainers()
 	{
 		return BuilderForgeRegistry.builder(MOD, ForgeRegistries.CONTAINERS)
 				.add(TypedRegKey.container("test_container", TestContainer.class), () -> IForgeContainerType.create((windowId, inv, data) -> new TestContainer(windowId, inv.player, data.readBlockPos())))
@@ -180,7 +188,17 @@ public class WitherLibTest extends BuilderMod
 	protected BuilderEntityAttributeRegistry registerEntityAttributes()
 	{
 		return BuilderEntityAttributeRegistry.builder()
-				.add("test_entity", () -> MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.23F))
+				.add("test_entity", () -> Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.23F))
+				.build();
+	}
+
+	@Override
+	protected BuilderEntityModelRegistry registerEntityModels()
+	{
+		return BuilderEntityModelRegistry.builder()
+				.model("test_entity")
+				.layer("body", new ModelLayerLocation(MOD.modLocation("test_entity"), "body"), TestEntityModel::createBodyLayer)
+				.build()
 				.build();
 	}
 
@@ -214,7 +232,7 @@ public class WitherLibTest extends BuilderMod
 	protected BuilderTabRegistry registerTabs()
 	{
 		return BuilderTabRegistry.builder()
-				.add(MODID, new ItemGroup(MODID)
+				.add(MODID, new CreativeModeTab(MODID)
 				{
 
 					@Nonnull
@@ -239,7 +257,7 @@ public class WitherLibTest extends BuilderMod
 					builderBlockStateProvider.simpleBlock(getBlocks().get(TypedRegKey.block("test_energy_block", TestEnergyBlock.class)).get());
 					builderBlockStateProvider.simpleBlock(getBlocks().get(TypedRegKey.block("test_progress_block", TestProgressBlock.class)).get());
 					builderBlockStateProvider.simpleBlock(getBlocks().get(TypedRegKey.block("test_nbt_block", TestNBTBlock.class)).get());
-					builderBlockStateProvider.fluidBlock(getBlocks().get(TypedRegKey.block("test_fluid", FlowingFluidBlock.class)).get());
+					builderBlockStateProvider.fluidBlock(getBlocks().get(TypedRegKey.block("test_fluid", LiquidBlock.class)).get());
 				})
 				.addItemModel(builderItemModelProvider ->
 				{
@@ -281,11 +299,11 @@ public class WitherLibTest extends BuilderMod
 				}, new ArrayList<>(getBlocks().getREGISTRY().getEntries()))
 				.addChestLootTable(consumer ->
 				{
-					consumer.accept(MOD.modLocation("chests/test"), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantRange.exactly(1)).add(ItemLootEntry.lootTableItem(Items.GOLDEN_APPLE).setWeight(20)).add(ItemLootEntry.lootTableItem(Items.ENCHANTED_GOLDEN_APPLE)).add(ItemLootEntry.lootTableItem(Items.NAME_TAG).setWeight(30)).add(ItemLootEntry.lootTableItem(Items.BOOK).setWeight(10).apply(EnchantRandomly.randomApplicableEnchantment())).add(ItemLootEntry.lootTableItem(Items.IRON_PICKAXE).setWeight(5)).add(EmptyLootEntry.emptyItem().setWeight(5))).withPool(LootPool.lootPool().setRolls(RandomValueRange.between(2.0F, 4.0F)).add(ItemLootEntry.lootTableItem(Items.IRON_INGOT).setWeight(10).apply(SetCount.setCount(RandomValueRange.between(1.0F, 5.0F)))).add(ItemLootEntry.lootTableItem(Items.GOLD_INGOT).setWeight(5).apply(SetCount.setCount(RandomValueRange.between(1.0F, 3.0F)))).add(ItemLootEntry.lootTableItem(Items.REDSTONE).setWeight(5).apply(SetCount.setCount(RandomValueRange.between(4.0F, 9.0F)))).add(ItemLootEntry.lootTableItem(Items.LAPIS_LAZULI).setWeight(5).apply(SetCount.setCount(RandomValueRange.between(4.0F, 9.0F)))).add(ItemLootEntry.lootTableItem(Items.DIAMOND).setWeight(3).apply(SetCount.setCount(RandomValueRange.between(1.0F, 2.0F)))).add(ItemLootEntry.lootTableItem(Items.COAL).setWeight(10).apply(SetCount.setCount(RandomValueRange.between(3.0F, 8.0F)))).add(ItemLootEntry.lootTableItem(Items.BREAD).setWeight(15).apply(SetCount.setCount(RandomValueRange.between(1.0F, 3.0F)))).add(ItemLootEntry.lootTableItem(Items.MELON_SEEDS).setWeight(10).apply(SetCount.setCount(RandomValueRange.between(2.0F, 4.0F)))).add(ItemLootEntry.lootTableItem(Items.PUMPKIN_SEEDS).setWeight(10).apply(SetCount.setCount(RandomValueRange.between(2.0F, 4.0F)))).add(ItemLootEntry.lootTableItem(Items.BEETROOT_SEEDS).setWeight(10).apply(SetCount.setCount(RandomValueRange.between(2.0F, 4.0F))))).withPool(LootPool.lootPool().setRolls(ConstantRange.exactly(3)).add(ItemLootEntry.lootTableItem(Blocks.RAIL).setWeight(20).apply(SetCount.setCount(RandomValueRange.between(4.0F, 8.0F)))).add(ItemLootEntry.lootTableItem(Blocks.POWERED_RAIL).setWeight(5).apply(SetCount.setCount(RandomValueRange.between(1.0F, 4.0F)))).add(ItemLootEntry.lootTableItem(Blocks.DETECTOR_RAIL).setWeight(5).apply(SetCount.setCount(RandomValueRange.between(1.0F, 4.0F)))).add(ItemLootEntry.lootTableItem(Blocks.ACTIVATOR_RAIL).setWeight(5).apply(SetCount.setCount(RandomValueRange.between(1.0F, 4.0F)))).add(ItemLootEntry.lootTableItem(Blocks.TORCH).setWeight(15).apply(SetCount.setCount(RandomValueRange.between(1.0F, 16.0F))))));
+					consumer.accept(MOD.modLocation("chests/test"), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(Items.GOLDEN_APPLE).setWeight(20)).add(LootItem.lootTableItem(Items.ENCHANTED_GOLDEN_APPLE)).add(LootItem.lootTableItem(Items.NAME_TAG).setWeight(30)).add(LootItem.lootTableItem(Items.BOOK).setWeight(10).apply(EnchantRandomlyFunction.randomApplicableEnchantment())).add(LootItem.lootTableItem(Items.IRON_PICKAXE).setWeight(5)).add(EmptyLootItem.emptyItem().setWeight(5))).withPool(LootPool.lootPool().setRolls(UniformGenerator.between(2.0F, 4.0F)).add(LootItem.lootTableItem(Items.IRON_INGOT).setWeight(10).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 5.0F)))).add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(5).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F)))).add(LootItem.lootTableItem(Items.REDSTONE).setWeight(5).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 9.0F)))).add(LootItem.lootTableItem(Items.LAPIS_LAZULI).setWeight(5).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 9.0F)))).add(LootItem.lootTableItem(Items.DIAMOND).setWeight(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))).add(LootItem.lootTableItem(Items.COAL).setWeight(10).apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 8.0F)))).add(LootItem.lootTableItem(Items.BREAD).setWeight(15).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F)))).add(LootItem.lootTableItem(Items.GLOW_BERRIES).setWeight(15).apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F)))).add(LootItem.lootTableItem(Items.MELON_SEEDS).setWeight(10).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 4.0F)))).add(LootItem.lootTableItem(Items.PUMPKIN_SEEDS).setWeight(10).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 4.0F)))).add(LootItem.lootTableItem(Items.BEETROOT_SEEDS).setWeight(10).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 4.0F))))).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(3.0F)).add(LootItem.lootTableItem(Blocks.RAIL).setWeight(20).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 8.0F)))).add(LootItem.lootTableItem(Blocks.POWERED_RAIL).setWeight(5).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F)))).add(LootItem.lootTableItem(Blocks.DETECTOR_RAIL).setWeight(5).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F)))).add(LootItem.lootTableItem(Blocks.ACTIVATOR_RAIL).setWeight(5).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F)))).add(LootItem.lootTableItem(Blocks.TORCH).setWeight(15).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 16.0F))))));
 				})
 				.addEntityLootTable(builderEntityLootTableProvider ->
 				{
-					builderEntityLootTableProvider.add(getEntities().get(TypedRegKey.entity("test_entity", TestEntity.class)).get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantRange.exactly(1)).add(ItemLootEntry.lootTableItem(getItems().get(TypedRegKey.item("test_item", TestItem.class)).get()).setWeight(100))));
+					builderEntityLootTableProvider.add(getEntities().get(TypedRegKey.entity("test_entity", TestEntity.class)).get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(getItems().get(TypedRegKey.item("test_item", TestItem.class)).get()).setWeight(100))));
 				}, new ArrayList<>(getEntities().getREGISTRY().getEntries()))
 				.addRecipe(iFinishedRecipeConsumer ->
 				{
@@ -305,7 +323,7 @@ public class WitherLibTest extends BuilderMod
 					builderLangProvider.add(getBlocks().get(TypedRegKey.block("test_nbt_block", TestNBTBlock.class)).get(), "Test NBT Block");
 					builderLangProvider.add(getEntities().get(TypedRegKey.entity("test_entity", TestEntity.class)).get(), "Test Entity");
 					builderLangProvider.add(getFluids().get(TypedRegKey.fluid("test_fluid", TestFluid.Source.class)).get().getAttributes().getTranslationKey(), "Test Fluid");
-					builderLangProvider.add(((TranslationTextComponent) getTabs().getTab(MODID).getDisplayName()).getKey(), "Test Tab");
+					builderLangProvider.add(((TranslatableComponent) getTabs().getTab(MODID).getDisplayName()).getKey(), "Test Tab");
 				})
 				.build();
 	}
@@ -314,10 +332,10 @@ public class WitherLibTest extends BuilderMod
 	protected BuilderNetworkRegistry registerNets()
 	{
 		return BuilderNetworkRegistry.builder(MOD)
-				.add("main", BuilderNetworkRegistry.channel()
-						.add(TestProgressTilePacket.TestProgressTileEnablePacket.class, TestProgressTilePacket.TestProgressTileEnablePacket::new, true)
-						.add(TestEnergyTilePacket.TestEnergyTileFluidInteractPacket.class, TestEnergyTilePacket.TestEnergyTileFluidInteractPacket::new, true)
-						.build())
+				.channel("main")
+						.packet(TestProgressTilePacket.TestProgressTileEnablePacket.class, TestProgressTilePacket.TestProgressTileEnablePacket::new, true)
+						.packet(TestEnergyTilePacket.TestEnergyTileFluidInteractPacket.class, TestEnergyTilePacket.TestEnergyTileFluidInteractPacket::new, true)
+						.build()
 				.build();
 	}
 

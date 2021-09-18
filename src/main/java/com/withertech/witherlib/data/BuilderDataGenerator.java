@@ -21,12 +21,12 @@ package com.withertech.witherlib.data;
 
 import com.mojang.datafixers.util.Pair;
 import com.withertech.witherlib.registration.ModData;
-import net.minecraft.block.Block;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.EntityType;
-import net.minecraft.loot.LootTable;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraftforge.fmllegacy.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class BuilderDataGenerator
 	private final List<Pair<Consumer<BuilderBlockLootTableProvider>, List<RegistryObject<Block>>>> BLOCK_LOOT_TABLES;
 	private final List<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>> CHEST_LOOT_TABLES;
 	private final List<Pair<Consumer<BuilderEntityLootTableProvider>, List<RegistryObject<EntityType<?>>>>> ENTITY_LOOT_TABLES;
-	private final List<Consumer<Consumer<IFinishedRecipe>>> RECIPES;
+	private final List<Consumer<Consumer<FinishedRecipe>>> RECIPES;
 	private final List<Consumer<BuilderLangProvider>> LANGS;
 	private final ModData MOD;
 
@@ -150,7 +150,7 @@ public class BuilderDataGenerator
 		return ENTITY_LOOT_TABLES.isEmpty();
 	}
 
-	public void forEachRecipes(Consumer<? super Consumer<Consumer<IFinishedRecipe>>> action)
+	public void forEachRecipes(Consumer<? super Consumer<Consumer<FinishedRecipe>>> action)
 	{
 		RECIPES.forEach(action);
 	}
@@ -182,7 +182,7 @@ public class BuilderDataGenerator
 		private final List<Pair<Consumer<BuilderBlockLootTableProvider>, List<RegistryObject<Block>>>> BLOCK_LOOT_TABLES = new ArrayList<>();
 		private final List<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>> CHEST_LOOT_TABLES = new ArrayList<>();
 		private final List<Pair<Consumer<BuilderEntityLootTableProvider>, List<RegistryObject<EntityType<?>>>>> ENTITY_LOOT_TABLES = new ArrayList<>();
-		private final List<Consumer<Consumer<IFinishedRecipe>>> RECIPES = new ArrayList<>();
+		private final List<Consumer<Consumer<FinishedRecipe>>> RECIPES = new ArrayList<>();
 		private final List<Consumer<BuilderLangProvider>> LANGS = new ArrayList<>();
 
 		private Builder(ModData mod)
@@ -244,7 +244,7 @@ public class BuilderDataGenerator
 			return this;
 		}
 
-		public Builder addRecipe(Consumer<Consumer<IFinishedRecipe>> generator)
+		public Builder addRecipe(Consumer<Consumer<FinishedRecipe>> generator)
 		{
 			RECIPES.add(generator);
 			return this;

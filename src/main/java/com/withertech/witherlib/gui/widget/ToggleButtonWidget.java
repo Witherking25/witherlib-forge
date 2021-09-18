@@ -18,10 +18,10 @@
 
 package com.withertech.witherlib.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.withertech.witherlib.gui.ScreenUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,14 +30,14 @@ import java.util.function.Supplier;
 public class ToggleButtonWidget extends AbstractButtonWidget
 {
 	private final Supplier<Boolean> getState;
-	private ITextComponent text;
+	private Component text;
 
 	public ToggleButtonWidget(
 			int x,
 			int y,
 			int width,
 			int height,
-			ITextComponent text,
+			Component text,
 			Runnable onPress,
 			Supplier<Boolean> getState
 	)
@@ -47,22 +47,22 @@ public class ToggleButtonWidget extends AbstractButtonWidget
 		this.getState = getState;
 	}
 
-	public void setText(ITextComponent text)
+	public void setText(Component text)
 	{
 		this.text = text;
 	}
 
 	@Override
-	protected List<ITextComponent> getNarrationMessage()
+	protected List<Component> getNarrationMessage()
 	{
 		return Collections.singletonList(this.text);
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
 		ScreenUtils.drawButtonBackground(
-				matrixStack,
+				poseStack,
 				this.x,
 				this.y,
 				this.width,
@@ -71,7 +71,7 @@ public class ToggleButtonWidget extends AbstractButtonWidget
 				(this.active ? this.isHovered() ? 5 : 0 : 10) / 15f
 		);
 		ScreenUtils.drawCenteredStringWithShadow(
-				matrixStack,
+				poseStack,
 				Minecraft.getInstance().font,
 				this.text,
 				this.x + this.width / 2f,

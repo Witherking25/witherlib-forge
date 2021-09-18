@@ -21,40 +21,40 @@ package com.withertech.witherlibtest.entities;
 import com.withertech.witherlib.registration.TypedRegKey;
 import com.withertech.witherlibtest.WitherLibTest;
 import com.withertech.witherlibtest.items.TestItem;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TestEntity extends AnimalEntity
+public class TestEntity extends Animal
 {
-    private EatGrassGoal eatGrassGoal;
+    private EatBlockGoal eatGrassGoal;
     private int eatAnimationTick;
 
-    public TestEntity(EntityType<? extends AnimalEntity> type, World world)
+    public TestEntity(EntityType<? extends Animal> type, Level world)
     {
         super(type, world);
     }
 
     @Nullable
     @Override
-    public AgeableEntity getBreedOffspring(@Nonnull ServerWorld world, @Nonnull AgeableEntity ageable)
+    public AgeableMob getBreedOffspring(@Nonnull ServerLevel world, @Nonnull AgeableMob ageable)
     {
         TestEntity entity = WitherLibTest.INSTANCE.REGISTRY.getEntity(TypedRegKey.entity("test_entity", TestEntity.class)).get().create(this.level);
         assert entity != null;
-        entity.finalizeSpawn((IServerWorld) this.level, this.level.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.BREEDING, null, null);
+        entity.finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null, null);
         return entity;
     }
 
@@ -62,16 +62,16 @@ public class TestEntity extends AnimalEntity
     protected void registerGoals()
     {
         super.registerGoals();
-        this.eatGrassGoal = new EatGrassGoal(this);
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.eatGrassGoal = new EatBlockGoal(this);
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.25D));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.1D, Ingredient.of(WitherLibTest.INSTANCE.REGISTRY.getItem(TypedRegKey.item("test_item", TestItem.class)).get()), false));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.1D));
         this.goalSelector.addGoal(5, this.eatGrassGoal);
-        this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0f));
-        this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0f));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -129,11 +129,11 @@ public class TestEntity extends AnimalEntity
         if (this.eatAnimationTick > 4 && this.eatAnimationTick <= 36)
         {
             float f = ((float) (this.eatAnimationTick - 4) - p_70890_1_) / 32.0F;
-            return ((float) Math.PI / 5F) + 0.21991149F * MathHelper.sin(f * 28.7F);
+            return ((float) Math.PI / 5F) + 0.21991149F * Mth.sin(f * 28.7F);
         }
         else
         {
-            return this.eatAnimationTick > 0 ? ((float) Math.PI / 5F) : this.xRot * ((float) Math.PI / 180F);
+            return this.eatAnimationTick > 0 ? ((float) Math.PI / 5F) : this.getXRot() * ((float) Math.PI / 180F);
         }
     }
 }

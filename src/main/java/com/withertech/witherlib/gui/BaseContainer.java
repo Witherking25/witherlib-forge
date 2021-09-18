@@ -18,24 +18,24 @@
 
 package com.withertech.witherlib.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 
 /**
  * Created 1/19/2021 by SuperMartijn642
  */
-public abstract class BaseContainer extends Container
+public abstract class BaseContainer extends AbstractContainerMenu
 {
 
-	public final PlayerEntity player;
-	public final World world;
+	public final Player player;
+	public final Level world;
 
-	public BaseContainer(ContainerType<?> type, int id, PlayerEntity player)
+	public BaseContainer(MenuType<?> type, int id, Player player)
 	{
 		super(type, id);
 		this.player = player;
@@ -44,7 +44,7 @@ public abstract class BaseContainer extends Container
 
 
 	/**
-	 * Adds slots to the container by calling {@link #addSlots(PlayerEntity)}.
+	 * Adds slots to the container by calling {@link #addSlots(Player)}.
 	 */
 	protected void addSlots()
 	{
@@ -54,7 +54,7 @@ public abstract class BaseContainer extends Container
 	/**
 	 * Adds slots to the container
 	 */
-	protected abstract void addSlots(PlayerEntity player);
+	protected abstract void addSlots(Player player);
 
 	/**
 	 * Adds the player's slots to the container at the given {@code x} and {@code y}.
@@ -69,19 +69,19 @@ public abstract class BaseContainer extends Container
 		{
 			for (int column = 0; column < 9; column++)
 			{
-				this.addSlot(new Slot(this.player.inventory, row * 9 + column + 9, x + 18 * column, y + 18 * row));
+				this.addSlot(new Slot(this.player.getInventory(), row * 9 + column + 9, x + 18 * column, y + 18 * row));
 			}
 		}
 
 		// hot bar
 		for (int column = 0; column < 9; column++)
 		{
-			this.addSlot(new Slot(this.player.inventory, column, x + 18 * column, y + 58));
+			this.addSlot(new Slot(this.player.getInventory(), column, x + 18 * column, y + 58));
 		}
 	}
 
 	@Override
-	public boolean stillValid(@Nonnull PlayerEntity playerIn)
+	public boolean stillValid(@Nonnull Player playerIn)
 	{
 		return true;
 	}

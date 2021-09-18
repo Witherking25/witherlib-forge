@@ -18,14 +18,13 @@
 
 package com.withertech.witherlib.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.withertech.witherlib.WitherLib;
 import com.withertech.witherlib.gui.ScreenUtils;
 import com.withertech.witherlib.util.TextComponents;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fluids.FluidUtil;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import java.text.NumberFormat;
@@ -55,11 +54,11 @@ public class FluidTankWidget extends AbstractButtonWidget implements IHoverTextW
 	}
 
 	@Override
-	public List<ITextComponent> getHoverText()
+	public List<Component> getHoverText()
 	{
 		int amount = this.tank.get().getFluidAmount();
 		int capacity = this.tank.get().getCapacity();
-		List<ITextComponent> text = new ArrayList<>();
+		List<Component> text = new ArrayList<>();
 		text.add(TextComponents.string(
 				((!tank.get().getFluid().isEmpty()) ?
 						(TextComponents.fluid(tank.get().getFluid().getFluid()).get().getString()) :
@@ -74,20 +73,19 @@ public class FluidTankWidget extends AbstractButtonWidget implements IHoverTextW
 
 
 	@Override
-	protected List<ITextComponent> getNarrationMessage()
+	protected List<Component> getNarrationMessage()
 	{
 		return this.getHoverText();
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
-		ScreenUtils.drawFluidStack(matrixStack, tank.get().getFluid(), tank.get().getCapacity(), x, y, width, height);
+		ScreenUtils.drawFluidStack(poseStack, tank.get().getFluid(), tank.get().getCapacity(), x, y, width, height);
 		ScreenUtils.bindTexture(TANK);
-		//noinspection deprecation
-		RenderSystem.enableAlphaTest();
+//		RenderSystem.enableAlphaTest();
 		ScreenUtils.drawTexture(
-				matrixStack,
+				poseStack,
 				this.x,
 				this.y,
 				this.width,
@@ -97,7 +95,6 @@ public class FluidTankWidget extends AbstractButtonWidget implements IHoverTextW
 				1 / 2f,
 				1
 		);
-		//noinspection deprecation
-		RenderSystem.disableAlphaTest();
+//		RenderSystem.disableAlphaTest();
 	}
 }

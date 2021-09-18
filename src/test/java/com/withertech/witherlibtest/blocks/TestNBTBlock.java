@@ -22,16 +22,12 @@ import com.withertech.witherlib.block.BaseTileBlock;
 import com.withertech.witherlib.registration.TypedRegKey;
 import com.withertech.witherlibtest.WitherLibTest;
 import com.withertech.witherlibtest.tiles.TestNBTTile;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
-
-import javax.annotation.Nullable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.material.Material;
 
 public class TestNBTBlock extends BaseTileBlock<TestNBTTile>
 {
@@ -47,21 +43,20 @@ public class TestNBTBlock extends BaseTileBlock<TestNBTTile>
 	}
 
 	@Override
-	protected Container createMenu(int id, PlayerEntity player, BlockPos pos)
+	protected AbstractContainerMenu createMenu(int id, Player player, BlockPos pos)
 	{
 		return null;
 	}
 
 	@Override
-	protected ITextComponent getDisplayName(TestNBTTile tile)
+	protected Component getDisplayName(TestNBTTile tile)
 	{
 		return null;
 	}
 
-	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public BlockEntityType<TestNBTTile> getBlockEntityType()
 	{
-		return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class)).get().create();
+		return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class)).get();
 	}
 }

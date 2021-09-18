@@ -19,9 +19,8 @@
 package com.withertech.witherlib.util;
 
 import com.withertech.witherlib.network.PacketContext;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -31,27 +30,23 @@ import javax.annotation.Nonnull;
 
 public class PacketUtils
 {
-	public static <T extends TileEntity> void interactCarriedItemWithFluidHandler(T tile, @Nonnull PacketContext context)
+	public static <T extends BlockEntity> void interactCarriedItemWithFluidHandler(T tile, @Nonnull PacketContext context)
 	{
-		PlayerEntity player = context.getSendingPlayer();
-		if (!player.inventory.getCarried().isEmpty() && player.inventory.getCarried().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent())
+		Player player = context.getSendingPlayer();
+		if (!player.containerMenu.getCarried().isEmpty() && player.containerMenu.getCarried().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent())
 		{
 			player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(playerInventory ->
 					tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(fluidTank ->
 					{
-						FluidActionResult fluidActionResult = FluidUtil.tryFillContainerAndStow(player.inventory.getCarried(), fluidTank, playerInventory, Integer.MAX_VALUE, player, true);
+						FluidActionResult fluidActionResult = FluidUtil.tryFillContainerAndStow(player.containerMenu.getCarried(), fluidTank, playerInventory, Integer.MAX_VALUE, player, true);
 						if (!fluidActionResult.isSuccess())
 						{
-							fluidActionResult = FluidUtil.tryEmptyContainerAndStow(player.inventory.getCarried(), fluidTank, playerInventory, Integer.MAX_VALUE, player, true);
+							fluidActionResult = FluidUtil.tryEmptyContainerAndStow(player.containerMenu.getCarried(), fluidTank, playerInventory, Integer.MAX_VALUE, player, true);
 						}
 
 						if (fluidActionResult.isSuccess())
 						{
-							player.inventory.setCarried(fluidActionResult.getResult());
-							if (player instanceof ServerPlayerEntity)
-							{
-								((ServerPlayerEntity) player).broadcastCarriedItem();
-							}
+							player.containerMenu.setCarried(fluidActionResult.getResult());
 						}
 					})
 			);

@@ -19,25 +19,26 @@
 package com.withertech.witherlib.tile;
 
 import com.withertech.witherlib.nbt.SyncVariable;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
-public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEntity
+public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends BlockEntity
 {
 	private boolean dataChanged = false;
 
-	public BaseTileEntity(TileEntityType<T> tileEntityTypeIn)
+	public BaseTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state)
 	{
-		super(tileEntityTypeIn);
+		super(tileEntityTypeIn, pos, state);
 	}
 
 	/**
@@ -53,33 +54,33 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
 
 	/**
 	 * Writes tile entity data to be saved with the chunk.
-	 * The stored data will be read in {@link #readData(CompoundNBT)}.
+	 * The stored data will be read in {@link #readData(CompoundTag)}.
 	 *
-	 * @return a {@link CompoundNBT} with the stored data
+	 * @return a {@link CompoundTag} with the stored data
 	 */
-	protected CompoundNBT writeData()
+	protected CompoundTag writeData()
 	{
-		return SyncVariable.Helper.writeSyncVars(this, new CompoundNBT(), SyncVariable.Type.WRITE);
+		return SyncVariable.Helper.writeSyncVars(this, new CompoundTag(), SyncVariable.Type.WRITE);
 	}
 
 	/**
 	 * Writes tile entity data to be sent to the client.
-	 * The stored data will be read in {@link #readData(CompoundNBT)}.
+	 * The stored data will be read in {@link #readData(CompoundTag)}.
 	 *
-	 * @return a {@link CompoundNBT} with the stored client data
+	 * @return a {@link CompoundTag} with the stored client data
 	 */
-	protected CompoundNBT writeClientData()
+	protected CompoundTag writeClientData()
 	{
-		return SyncVariable.Helper.writeSyncVars(this, new CompoundNBT(), SyncVariable.Type.PACKET);
+		return SyncVariable.Helper.writeSyncVars(this, new CompoundTag(), SyncVariable.Type.PACKET);
 	}
 
 	/**
 	 * Writes tile entity data to be stored on item stacks.
-	 * The stored data will be read in {@link #readData(CompoundNBT)}.
+	 * The stored data will be read in {@link #readData(CompoundTag)}.
 	 *
-	 * @return a {@link CompoundNBT} with the stored item stack data
+	 * @return a {@link CompoundTag} with the stored item stack data
 	 */
-	public CompoundNBT writeItemStackData()
+	public CompoundTag writeItemStackData()
 	{
 		return this.writeData();
 	}
@@ -90,17 +91,17 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
 	 *
 	 * @param tag data to be read
 	 */
-	public void readData(CompoundNBT tag)
+	public void readData(CompoundTag tag)
 	{
 		SyncVariable.Helper.readSyncVars(this, tag);
 	}
 
 	@Nonnull
 	@Override
-	public CompoundNBT save(@Nonnull CompoundNBT compound)
+	public CompoundTag save(@Nonnull CompoundTag compound)
 	{
 		super.save(compound);
-		CompoundNBT data = this.writeData();
+		CompoundTag data = this.writeData();
 		if (data != null && !data.isEmpty())
 		{
 			compound.put("data", data);
@@ -109,18 +110,18 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
 	}
 
 	@Override
-	public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt)
+	public void load(@Nonnull CompoundTag nbt)
 	{
-		super.load(state, nbt);
+		super.load(nbt);
 		this.readData(nbt.getCompound("data"));
 	}
 
 	@Nonnull
 	@Override
-	public CompoundNBT getUpdateTag()
+	public CompoundTag getUpdateTag()
 	{
-		CompoundNBT tag = super.save(new CompoundNBT());
-		CompoundNBT data = this.writeClientData();
+		CompoundTag tag = super.save(new CompoundTag());
+		CompoundTag data = this.writeClientData();
 		if (data != null && !data.isEmpty())
 		{
 			tag.put("data", data);
@@ -129,25 +130,25 @@ public abstract class BaseTileEntity<T extends BaseTileEntity<T>> extends TileEn
 	}
 
 	@Override
-	public void handleUpdateTag(BlockState state, CompoundNBT tag)
+	public void handleUpdateTag(CompoundTag tag)
 	{
-		super.load(state, tag);
+		super.load(tag);
 		this.readData(tag.getCompound("data"));
 	}
 
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket()
+	public ClientboundBlockEntityDataPacket getUpdatePacket()
 	{
 		if (this.dataChanged)
 		{
 			this.dataChanged = false;
-			return new SUpdateTileEntityPacket(this.worldPosition, 0, this.writeClientData());
+			return new ClientboundBlockEntityDataPacket(this.worldPosition, 0, this.writeClientData());
 		}
 		return null;
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
 	{
 		this.readData(pkt.getTag());
 	}

@@ -22,22 +22,30 @@ import com.withertech.witherlib.gui.TileEntityBaseContainer;
 import com.withertech.witherlib.registration.TypedRegKey;
 import com.withertech.witherlibtest.WitherLibTest;
 import com.withertech.witherlibtest.tiles.TestProgressTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
 public class TestProgressContainer extends TileEntityBaseContainer<TestProgressContainer, TestProgressTile>
 {
-    public TestProgressContainer(int id, PlayerEntity player, BlockPos tilePos)
+    public TestProgressContainer(int id, Player player, BlockPos tilePos)
     {
         super(WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.container("test_progress_container", TestProgressContainer.class)).get(), id, player, tilePos);
         addSlots();
     }
 
     @Override
-    protected void addSlots(PlayerEntity player, @Nonnull TestProgressTile object)
+    protected void addSlots(Player player, @Nonnull TestProgressTile object)
     {
         addPlayerSlots(8, 140);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack quickMoveStack(@Nonnull Player p_82846_1_, int p_82846_2_)
+    {
+        return ItemStack.EMPTY;
     }
 }

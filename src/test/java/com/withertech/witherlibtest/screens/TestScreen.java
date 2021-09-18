@@ -21,14 +21,14 @@ package com.withertech.witherlibtest.screens;
 import com.withertech.witherlib.gui.TileEntityBaseContainerScreen;
 import com.withertech.witherlibtest.containers.TestContainer;
 import com.withertech.witherlibtest.tiles.TestTile;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 
 public class TestScreen extends TileEntityBaseContainerScreen<TestTile, TestContainer>
 {
-    public TestScreen(TestContainer screenContainer, PlayerInventory playerInventory, ITextComponent title)
+    public TestScreen(TestContainer screenContainer, Inventory playerInventory, Component title)
     {
         super(screenContainer, playerInventory, title);
     }

@@ -16,29 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.nbt.wrappers;
+package com.withertech.witherlib.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
-public class BlockPosNBTWrapper extends AbstractNBTWrapper<BlockPos, CompoundTag>
+import javax.annotation.Nonnull;
+
+public interface IWrenchable
 {
-
-	public BlockPosNBTWrapper(BlockPos value)
-	{
-		super(value);
-	}
-
-	@Override
-	public CompoundTag serializeNBT()
-	{
-		return NbtUtils.writeBlockPos(get());
-	}
-
-	@Override
-	public void deserializeNBT(CompoundTag nbt)
-	{
-		set(NbtUtils.readBlockPos(nbt));
-	}
+	void wrench(
+			@Nonnull BlockState state,
+			@Nonnull Level world,
+			@Nonnull BlockPos pos,
+			@Nonnull Player player,
+			@Nonnull InteractionHand hand,
+			@Nonnull BlockHitResult rayTraceResult
+	);
 }

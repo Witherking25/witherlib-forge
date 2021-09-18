@@ -20,16 +20,15 @@ package com.withertech.witherlibtest.fluids;
 
 import com.withertech.witherlib.registration.TypedRegKey;
 import com.withertech.witherlibtest.WitherLibTest;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.DyeColor;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -50,7 +49,7 @@ public abstract class TestFluid extends ForgeFlowingFluid
                     .translationKey("block.WitherLibTest.test_fluid")
 		            .sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY))
             .bucket(() -> WitherLibTest.INSTANCE.REGISTRY.getItem(TypedRegKey.item("test_fluid_bucket", BucketItem.class)).get())
-            .block(() -> WitherLibTest.INSTANCE.REGISTRY.getBlock(TypedRegKey.block("test_fluid", FlowingFluidBlock.class)).get())
+            .block(() -> WitherLibTest.INSTANCE.REGISTRY.getBlock(TypedRegKey.block("test_fluid", LiquidBlock.class)).get())
             .canMultiply()
             .slopeFindDistance(4)
             .tickRate(5)
@@ -65,13 +64,13 @@ public abstract class TestFluid extends ForgeFlowingFluid
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(@Nonnull World world, @Nonnull BlockPos pos, FluidState state, @Nonnull Random random)
+    public void animateTick(@Nonnull Level world, @Nonnull BlockPos pos, FluidState state, @Nonnull Random random)
     {
         if (!state.isSource() && !state.getValue(FALLING))
         {
             if (random.nextInt(64) == 0)
             {
-                world.playLocalSound((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, SoundEvents.WATER_AMBIENT, SoundCategory.BLOCKS, random.nextFloat() * 0.25F + 0.75F, random.nextFloat() + 0.5F, false);
+                world.playLocalSound((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, SoundEvents.WATER_AMBIENT, SoundSource.BLOCKS, random.nextFloat() * 0.25F + 0.75F, random.nextFloat() + 0.5F, false);
             }
         }
         else if (random.nextInt(10) == 0)
@@ -84,7 +83,7 @@ public abstract class TestFluid extends ForgeFlowingFluid
     @Override
     @Nullable
     @OnlyIn(Dist.CLIENT)
-    public IParticleData getDripParticle()
+    public ParticleOptions getDripParticle()
     {
         return ParticleTypes.DRIPPING_WATER;
     }

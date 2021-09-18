@@ -18,14 +18,13 @@
 
 package com.withertech.witherlibtest.blocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
 
 public class TestBlock extends Block
 {
     public TestBlock()
     {
-        super(AbstractBlock.Properties.of(Material.STONE));
+        super(Properties.of(Material.STONE));
     }
 }

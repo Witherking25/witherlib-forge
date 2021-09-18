@@ -18,8 +18,11 @@
 
 package com.withertech.witherlib;
 
+import com.withertech.witherlib.config.ClientConfig;
+import com.withertech.witherlib.registration.BuilderConfigRegistry;
 import com.withertech.witherlib.registration.BuilderMod;
 import com.withertech.witherlib.registration.ModData;
+import com.withertech.witherlib.registration.TypedRegKey;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -53,5 +56,11 @@ public class WitherLib extends BuilderMod
 		INSTANCE = this;
 	}
 
-
+	@Override
+	protected BuilderConfigRegistry registerConfigs()
+	{
+		return BuilderConfigRegistry.builder(MOD)
+				.add(TypedRegKey.config("client", ClientConfig.class), ClientConfig::new)
+				.build();
+	}
 }

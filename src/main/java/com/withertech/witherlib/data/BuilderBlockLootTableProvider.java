@@ -18,12 +18,12 @@
 
 package com.withertech.witherlib.data;
 
-import net.minecraft.block.Block;
-import net.minecraft.data.loot.BlockLootTables;
+import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.world.level.block.Block;
 
 import javax.annotation.Nonnull;
 
-public abstract class BuilderBlockLootTableProvider extends BlockLootTables
+public abstract class BuilderBlockLootTableProvider extends BlockLoot
 {
 	@Override
 	protected abstract void addTables();

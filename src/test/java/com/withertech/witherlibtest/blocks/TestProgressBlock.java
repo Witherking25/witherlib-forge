@@ -24,16 +24,12 @@ import com.withertech.witherlib.util.TextComponents;
 import com.withertech.witherlibtest.WitherLibTest;
 import com.withertech.witherlibtest.containers.TestProgressContainer;
 import com.withertech.witherlibtest.tiles.TestProgressTile;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
-
-import javax.annotation.Nullable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.material.Material;
 
 public class TestProgressBlock extends BaseTileBlock<TestProgressTile>
 {
@@ -49,34 +45,21 @@ public class TestProgressBlock extends BaseTileBlock<TestProgressTile>
     }
 
     @Override
-    protected Container createMenu(int id, PlayerEntity player, BlockPos pos)
+    protected AbstractContainerMenu createMenu(int id, Player player, BlockPos pos)
     {
         return new TestProgressContainer(id, player, pos);
     }
 
     @Override
-    protected ITextComponent getDisplayName(TestProgressTile tile)
+    protected Component getDisplayName(TestProgressTile tile)
     {
         return TextComponents.block(this).get();
     }
 
-    @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    public BlockEntityType<TestProgressTile> getBlockEntityType()
     {
-        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_progress_tile", TestProgressTile.class)).get().create();
+        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_progress_tile", TestProgressTile.class)).get();
     }
 
-//    @Override
-//    public void neighborChanged(BlockState p_220069_1_, World p_220069_2_, BlockPos p_220069_3_, Block p_220069_4_, BlockPos p_220069_5_, boolean p_220069_6_)
-//    {
-//        super.neighborChanged(p_220069_1_, p_220069_2_, p_220069_3_, p_220069_4_, p_220069_5_, p_220069_6_);
-//        if (!p_220069_2_.isClientSide())
-//        {
-//            TestTile tile = (TestTile) p_220069_2_.getBlockEntity(p_220069_3_);
-//            assert tile != null;
-//            if (tile.running != p_220069_2_.hasNeighborSignal(p_220069_3_))
-//                tile.running = !tile.running;
-//        }
-//    }
 }

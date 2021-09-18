@@ -18,12 +18,12 @@
 
 package com.withertech.witherlib.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.withertech.witherlib.WitherLib;
 import com.withertech.witherlib.gui.ScreenUtils;
 import com.withertech.witherlib.util.TextComponents;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collections;
 import java.util.List;
@@ -58,22 +58,22 @@ public class ProgressBarWidget extends Widget
 
 
 	@Override
-	protected List<ITextComponent> getNarrationMessage()
+	protected List<Component> getNarrationMessage()
 	{
 		return Collections.singletonList(TextComponents.string("").get());
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
 		ScreenUtils.bindTexture(PROGRESS);
 		float percentage = maxProgress.get() == 0 ? 1 : Math.max(Math.min(
 				progress.get() / (float) maxProgress.get(),
 				1
 		), 0);
-		ScreenUtils.drawTexture(matrixStack, this.x, this.y, this.width, this.height, 0, 0, 1, 16 / 32f);
+		ScreenUtils.drawTexture(poseStack, this.x, this.y, this.width, this.height, 0, 0, 1, 16 / 32f);
 		ScreenUtils.drawTexture(
-				matrixStack,
+				poseStack,
 				this.x,
 				this.y,
 				this.width * percentage,

@@ -19,9 +19,9 @@
 package com.withertech.witherlib.data;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.FluidTagsProvider;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.tags.ITag;
+import net.minecraft.data.tags.FluidTagsProvider;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nonnull;
@@ -38,9 +38,9 @@ public abstract class BuilderFluidTagsProvider extends FluidTagsProvider
 	@Override
 	protected abstract void addTags();
 
-	@Override
 	@Nonnull
-	public Builder<Fluid> tag(@Nonnull ITag.INamedTag<Fluid> tag)
+	@Override
+	public TagAppender<Fluid> tag(@Nonnull Tag.Named<Fluid> tag)
 	{
 		return super.tag(tag);
 	}

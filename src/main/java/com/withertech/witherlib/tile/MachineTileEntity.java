@@ -19,19 +19,19 @@
 package com.withertech.witherlib.tile;
 
 import com.withertech.witherlib.nbt.SyncVariable;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class MachineTileEntity<T extends MachineTileEntity<T>> extends BaseTileEntity<T>
-		implements ITickableTileEntity
+public abstract class MachineTileEntity<T extends MachineTileEntity<T>> extends BaseTileEntity<T> implements ITickableTileEntity
 {
 	@SyncVariable(name = "progress")
 	protected int progress = 0;
 
-	public MachineTileEntity(TileEntityType<T> tileEntityTypeIn)
+	public MachineTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state)
 	{
-		super(tileEntityTypeIn);
+		super(tileEntityTypeIn, pos, state);
 	}
 
 	public abstract boolean canMachineRun();
@@ -50,7 +50,7 @@ public abstract class MachineTileEntity<T extends MachineTileEntity<T>> extends 
 	}
 
 	@Override
-	protected CompoundNBT writeData()
+	protected CompoundTag writeData()
 	{
 		return SyncVariable.Helper.writeSyncVars(
 				MachineTileEntity.class,
@@ -61,7 +61,7 @@ public abstract class MachineTileEntity<T extends MachineTileEntity<T>> extends 
 	}
 
 	@Override
-	protected CompoundNBT writeClientData()
+	protected CompoundTag writeClientData()
 	{
 		return SyncVariable.Helper.writeSyncVars(
 				MachineTileEntity.class,
@@ -72,7 +72,7 @@ public abstract class MachineTileEntity<T extends MachineTileEntity<T>> extends 
 	}
 
 	@Override
-	public void readData(CompoundNBT tag)
+	public void readData(CompoundTag tag)
 	{
 		super.readData(tag);
 		SyncVariable.Helper.readSyncVars(MachineTileEntity.class, this, tag);

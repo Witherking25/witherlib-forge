@@ -18,10 +18,10 @@
 
 package com.withertech.witherlib.nbt.wrappers;
 
-import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public interface INBTWrapper<T, X extends INBT> extends INBTSerializable<X>
+public interface INBTWrapper<T, X extends Tag> extends INBTSerializable<X>
 {
 	T get();
 

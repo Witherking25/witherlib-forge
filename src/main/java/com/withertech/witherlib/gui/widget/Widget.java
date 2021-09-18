@@ -18,10 +18,10 @@
 
 package com.withertech.witherlib.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.Util;
 import net.minecraft.client.gui.chat.NarratorChatListener;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
@@ -70,7 +70,7 @@ public abstract class Widget
 	/**
 	 * @return the message that should be narrated for the current state of the widget
 	 */
-	protected abstract List<ITextComponent> getNarrationMessage();
+	protected abstract List<Component> getNarrationMessage();
 
 	/**
 	 * Sets whether the widget is active, i.e. can be interacted with.
@@ -85,7 +85,7 @@ public abstract class Widget
 	/**
 	 * Renders the entire widget.
 	 */
-	public abstract void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks);
+	public abstract void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks);
 
 	/**
 	 * @return whether the user is hovering their cursor over the widget

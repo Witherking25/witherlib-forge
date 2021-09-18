@@ -18,11 +18,11 @@
 
 package com.withertech.witherlib.nbt.wrappers;
 
-import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.Tag;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractNBTWrapper<T, X extends INBT> implements INBTWrapper<T, X>
+public abstract class AbstractNBTWrapper<T, X extends Tag> implements INBTWrapper<T, X>
 {
 	protected T value;
 

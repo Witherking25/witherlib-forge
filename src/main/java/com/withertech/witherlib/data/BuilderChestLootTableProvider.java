@@ -18,14 +18,14 @@
 
 package com.withertech.witherlib.data;
 
-import net.minecraft.data.loot.ChestLootTables;
-import net.minecraft.loot.LootTable;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.loot.ChestLoot;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 import javax.annotation.Nonnull;
 import java.util.function.BiConsumer;
 
-public abstract class BuilderChestLootTableProvider extends ChestLootTables
+public abstract class BuilderChestLootTableProvider extends ChestLoot
 {
 	@Override
 	public abstract void accept(@Nonnull BiConsumer<ResourceLocation, LootTable.Builder> consumer);

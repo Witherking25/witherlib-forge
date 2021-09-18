@@ -19,11 +19,12 @@
 package com.withertech.witherlib.registration;
 
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -34,7 +35,7 @@ public class BuilderForgeRegistry<T extends IForgeRegistryEntry<T>>
 	protected final DeferredRegister<T> REGISTRY;
 	protected final Map<TypedRegKey<?>, RegistryObject<T>> ENTRIES;
 
-	protected BuilderForgeRegistry(Builder<T> builder)
+	protected BuilderForgeRegistry(@Nonnull Builder<T> builder)
 	{
 		MOD = builder.mod;
 		REGISTRY = builder.REGISTRY;

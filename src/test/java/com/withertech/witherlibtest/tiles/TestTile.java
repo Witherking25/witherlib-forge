@@ -22,8 +22,10 @@ import com.withertech.witherlib.nbt.SyncVariable;
 import com.withertech.witherlib.registration.TypedRegKey;
 import com.withertech.witherlib.tile.BaseTileEntity;
 import com.withertech.witherlibtest.WitherLibTest;
-import net.minecraft.block.Block;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -40,15 +42,15 @@ public class TestTile extends BaseTileEntity<TestTile>
     @SyncVariable(name = "Items")
     public final LazyOptional<ItemStackHandler> items = LazyOptional.of(this::createHandler);
 
-    public TestTile()
+    public TestTile(BlockPos pos, BlockState state)
     {
-        super(WitherLibTest.INSTANCE.REGISTRY.getTile((TypedRegKey.tile("test_tile", TestTile.class))).get());
+        super(WitherLibTest.INSTANCE.REGISTRY.getTile((TypedRegKey.tile("test_tile", TestTile.class))).get(), pos, state);
     }
 
     @OnlyIn(Dist.CLIENT)
     public boolean shouldRenderFace(Direction face)
     {
-        return Block.shouldRenderFace(this.getBlockState(), Objects.requireNonNull(this.level), this.getBlockPos(), face);
+        return Block.shouldRenderFace(this.getBlockState(), Objects.requireNonNull(this.level), this.getBlockPos(), face, this.getBlockPos().relative(face));
     }
 
     @Nonnull
@@ -77,7 +79,7 @@ public class TestTile extends BaseTileEntity<TestTile>
     }
 
     @Override
-    protected void invalidateCaps()
+    public void invalidateCaps()
     {
         super.invalidateCaps();
         items.invalidate();

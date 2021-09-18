@@ -18,15 +18,15 @@
 
 package com.withertech.witherlib.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.withertech.witherlib.WitherLib;
 import com.withertech.witherlib.gui.ScreenUtils;
 import com.withertech.witherlib.util.EnergyFormat;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import com.withertech.witherlib.util.TextComponents;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.energy.EnergyStorage;
 
 import java.util.Collections;
@@ -58,12 +58,12 @@ public class EnergyBarWidget extends AbstractButtonWidget implements IHoverTextW
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
 		ScreenUtils.bindTexture(BARS);
-		GlStateManager._enableAlphaTest();
+//		RenderSystem.enableAlphaTest();
 		ScreenUtils.drawTexture(
-				matrixStack,
+				poseStack,
 				this.x,
 				this.y,
 				this.width,
@@ -79,7 +79,7 @@ public class EnergyBarWidget extends AbstractButtonWidget implements IHoverTextW
 		if (percentage != 0)
 		{
 			ScreenUtils.drawTexture(
-					matrixStack,
+					poseStack,
 					this.x,
 					this.y + this.height * (1 - percentage),
 					this.width,
@@ -90,18 +90,19 @@ public class EnergyBarWidget extends AbstractButtonWidget implements IHoverTextW
 					percentage
 			);
 		}
+//		RenderSystem.disableAlphaTest();
 	}
 
 	@Override
-	public List<ITextComponent> getHoverText()
+	public List<Component> getHoverText()
 	{
 		int energy = this.energy.get().getEnergyStored();
 		int capacity = this.energy.get().getMaxEnergyStored();
-		return Collections.singletonList(new StringTextComponent(EnergyFormat.formatCapacity(energy, capacity)));
+		return Collections.singletonList(TextComponents.string(EnergyFormat.formatCapacity(energy, capacity)).get());
 	}
 
 	@Override
-	protected List<ITextComponent> getNarrationMessage()
+	protected List<Component> getNarrationMessage()
 	{
 		return this.getHoverText();
 	}

@@ -18,8 +18,8 @@
 
 package com.withertech.witherlib.data;
 
-import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -33,7 +33,7 @@ public abstract class BuilderBlockStateProvider extends BlockStateProvider
 		super(gen, modid, exFileHelper);
 	}
 
-	public void fluidBlock(FlowingFluidBlock block)
+	public void fluidBlock(LiquidBlock block)
 	{
 		simpleBlock(
 				block,

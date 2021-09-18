@@ -18,11 +18,11 @@
 
 package com.withertech.witherlib.nbt.wrappers;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class BlockStateNBTWrapper extends AbstractNBTWrapper<BlockState, CompoundNBT>
+public class BlockStateNBTWrapper extends AbstractNBTWrapper<BlockState, CompoundTag>
 {
 	public BlockStateNBTWrapper(BlockState value)
 	{
@@ -30,14 +30,14 @@ public class BlockStateNBTWrapper extends AbstractNBTWrapper<BlockState, Compoun
 	}
 
 	@Override
-	public CompoundNBT serializeNBT()
+	public CompoundTag serializeNBT()
 	{
-		return NBTUtil.writeBlockState(get());
+		return NbtUtils.writeBlockState(get());
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt)
+	public void deserializeNBT(CompoundTag nbt)
 	{
-		set(NBTUtil.readBlockState(nbt));
+		set(NbtUtils.readBlockState(nbt));
 	}
 }

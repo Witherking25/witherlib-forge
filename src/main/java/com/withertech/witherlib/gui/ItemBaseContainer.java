@@ -19,10 +19,10 @@
 package com.withertech.witherlib.gui;
 
 import com.withertech.witherlib.util.ClientUtils;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;
 
@@ -34,19 +34,19 @@ public abstract class ItemBaseContainer extends ObjectBaseContainer<ItemStack>
 
 	private final Supplier<ItemStack> stackSupplier;
 
-	private ItemBaseContainer(ContainerType<?> type, int id, PlayerEntity player,
+	private ItemBaseContainer(MenuType<?> type, int id, Player player,
 	                          Supplier<ItemStack> itemStackSupplier)
 	{
 		super(type, id, player);
 		this.stackSupplier = itemStackSupplier;
 	}
 
-	protected ItemBaseContainer(ContainerType<?> type, int id, PlayerEntity player, int playerSlot)
+	protected ItemBaseContainer(MenuType<?> type, int id, Player player, int playerSlot)
 	{
-		this(type, id, player, () -> player.inventory.getItem(playerSlot));
+		this(type, id, player, () -> player.getInventory().getItem(playerSlot));
 	}
 
-	protected ItemBaseContainer(ContainerType<?> type, int id, PlayerEntity player, Hand hand)
+	protected ItemBaseContainer(MenuType<?> type, int id, Player player, InteractionHand hand)
 	{
 		this(type, id, player, () -> ClientUtils.getPlayer().getItemInHand(hand));
 	}

@@ -18,14 +18,14 @@
 
 package com.withertech.witherlib.registration;
 
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.CreativeModeTab;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class BuilderTabRegistry
 {
-	private final Map<String, ItemGroup> ITEM_GROUPS;
+	private final Map<String, CreativeModeTab> ITEM_GROUPS;
 
 	private BuilderTabRegistry(Builder builder)
 	{
@@ -37,7 +37,7 @@ public class BuilderTabRegistry
 		return new Builder();
 	}
 
-	public ItemGroup getTab(String key)
+	public CreativeModeTab getTab(String key)
 	{
 		return ITEM_GROUPS.get(key);
 	}
@@ -49,14 +49,14 @@ public class BuilderTabRegistry
 
 	public static class Builder
 	{
-		private final Map<String, ItemGroup> ITEM_GROUPS = new HashMap<>();
+		private final Map<String, CreativeModeTab> ITEM_GROUPS = new HashMap<>();
 
 		private Builder()
 		{
 
 		}
 
-		public Builder add(String name, ItemGroup group)
+		public Builder add(String name, CreativeModeTab group)
 		{
 			ITEM_GROUPS.put(name, group);
 			return this;

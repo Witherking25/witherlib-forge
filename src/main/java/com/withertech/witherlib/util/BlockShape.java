@@ -18,11 +18,11 @@
 
 package com.withertech.witherlib.util;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,17 +43,17 @@ public class BlockShape
 		this.shape = shape;
 	}
 
-	public BlockShape(AxisAlignedBB shape)
+	public BlockShape(AABB shape)
 	{
-		this(VoxelShapes.create(shape));
+		this(Shapes.create(shape));
 	}
 
-	public BlockShape(List<AxisAlignedBB> shapes)
+	public BlockShape(List<AABB> shapes)
 	{
-		this(VoxelShapes.or(VoxelShapes.empty(), shapes.stream().map(VoxelShapes::create).toArray(VoxelShape[]::new)));
+		this(Shapes.or(Shapes.empty(), shapes.stream().map(Shapes::create).toArray(VoxelShape[]::new)));
 	}
 
-	public static BlockShape create(AxisAlignedBB box)
+	public static BlockShape create(AABB box)
 	{
 		return new BlockShape(box);
 	}
@@ -65,7 +65,7 @@ public class BlockShape
 
 	public static BlockShape create(double x1, double y1, double z1, double x2, double y2, double z2)
 	{
-		return create(VoxelShapes.box(x1, y1, z1, x2, y2, z2));
+		return create(Shapes.box(x1, y1, z1, x2, y2, z2));
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class BlockShape
 	 */
 	public static BlockShape createBlockShape(double x1, double y1, double z1, double x2, double y2, double z2)
 	{
-		return create(VoxelShapes.box(x1 / 16, y1 / 16, z1 / 16, x2 / 16, y2 / 16, z2 / 16));
+		return create(Shapes.box(x1 / 16, y1 / 16, z1 / 16, x2 / 16, y2 / 16, z2 / 16));
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class BlockShape
 	 */
 	public static BlockShape or(BlockShape shape, BlockShape... shapes)
 	{
-		return new BlockShape(VoxelShapes.or(
+		return new BlockShape(Shapes.or(
 				shape.shape,
 				Arrays.stream(shapes).map(s -> s.shape).toArray(VoxelShape[]::new)
 		));
@@ -89,12 +89,12 @@ public class BlockShape
 
 	public static BlockShape fullCube()
 	{
-		return new BlockShape(VoxelShapes.block());
+		return new BlockShape(Shapes.block());
 	}
 
 	public static BlockShape empty()
 	{
-		return new BlockShape(VoxelShapes.empty());
+		return new BlockShape(Shapes.empty());
 	}
 
 	/**
@@ -105,12 +105,12 @@ public class BlockShape
 		return shape1.intersects(shape2);
 	}
 
-	public List<AxisAlignedBB> toBoxes()
+	public List<AABB> toBoxes()
 	{
 		return this.shape.toAabbs();
 	}
 
-	public void forEachBox(Consumer<AxisAlignedBB> action)
+	public void forEachBox(Consumer<AABB> action)
 	{
 		this.toBoxes().forEach(action);
 	}
@@ -138,7 +138,7 @@ public class BlockShape
 	/**
 	 * Creates the smallest box that encapsulate the entire shape.
 	 */
-	public AxisAlignedBB simplify()
+	public AABB simplify()
 	{
 		return this.shape.bounds();
 	}
@@ -245,7 +245,7 @@ public class BlockShape
 	 */
 	public BlockShape flip(Direction.Axis axis)
 	{
-		return this.transformBoxes(box -> new AxisAlignedBB(
+		return this.transformBoxes(box -> new AABB(
 				axis == Direction.Axis.X ? 1 - box.minX : box.minX,
 				axis == Direction.Axis.Y ? 1 - box.minY : box.minY,
 				axis == Direction.Axis.Z ? 1 - box.minZ : box.minZ,
@@ -266,7 +266,7 @@ public class BlockShape
 		}
 		if (axis == Direction.Axis.X)
 		{
-			return this.transformBoxes(box -> new AxisAlignedBB(
+			return this.transformBoxes(box -> new AABB(
 					box.minX,
 					box.minZ,
 					-box.minY + 1,
@@ -277,7 +277,7 @@ public class BlockShape
 		}
 		if (axis == Direction.Axis.Y)
 		{
-			return this.transformBoxes(box -> new AxisAlignedBB(
+			return this.transformBoxes(box -> new AABB(
 					-box.minZ + 1,
 					box.minY,
 					box.minX,
@@ -288,7 +288,7 @@ public class BlockShape
 		}
 		if (axis == Direction.Axis.Z)
 		{
-			return this.transformBoxes(box -> new AxisAlignedBB(
+			return this.transformBoxes(box -> new AABB(
 					box.minY,
 					-box.minX + 1,
 					box.minZ,
@@ -312,10 +312,10 @@ public class BlockShape
 	}
 
 	@FunctionalInterface
-	public interface BoxTransformer extends Function<AxisAlignedBB, AxisAlignedBB>
+	public interface BoxTransformer extends Function<AABB, AABB>
 	{
 		@Override
-		AxisAlignedBB apply(AxisAlignedBB axisAlignedBB);
+		AABB apply(AABB axisAlignedBB);
 	}
 
 	@FunctionalInterface

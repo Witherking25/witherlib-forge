@@ -25,14 +25,14 @@ import com.withertech.witherlib.gui.TileEntityBaseContainerScreen;
 import com.withertech.witherlib.gui.TileGui;
 import com.withertech.witherlib.tile.BaseTileEntity;
 import com.withertech.witherlib.util.ClassUtils;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.Objects;
@@ -78,7 +78,7 @@ public class TypedRegKey<X>
 		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
 	}
 
-	public static <X extends BaseTileEntity<X>> TypedRegKey<RegistryObject<TileEntityType<X>>> tile(
+	public static <X extends BaseTileEntity<X>> TypedRegKey<RegistryObject<BlockEntityType<X>>> tile(
 			String id,
 			Class<X> type
 	)
@@ -86,7 +86,7 @@ public class TypedRegKey<X>
 		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
 	}
 
-	public static <X extends TileEntityBaseContainer<X, ?>> TypedRegKey<RegistryObject<ContainerType<X>>> container(
+	public static <X extends TileEntityBaseContainer<X, ?>> TypedRegKey<RegistryObject<MenuType<X>>> container(
 			String id,
 			Class<X> type
 	)
@@ -126,11 +126,10 @@ public class TypedRegKey<X>
 		{
 			return true;
 		}
-		if (!(o instanceof TypedRegKey))
+		if (!(o instanceof TypedRegKey<?> that))
 		{
 			return false;
 		}
-		TypedRegKey<?> that = (TypedRegKey<?>) o;
 		return getType().equals(that.getType()) && getId().equals(that.getId());
 	}
 

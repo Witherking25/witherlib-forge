@@ -18,16 +18,15 @@
 
 package com.withertech.witherlib.data;
 
-import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.loaders.DynamicBucketModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -48,18 +47,18 @@ public abstract class BuilderItemModelProvider extends ItemModelProvider
 
 	public void bucketBuilder(@Nonnull Fluid fluid)
 	{
-		withExistingParent(fluid.getBucket().getRegistryName().getPath(), new ResourceLocation("forge", "item/bucket"))
+		withExistingParent(Objects.requireNonNull(fluid.getBucket().getRegistryName()).getPath(), new ResourceLocation("forge", "item/bucket"))
 				.customLoader(DynamicBucketModelBuilder::begin)
 				.fluid(fluid);
 	}
 
-	public void builder(@Nonnull IItemProvider item, ModelFile parent)
+	public void builder(@Nonnull ItemLike item, ModelFile parent)
 	{
 		String name = Objects.requireNonNull(item.asItem().getRegistryName()).getPath();
 		builder(item, parent, "item/" + name);
 	}
 
-	public void builder(@Nonnull IItemProvider item, ModelFile parent, String texture)
+	public void builder(@Nonnull ItemLike item, ModelFile parent, String texture)
 	{
 		getBuilder(Objects.requireNonNull(item.asItem().getRegistryName()).getPath())
 				.parent(parent)

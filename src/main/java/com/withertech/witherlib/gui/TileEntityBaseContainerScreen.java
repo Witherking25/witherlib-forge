@@ -18,20 +18,20 @@
 
 package com.withertech.witherlib.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import javax.annotation.Nonnull;
 
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
-public abstract class TileEntityBaseContainerScreen<T extends TileEntity, X extends TileEntityBaseContainer<X, T>>
+public abstract class TileEntityBaseContainerScreen<T extends BlockEntity, X extends TileEntityBaseContainer<X, T>>
 		extends ObjectBaseContainerScreen<T, X>
 {
-	public TileEntityBaseContainerScreen(X screenContainer, PlayerInventory inventory, ITextComponent title)
+	public TileEntityBaseContainerScreen(X screenContainer, Inventory inventory, Component title)
 	{
 		super(screenContainer, title);
 	}
@@ -47,19 +47,19 @@ public abstract class TileEntityBaseContainerScreen<T extends TileEntity, X exte
 	{
 	}
 
-	protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, @Nonnull T tile)
+	protected void renderBackground(PoseStack poseStack, int mouseX, int mouseY, @Nonnull T tile)
 	{
-		super.renderBackground(matrixStack, mouseX, mouseY, tile);
+		super.renderBackground(poseStack, mouseX, mouseY, tile);
 	}
 
-	protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, @Nonnull T tile)
+	protected void renderForeground(PoseStack poseStack, int mouseX, int mouseY, @Nonnull T tile)
 	{
-		super.renderForeground(matrixStack, mouseX, mouseY, tile);
+		super.renderForeground(poseStack, mouseX, mouseY, tile);
 	}
 
-	protected void renderTooltips(MatrixStack matrixStack, int mouseX, int mouseY, @Nonnull T tile)
+	protected void renderTooltips(PoseStack poseStack, int mouseX, int mouseY, @Nonnull T tile)
 	{
-		super.renderTooltips(matrixStack, mouseX, mouseY, tile);
+		super.renderTooltips(poseStack, mouseX, mouseY, tile);
 	}
 
 

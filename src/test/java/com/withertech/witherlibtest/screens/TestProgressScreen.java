@@ -26,15 +26,15 @@ import com.withertech.witherlibtest.WitherLibTest;
 import com.withertech.witherlibtest.containers.TestProgressContainer;
 import com.withertech.witherlibtest.network.TestProgressTilePacket;
 import com.withertech.witherlibtest.tiles.TestProgressTile;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class TestProgressScreen extends TileEntityBaseContainerScreen<TestProgressTile, TestProgressContainer>
 {
-    public TestProgressScreen(TestProgressContainer testProgressContainer, @Nullable PlayerInventory playerInventory, ITextComponent textComponent)
+    public TestProgressScreen(TestProgressContainer testProgressContainer, @Nullable Inventory playerInventory, Component textComponent)
     {
         super(testProgressContainer, playerInventory, textComponent);
     }

@@ -23,41 +23,41 @@ import com.withertech.witherlib.WitherLib;
 import com.withertech.witherlib.config.BaseConfig;
 import com.withertech.witherlib.data.*;
 import com.withertech.witherlib.network.PacketChannel;
-import com.withertech.witherlib.render.ITileEntityRendererFactory;
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.loot.LootParameterSet;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootTable;
-import net.minecraft.tags.ITag;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -77,15 +77,17 @@ public class ModRegistry
 
 	public final Supplier<BuilderForgeRegistry<Item>> ITEMS;
 
-	public final Supplier<BuilderForgeRegistry<TileEntityType<?>>> TILES;
+	public final Supplier<BuilderForgeRegistry<BlockEntityType<?>>> TILES;
 
-	public final Supplier<BuilderForgeRegistry<ContainerType<?>>> CONTAINERS;
+	public final Supplier<BuilderForgeRegistry<MenuType<?>>> CONTAINERS;
 
 	public final Supplier<BuilderForgeRegistry<Fluid>> FLUIDS;
 
 	public final Supplier<BuilderForgeRegistry<EntityType<?>>> ENTITIES;
 
 	public final Supplier<BuilderEntityAttributeRegistry> ENTITY_ATTRIBUTES;
+
+	public final Supplier<BuilderEntityModelRegistry> ENTITY_MODELS;
 
 	public final Supplier<BuilderEntityRendererRegistry> ENTITY_RENDERERS;
 
@@ -109,11 +111,12 @@ public class ModRegistry
 			Supplier<BuilderCustomRegistryEntryRegistry> custom_registry_entries,
 			Supplier<BuilderForgeRegistry<Block>> blocks,
 			Supplier<BuilderForgeRegistry<Item>> items,
-			Supplier<BuilderForgeRegistry<TileEntityType<?>>> tiles,
-			Supplier<BuilderForgeRegistry<ContainerType<?>>> containers,
+			Supplier<BuilderForgeRegistry<BlockEntityType<?>>> tiles,
+			Supplier<BuilderForgeRegistry<MenuType<?>>> containers,
 			Supplier<BuilderForgeRegistry<Fluid>> fluids,
 			Supplier<BuilderForgeRegistry<EntityType<?>>> entities,
 			Supplier<BuilderEntityAttributeRegistry> entity_attributes,
+			Supplier<BuilderEntityModelRegistry> entity_models,
 			Supplier<BuilderEntityRendererRegistry> entity_renderers,
 			Supplier<BuilderTileEntityRendererRegistry> tile_renderers,
 			Supplier<BuilderDataGenerator> data_generator,
@@ -134,6 +137,7 @@ public class ModRegistry
 		FLUIDS = fluids;
 		ENTITIES = entities;
 		ENTITY_ATTRIBUTES = entity_attributes;
+		ENTITY_MODELS = entity_models;
 		ENTITY_RENDERERS = entity_renderers;
 		TILE_RENDERERS = tile_renderers;
 		DATA_GENERATOR = data_generator;
@@ -145,6 +149,8 @@ public class ModRegistry
 
 		MOD.MOD_EVENT_BUS.addListener(this::onGatherData);
 		MOD.MOD_EVENT_BUS.addListener(this::onClientSetup);
+		MOD.MOD_EVENT_BUS.addListener(this::onEntityRenderersRegisterRenderers);
+		MOD.MOD_EVENT_BUS.addListener(this::onEntityRenderersRegisterLayerDefinitions);
 		MOD.MOD_EVENT_BUS.addListener(this::onEntityAttributeCreation);
 		MOD.MOD_EVENT_BUS.addListener(this::onNewRegistry);
 		register();
@@ -179,7 +185,7 @@ public class ModRegistry
 		return BLOCKS.get().get(key);
 	}
 
-	public ITag.INamedTag<Block> getBlockTag(String key)
+	public Tag.Named<Block> getBlockTag(String key)
 	{
 		return TAGS.get().getBlock(key);
 	}
@@ -189,17 +195,17 @@ public class ModRegistry
 		return ITEMS.get().get(key);
 	}
 
-	public ITag.INamedTag<Item> getItemTag(String key)
+	public Tag.Named<Item> getItemTag(String key)
 	{
 		return TAGS.get().getItem(key);
 	}
 
-	public <T extends TileEntity> RegistryObject<TileEntityType<T>> getTile(TypedRegKey<RegistryObject<TileEntityType<T>>> key)
+	public <T extends BlockEntity> RegistryObject<BlockEntityType<T>> getTile(TypedRegKey<RegistryObject<BlockEntityType<T>>> key)
 	{
 		return TILES.get().get(key);
 	}
 
-	public <T extends Container> RegistryObject<ContainerType<T>> getContainer(TypedRegKey<RegistryObject<ContainerType<T>>> key)
+	public <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> getContainer(TypedRegKey<RegistryObject<MenuType<T>>> key)
 	{
 		return CONTAINERS.get().get(key);
 	}
@@ -209,7 +215,7 @@ public class ModRegistry
 		return FLUIDS.get().get(key);
 	}
 
-	public ITag.INamedTag<Fluid> getFluidTag(String key)
+	public Tag.Named<Fluid> getFluidTag(String key)
 	{
 		return TAGS.get().getFluid(key);
 	}
@@ -219,14 +225,19 @@ public class ModRegistry
 		return ENTITIES.get().get(key);
 	}
 
-	public ItemGroup getTab(String key)
+	public BuilderEntityModelRegistry.Model getEntityModel(String key)
+	{
+		return ENTITY_MODELS.get().getModels().get(key);
+	}
+
+	public CreativeModeTab getTab(String key)
 	{
 		return TABS.get().getTab(key);
 	}
 
 	public PacketChannel getNet(String key)
 	{
-		return NETS.get().getCHANNELS().get(key);
+		return NETS.get().getChannels().get(key).getChannel();
 	}
 
 	public PacketChannel getNet()
@@ -254,48 +265,56 @@ public class ModRegistry
 		return CUSTOM_REGISTRY_ENTRIES.get().get(type);
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void onClientSetup(FMLClientSetupEvent event)
 	{
-		ENTITIES.get().getENTRIES().forEach((key, entityTypeRegistryObject) ->
+		GUIS.get().getGUIS().forEach((key, tileGui) ->
+				MenuScreens.register(
+						(MenuType) tileGui.getContainer().get(),
+						(MenuScreens.ScreenConstructor) tileGui.getScreen()
+				)
+		);
+	}
+
+	public void onEntityRenderersRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event)
+	{
+		ENTITIES.get().getENTRIES().forEach((key, entity) ->
+		{
+			if (ENTITY_MODELS.get().containsKey(key.getId()))
+			{
+				ENTITY_MODELS.get().getModels().get(key.getId()).getLayers().forEach((name, layer) ->
+						event.registerLayerDefinition(
+								layer.getLeft(),
+								layer.getRight()
+						)
+				);
+			}
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	public void onEntityRenderersRegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
+	{
+		ENTITIES.get().getENTRIES().forEach((key, entity) ->
 		{
 			if (ENTITY_RENDERERS.get().containsKey(key.getId()))
 			{
-				registerEntityRenderingHandler(
-						entityTypeRegistryObject.get(),
-						ENTITY_RENDERERS.get().get(key.getId())
+				event.registerEntityRenderer(
+						entity.get(),
+						(EntityRendererProvider<? super Entity>) ENTITY_RENDERERS.get().get(key.getId())
 				);
 			}
 		});
-		TILES.get().getENTRIES().forEach((key, tileEntityTypeRegistryObject) ->
+		TILES.get().getENTRIES().forEach((key, tile) ->
 		{
 			if (TILE_RENDERERS.get().containsKey(key.getId()))
 			{
-				bindTileEntityRenderer(
-						tileEntityTypeRegistryObject.get(),
-						TILE_RENDERERS.get().get(key.getId())
+				event.registerBlockEntityRenderer(
+						tile.get(),
+						(BlockEntityRendererProvider<? super BlockEntity>) TILE_RENDERERS.get().get(key.getId())
 				);
 			}
 		});
-		GUIS.get().getGUIS().forEach((key, tileGui) ->
-				registerScreen(tileGui.getContainer().get(), tileGui.getScreen()));
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void bindTileEntityRenderer(TileEntityType tile, ITileEntityRendererFactory renderer)
-	{
-		ClientRegistry.bindTileEntityRenderer(tile, renderer);
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void registerScreen(ContainerType container, ScreenManager.IScreenFactory screen)
-	{
-		ScreenManager.register(container, screen);
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void registerEntityRenderingHandler(EntityType entity, IRenderFactory renderer)
-	{
-		RenderingRegistry.registerEntityRenderingHandler(entity, renderer);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -437,9 +456,9 @@ public class ModRegistry
 		{
 			@Nonnull
 			@Override
-			protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables()
+			protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables()
 			{
-				List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> pairs = new java.util.ArrayList<>();
+				List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> pairs = new ArrayList<>();
 				if (!DATA_GENERATOR.get().isBlockLootTablesEmpty())
 				{
 					pairs.add(Pair.of(() -> new BuilderBlockLootTableProvider()
@@ -464,7 +483,7 @@ public class ModRegistry
 											knownBlocks::add));
 							return knownBlocks.build().collect(Collectors.toList());
 						}
-					}, LootParameterSets.BLOCK));
+					}, LootContextParamSets.BLOCK));
 				}
 				if (!DATA_GENERATOR.get().isChestLootTablesEmpty())
 				{
@@ -476,7 +495,7 @@ public class ModRegistry
 							DATA_GENERATOR.get().forEachChestLootTables(biConsumerConsumer ->
 									biConsumerConsumer.accept(consumer));
 						}
-					}, LootParameterSets.CHEST));
+					}, LootContextParamSets.CHEST));
 				}
 				if (!DATA_GENERATOR.get().isEntityLootTablesEmpty())
 				{
@@ -502,7 +521,7 @@ public class ModRegistry
 											knownEntities::add));
 							return knownEntities.build().collect(Collectors.toList());
 						}
-					}, LootParameterSets.ENTITY));
+					}, LootContextParamSets.ENTITY));
 				}
 				return pairs;
 			}
@@ -518,7 +537,7 @@ public class ModRegistry
 		dataGenerator.addProvider(new BuilderRecipeProvider(dataGenerator)
 		{
 			@Override
-			protected void buildShapelessRecipes(@Nonnull Consumer<IFinishedRecipe> consumer)
+			protected void buildCraftingRecipes(@Nonnull Consumer<FinishedRecipe> consumer)
 			{
 				if (!DATA_GENERATOR.get().isRecipesEmpty())
 				{

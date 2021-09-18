@@ -18,31 +18,35 @@
 
 package com.withertech.witherlib.block;
 
+import com.withertech.witherlib.item.IWrench;
 import com.withertech.witherlib.tile.BaseTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import com.withertech.witherlib.tile.ITickableTileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,9 +55,17 @@ import java.util.List;
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
-public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Block
+public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends BaseEntityBlock
 {
 	private final boolean saveTileData;
+
+	private final BlockEntityTicker<T> ticker = (world, pos, state, tile) ->
+	{
+		if (tile instanceof ITickableTileEntity)
+		{
+			((ITickableTileEntity) tile).tick();
+		}
+	};
 
 	public BaseTileBlock(boolean saveTileData, Properties properties)
 	{
@@ -61,70 +73,81 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Block
 		this.saveTileData = saveTileData;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Nonnull
 	@Override
-	public BlockRenderType getRenderShape(@Nonnull BlockState state)
+	public RenderShape getRenderShape(@Nonnull BlockState state)
 	{
-		return BlockRenderType.MODEL;
+		return RenderShape.MODEL;
 	}
-
 
 	@SuppressWarnings({"deprecation", "unchecked"})
 	@Override
 	@Nonnull
-	public ActionResultType use(
+	public InteractionResult use(
 			@Nonnull BlockState state,
-			@Nonnull World world,
+			@Nonnull Level world,
 			@Nonnull BlockPos pos,
-			@Nonnull PlayerEntity player,
-			@Nonnull Hand hand,
-			@Nonnull BlockRayTraceResult rayTraceResult
+			@Nonnull Player player,
+			@Nonnull InteractionHand hand,
+			@Nonnull BlockHitResult rayTraceResult
 	)
 	{
-		if (hasContainer())
+		if (player.getItemInHand(hand).getItem() instanceof IWrench wrench)
+		{
+			wrench.wrench(state, world, pos, player, hand, rayTraceResult);
+			if (state.getBlock() instanceof IWrenchable wrenchable)
+			{
+				wrenchable.wrench(state, world, pos, player, hand, rayTraceResult);
+			}
+			if (world.getBlockEntity(pos) instanceof IWrenchable wrenchable)
+			{
+				wrenchable.wrench(state, world, pos, player, hand, rayTraceResult);
+			}
+			return InteractionResult.CONSUME;
+		}
+		else if (hasContainer())
 		{
 			if (!world.isClientSide())
 			{
-				NetworkHooks.openGui((ServerPlayerEntity) player, new INamedContainerProvider()
+				NetworkHooks.openGui((ServerPlayer) player, new MenuProvider()
 				{
 					@Nonnull
 					@Override
-					public ITextComponent getDisplayName()
+					public Component getDisplayName()
 					{
 						return BaseTileBlock.this.getDisplayName((T) world.getBlockEntity(pos));
 					}
 
 					@Override
-					public Container createMenu(
+					public AbstractContainerMenu createMenu(
 							int id,
-							@Nonnull PlayerInventory playerInventory,
-							@Nonnull PlayerEntity player
+							@Nonnull Inventory playerInventory,
+							@Nonnull Player player
 					)
 					{
 						return BaseTileBlock.this.createMenu(id, player, pos);
 					}
 				}, pos);
 			}
-			return ActionResultType.CONSUME;
+			return InteractionResult.CONSUME;
 		}
 		else
 		{
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 
 	}
 
 	protected abstract boolean hasContainer();
 
-	protected abstract Container createMenu(int id, PlayerEntity player, BlockPos pos);
+	protected abstract AbstractContainerMenu createMenu(int id, Player player, BlockPos pos);
 
-	protected abstract ITextComponent getDisplayName(T tile);
+	protected abstract Component getDisplayName(T tile);
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void setPlacedBy(
-			@Nonnull World worldIn,
+			@Nonnull Level worldIn,
 			@Nonnull BlockPos pos,
 			@Nonnull BlockState state,
 			LivingEntity placer,
@@ -136,14 +159,14 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Block
 			return;
 		}
 
-		CompoundNBT tag = stack.getTag();
+		CompoundTag tag = stack.getTag();
 		tag = tag == null ? null : tag.contains("tileData") ? tag.getCompound("tileData") : null;
 		if (tag == null || tag.isEmpty())
 		{
 			return;
 		}
 
-		TileEntity tile = worldIn.getBlockEntity(pos);
+		BlockEntity tile = worldIn.getBlockEntity(pos);
 		if (tile instanceof BaseTileEntity)
 		{
 			((BaseTileEntity) tile).readData(tag);
@@ -162,19 +185,19 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Block
 			return items;
 		}
 
-		TileEntity tile = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
+		BlockEntity tile = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
 		if (!(tile instanceof BaseTileEntity))
 		{
 			return items;
 		}
 
-		CompoundNBT tileTag = ((BaseTileEntity) tile).writeItemStackData();
+		CompoundTag tileTag = ((BaseTileEntity) tile).writeItemStackData();
 		if (tileTag == null || tileTag.isEmpty())
 		{
 			return items;
 		}
 
-		CompoundNBT tag = new CompoundNBT();
+		CompoundTag tag = new CompoundTag();
 		tag.put("tileData", tileTag);
 
 		for (ItemStack stack : items)
@@ -192,10 +215,10 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Block
 	@Override
 	public ItemStack getPickBlock(
 			BlockState state,
-			RayTraceResult target,
-			IBlockReader world,
+			HitResult target,
+			BlockGetter world,
 			BlockPos pos,
-			PlayerEntity player
+			Player player
 	)
 	{
 		ItemStack stack = super.getPickBlock(state, target, world, pos, player);
@@ -205,19 +228,19 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Block
 			return stack;
 		}
 
-		TileEntity tile = world.getBlockEntity(pos);
+		BlockEntity tile = world.getBlockEntity(pos);
 		if (!(tile instanceof BaseTileEntity))
 		{
 			return stack;
 		}
 
-		CompoundNBT tileTag = ((BaseTileEntity) tile).writeItemStackData();
+		CompoundTag tileTag = ((BaseTileEntity) tile).writeItemStackData();
 		if (tileTag == null || tileTag.isEmpty())
 		{
 			return stack;
 		}
 
-		CompoundNBT tag = new CompoundNBT();
+		CompoundTag tag = new CompoundTag();
 		tag.put("tileData", tileTag);
 
 		if (stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() == this)
@@ -228,13 +251,19 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Block
 		return stack;
 	}
 
+	public abstract BlockEntityType<T> getBlockEntityType();
+
+	@Nullable
 	@Override
-	public boolean hasTileEntity(BlockState state)
+	public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state)
 	{
-		return true;
+		return getBlockEntityType().create(pos, state);
 	}
 
 	@Nullable
 	@Override
-	public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
+	public <X extends BlockEntity> BlockEntityTicker<X> getTicker(@Nonnull Level world, @Nonnull BlockState state, @Nonnull BlockEntityType<X> type)
+	{
+		return world.isClientSide()? null : BaseTileBlock.createTickerHelper(type, getBlockEntityType(), ticker);
+	}
 }

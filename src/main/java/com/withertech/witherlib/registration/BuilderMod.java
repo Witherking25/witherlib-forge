@@ -19,12 +19,12 @@
 package com.withertech.witherlib.registration;
 
 import com.withertech.witherlib.data.BuilderDataGenerator;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
@@ -47,12 +47,13 @@ public abstract class BuilderMod
 
 	private BuilderForgeRegistry<Block> BLOCKS;
 	private BuilderForgeRegistry<Item> ITEMS;
-	private BuilderForgeRegistry<TileEntityType<?>> TILES;
-	private BuilderForgeRegistry<ContainerType<?>> CONTAINERS;
+	private BuilderForgeRegistry<BlockEntityType<?>> TILES;
+	private BuilderForgeRegistry<MenuType<?>> CONTAINERS;
 	private BuilderForgeRegistry<Fluid> FLUIDS;
 	private BuilderForgeRegistry<EntityType<?>> ENTITIES;
 
 	private BuilderEntityAttributeRegistry ENTITY_ATTRIBUTES;
+	private BuilderEntityModelRegistry ENTITY_MODELS;
 	private BuilderEntityRendererRegistry ENTITY_RENDERERS;
 	private BuilderTileEntityRendererRegistry TILE_RENDERERS;
 	private BuilderDataGenerator DATA_GENERATORS;
@@ -84,6 +85,7 @@ public abstract class BuilderMod
 						this::getFluids,
 						this::getEntities,
 						this::getEntityAttributes,
+						this::getEntityModels,
 						this::getEntityRenderers,
 						this::getTileRenderers,
 						this::getDataGenerators,
@@ -209,9 +211,9 @@ public abstract class BuilderMod
 	 *
 	 * @return the builder forge registry
 	 */
-	protected BuilderForgeRegistry<TileEntityType<?>> registerTiles()
+	protected BuilderForgeRegistry<BlockEntityType<?>> registerTiles()
 	{
-		return BuilderForgeRegistry.builder(MOD, ForgeRegistries.TILE_ENTITIES).build();
+		return BuilderForgeRegistry.builder(MOD, ForgeRegistries.BLOCK_ENTITIES).build();
 	}
 
 	/**
@@ -219,7 +221,7 @@ public abstract class BuilderMod
 	 *
 	 * @return the tiles
 	 */
-	protected final BuilderForgeRegistry<TileEntityType<?>> getTiles()
+	protected final BuilderForgeRegistry<BlockEntityType<?>> getTiles()
 	{
 		if (TILES == null)
 		{
@@ -233,7 +235,7 @@ public abstract class BuilderMod
 	 *
 	 * @return the builder forge registry
 	 */
-	protected BuilderForgeRegistry<ContainerType<?>> registerContainers()
+	protected BuilderForgeRegistry<MenuType<?>> registerContainers()
 	{
 		return BuilderForgeRegistry.builder(MOD, ForgeRegistries.CONTAINERS).build();
 	}
@@ -243,7 +245,7 @@ public abstract class BuilderMod
 	 *
 	 * @return the containers
 	 */
-	protected final BuilderForgeRegistry<ContainerType<?>> getContainers()
+	protected final BuilderForgeRegistry<MenuType<?>> getContainers()
 	{
 		if (CONTAINERS == null)
 		{
@@ -322,6 +324,20 @@ public abstract class BuilderMod
 			ENTITY_ATTRIBUTES = registerEntityAttributes();
 		}
 		return ENTITY_ATTRIBUTES;
+	}
+
+	protected BuilderEntityModelRegistry registerEntityModels()
+	{
+		return BuilderEntityModelRegistry.builder().build();
+	}
+
+	protected final BuilderEntityModelRegistry getEntityModels()
+	{
+		if (ENTITY_MODELS == null)
+		{
+			ENTITY_MODELS = registerEntityModels();
+		}
+		return ENTITY_MODELS;
 	}
 
 	/**

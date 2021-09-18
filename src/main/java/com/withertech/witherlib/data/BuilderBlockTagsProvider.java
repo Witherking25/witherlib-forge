@@ -18,11 +18,11 @@
 
 package com.withertech.witherlib.data;
 
-import net.minecraft.block.Block;
-import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.TagsProvider;
-import net.minecraft.tags.ITag;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nonnull;
@@ -40,7 +40,7 @@ public abstract class BuilderBlockTagsProvider extends BlockTagsProvider
 
 	@Override
 	@Nonnull
-	public TagsProvider.Builder<Block> tag(@Nonnull ITag.INamedTag<Block> tag)
+	public TagsProvider.TagAppender<Block> tag(@Nonnull Tag.Named<Block> tag)
 	{
 		return super.tag(tag);
 	}

@@ -18,15 +18,15 @@
 
 package com.withertech.witherlib.registration;
 
-import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.world.entity.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class BuilderEntityRendererRegistry
 {
-	private final Map<String, IRenderFactory<?>> ENTITIES;
+	private final Map<String, EntityRendererProvider<?>> ENTITIES;
 
 	private BuilderEntityRendererRegistry(Builder builder)
 	{
@@ -38,7 +38,7 @@ public class BuilderEntityRendererRegistry
 		return new Builder();
 	}
 
-	public IRenderFactory<?> get(String key)
+	public EntityRendererProvider<?> get(String key)
 	{
 		return ENTITIES.get(key);
 	}
@@ -50,14 +50,14 @@ public class BuilderEntityRendererRegistry
 
 	public static class Builder
 	{
-		private final Map<String, IRenderFactory<?>> ENTITIES = new HashMap<>();
+		private final Map<String, EntityRendererProvider<?>> ENTITIES = new HashMap<>();
 
 		private Builder()
 		{
 
 		}
 
-		public <T extends Entity> Builder add(String name, IRenderFactory<T> renderer)
+		public <T extends Entity> Builder add(String name, EntityRendererProvider<T> renderer)
 		{
 			ENTITIES.put(name, renderer);
 			return this;

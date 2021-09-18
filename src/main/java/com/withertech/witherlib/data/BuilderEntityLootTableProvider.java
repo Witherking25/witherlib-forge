@@ -18,14 +18,14 @@
 
 package com.withertech.witherlib.data;
 
-import net.minecraft.data.loot.EntityLootTables;
-import net.minecraft.entity.EntityType;
-import net.minecraft.loot.LootTable;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.loot.EntityLoot;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 import javax.annotation.Nonnull;
 
-public abstract class BuilderEntityLootTableProvider extends EntityLootTables
+public abstract class BuilderEntityLootTableProvider extends EntityLoot
 {
 	@Override
 	protected abstract void addTables();

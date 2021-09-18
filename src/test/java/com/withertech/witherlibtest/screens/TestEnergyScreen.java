@@ -3,22 +3,18 @@ package com.withertech.witherlibtest.screens;
 import com.withertech.witherlib.gui.TileEntityBaseContainerScreen;
 import com.withertech.witherlib.gui.widget.EnergyBarWidget;
 import com.withertech.witherlib.gui.widget.FluidTankWidget;
-import com.withertech.witherlib.util.ClientUtils;
 import com.withertech.witherlibtest.WitherLibTest;
 import com.withertech.witherlibtest.containers.TestEnergyContainer;
 import com.withertech.witherlibtest.network.TestEnergyTilePacket;
-import com.withertech.witherlibtest.network.TestProgressTilePacket;
 import com.withertech.witherlibtest.tiles.TestEnergyTile;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 
 public class TestEnergyScreen extends TileEntityBaseContainerScreen<TestEnergyTile, TestEnergyContainer>
 {
-    public TestEnergyScreen(TestEnergyContainer screenContainer, PlayerInventory playerInventory, ITextComponent title)
+    public TestEnergyScreen(TestEnergyContainer screenContainer, Inventory playerInventory, Component title)
     {
         super(screenContainer, playerInventory, title);
     }

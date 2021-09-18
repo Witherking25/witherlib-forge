@@ -18,29 +18,29 @@
 
 package com.withertech.witherlib.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import javax.annotation.Nonnull;
 
 /**
  * Created 1/26/2021 by SuperMartijn642
  */
-public abstract class TileEntityBaseContainer<X extends TileEntityBaseContainer<X, T>, T extends TileEntity>
+public abstract class TileEntityBaseContainer<X extends TileEntityBaseContainer<X, T>, T extends BlockEntity>
 		extends ObjectBaseContainer<T>
 {
 
-	protected final World tileWorld;
+	protected final Level tileWorld;
 	protected final BlockPos tilePos;
 
 	public TileEntityBaseContainer(
-			ContainerType<X> type,
+			MenuType<X> type,
 			int id,
-			PlayerEntity player,
-			World tileWorld,
+			Player player,
+			Level tileWorld,
 			BlockPos tilePos
 	)
 	{
@@ -49,7 +49,7 @@ public abstract class TileEntityBaseContainer<X extends TileEntityBaseContainer<
 		this.tilePos = tilePos;
 	}
 
-	public TileEntityBaseContainer(ContainerType<X> type, int id, PlayerEntity player, BlockPos tilePos)
+	public TileEntityBaseContainer(MenuType<X> type, int id, Player player, BlockPos tilePos)
 	{
 		this(type, id, player, player.level, tilePos);
 	}
@@ -60,7 +60,7 @@ public abstract class TileEntityBaseContainer<X extends TileEntityBaseContainer<
 	}
 
 	@Override
-	public boolean stillValid(@Nonnull PlayerEntity playerIn)
+	public boolean stillValid(@Nonnull Player playerIn)
 	{
 		return super.stillValid(playerIn);
 	}
@@ -69,7 +69,7 @@ public abstract class TileEntityBaseContainer<X extends TileEntityBaseContainer<
 	@Override
 	protected T getObject()
 	{
-		TileEntity tile = this.tileWorld.getBlockEntity(this.tilePos);
+		BlockEntity tile = this.tileWorld.getBlockEntity(this.tilePos);
 
 		if (tile == null)
 		{

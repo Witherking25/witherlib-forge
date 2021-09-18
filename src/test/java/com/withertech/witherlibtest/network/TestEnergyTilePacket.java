@@ -22,7 +22,7 @@ import com.withertech.witherlib.network.PacketContext;
 import com.withertech.witherlib.network.TileEntityBasePacket;
 import com.withertech.witherlib.util.PacketUtils;
 import com.withertech.witherlibtest.tiles.TestEnergyTile;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public abstract class TestEnergyTilePacket extends TileEntityBasePacket<TestEnergyTile>
 {

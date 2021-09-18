@@ -25,10 +25,10 @@ import com.withertech.witherlibtest.blocks.TestProgressBlock;
 import com.withertech.witherlibtest.containers.TestProgressContainer;
 import com.withertech.witherlibtest.screens.TestProgressScreen;
 import com.withertech.witherlibtest.tiles.TestProgressTile;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.fmllegacy.RegistryObject;
 
 public class TestProgressGui extends TileGui<TestProgressBlock, TestProgressTile, TestProgressContainer, TestProgressScreen>
 {
@@ -39,19 +39,19 @@ public class TestProgressGui extends TileGui<TestProgressBlock, TestProgressTile
     }
 
     @Override
-    protected RegistryObject<TileEntityType<TestProgressTile>> registerTile()
+    protected RegistryObject<BlockEntityType<TestProgressTile>> registerTile()
     {
         return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_progress_tile", TestProgressTile.class));
     }
 
     @Override
-    protected RegistryObject<ContainerType<TestProgressContainer>> registerContainer()
+    protected RegistryObject<MenuType<TestProgressContainer>> registerContainer()
     {
         return WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.container("test_progress_container", TestProgressContainer.class));
     }
 
     @Override
-    protected ScreenManager.IScreenFactory<TestProgressContainer, TestProgressScreen> registerScreen()
+    protected MenuScreens.ScreenConstructor<TestProgressContainer, TestProgressScreen> registerScreen()
     {
         return TestProgressScreen::new;
     }

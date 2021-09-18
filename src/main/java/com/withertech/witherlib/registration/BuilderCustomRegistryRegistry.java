@@ -64,9 +64,7 @@ public class BuilderCustomRegistryRegistry
 	public void register()
 	{
 		BUILDERS.forEach((typedRegKey, registryBuilder) ->
-		{
-			REGISTRIES.put(typedRegKey, (ForgeRegistry<?>) registryBuilder.create());
-		});
+				REGISTRIES.put(typedRegKey, (ForgeRegistry<?>) registryBuilder.create()));
 	}
 
 	public static class Builder

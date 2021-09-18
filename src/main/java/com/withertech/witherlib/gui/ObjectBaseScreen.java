@@ -18,10 +18,10 @@
 
 package com.withertech.witherlib.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.withertech.witherlib.gui.widget.Widget;
 import com.withertech.witherlib.util.ClientUtils;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
 
@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 public abstract class ObjectBaseScreen<T> extends BaseScreen
 {
 
-	protected ObjectBaseScreen(ITextComponent title)
+	protected ObjectBaseScreen(Component title)
 	{
 		super(title);
 	}
@@ -93,12 +93,12 @@ public abstract class ObjectBaseScreen<T> extends BaseScreen
 	}
 
 	@Override
-	protected void render(MatrixStack matrixStack, int mouseX, int mouseY)
+	protected void render(PoseStack poseStack, int mouseX, int mouseY)
 	{
 		T object = this.getObjectOrClose();
 		if (object != null)
 		{
-			this.render(matrixStack, mouseX, mouseY, object);
+			this.render(poseStack, mouseX, mouseY, object);
 		}
 	}
 
@@ -106,15 +106,15 @@ public abstract class ObjectBaseScreen<T> extends BaseScreen
 	 * Renders the screen's background and features.
 	 * Widgets are drawn after this.
 	 */
-	protected abstract void render(MatrixStack matrixStack, int mouseX, int mouseY, @Nonnull T object);
+	protected abstract void render(PoseStack poseStack, int mouseX, int mouseY, @Nonnull T object);
 
 	@Override
-	protected void renderTooltips(MatrixStack matrixStack, int mouseX, int mouseY)
+	protected void renderTooltips(PoseStack poseStack, int mouseX, int mouseY)
 	{
 		T object = this.getObjectOrClose();
 		if (object != null)
 		{
-			this.renderTooltips(matrixStack, mouseX, mouseY, object);
+			this.renderTooltips(poseStack, mouseX, mouseY, object);
 		}
 	}
 
@@ -122,7 +122,7 @@ public abstract class ObjectBaseScreen<T> extends BaseScreen
 	 * Renders tooltips for the given {@code mouseX} and {@code mouseY}.
 	 * This will be called last in the render chain.
 	 */
-	protected void renderTooltips(MatrixStack matrixStack, int mouseX, int mouseY, @Nonnull T object)
+	protected void renderTooltips(PoseStack poseStack, int mouseX, int mouseY, @Nonnull T object)
 	{
 	}
 

@@ -30,13 +30,11 @@ import java.util.function.Supplier;
 
 public class BuilderNetworkRegistry
 {
-	private final Map<String, PacketChannel> CHANNELS;
-	private final Map<String, List<Channel.Packet<?>>> PACKETS;
+	private final Map<String, Channel> channels;
 
 	private BuilderNetworkRegistry(Builder builder)
 	{
-		CHANNELS = builder.CHANNELS;
-		PACKETS = builder.PACKETS;
+		channels = builder.channels;
 	}
 
 	public static Builder builder(ModData mod)
@@ -44,55 +42,39 @@ public class BuilderNetworkRegistry
 		return new Builder(mod);
 	}
 
-	public static Channel.ChannelBuilder channel()
+	public boolean containsKey(String key)
 	{
-		return new Channel.ChannelBuilder();
+		return channels.containsKey(key);
 	}
 
-	public boolean containsChannel(String key)
+	public Map<String, Channel> getChannels()
 	{
-		return CHANNELS.containsKey(key);
-	}
-
-	public boolean containsPacket(String key)
-	{
-		return PACKETS.containsKey(key);
-	}
-
-	public Map<String, PacketChannel> getCHANNELS()
-	{
-		return CHANNELS;
-	}
-
-	public Map<String, List<Channel.Packet<?>>> getPACKETS()
-	{
-		return PACKETS;
+		return channels;
 	}
 
 	public void register()
 	{
-		getCHANNELS().forEach((id, packetChannel) ->
-				((containsPacket(id)) ? getPACKETS().get(id) :
-						new ArrayList<Channel.Packet<?>>()).forEach(
-						(packet) ->
-								registerPacket(
-										packetChannel,
-										packet.getPacketClass(),
-										packet.getPacketSupplier(),
-										packet.isShouldBeQueued()
-								)));
+		getChannels().forEach((id, channel) ->
+				channel.getPackets().forEach(packet ->
+						registerMessage(
+								channel.getChannel(),
+								packet.getPacketClass(),
+								packet.getPacketSupplier(),
+								packet.isShouldBeQueued()
+						)
+				)
+		);
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	private void registerPacket(@Nonnull PacketChannel channel, Class type, Supplier supplier, boolean queue)
+	private void registerMessage(@Nonnull PacketChannel channel, Class type, Supplier supplier, boolean queue)
 	{
 		channel.registerMessage(type, supplier, queue);
 	}
 
 	public static class Builder
 	{
-		private final Map<String, PacketChannel> CHANNELS = new HashMap<>();
-		private final Map<String, List<Channel.Packet<?>>> PACKETS = new HashMap<>();
+		private final Map<String, Channel> channels = new HashMap<>();
 		private final ModData mod;
 
 		private Builder(ModData mod)
@@ -100,16 +82,14 @@ public class BuilderNetworkRegistry
 			this.mod = mod;
 		}
 
-		public Builder add(String name, Channel channel)
+		public Channel.ChannelBuilder channel(String name)
 		{
-			CHANNELS.put(name, PacketChannel.create(mod.MODID, name));
-			PACKETS.put(name, channel.PACKETS);
-			return this;
+			return new Channel.ChannelBuilder(name, PacketChannel.create(mod.MODID, name), this);
 		}
 
-		public Builder add(Channel channel)
+		public Channel.ChannelBuilder channel()
 		{
-			return add("main", channel);
+			return channel("main");
 		}
 
 		public BuilderNetworkRegistry build()
@@ -122,35 +102,55 @@ public class BuilderNetworkRegistry
 
 	public static class Channel
 	{
-		private final List<Packet<?>> PACKETS;
+
+		private final List<Packet<?>> packets;
+
+		private final PacketChannel channel;
 
 		private Channel(ChannelBuilder builder)
 		{
-			PACKETS = builder.PACKETS;
+			packets = builder.packets;
+			channel = builder.channel;
+		}
+
+		public List<Packet<?>> getPackets()
+		{
+			return packets;
+		}
+
+		public PacketChannel getChannel()
+		{
+			return channel;
 		}
 
 		public static class ChannelBuilder
 		{
-			private final List<Packet<?>> PACKETS = new ArrayList<>();
+			private final List<Packet<?>> packets = new ArrayList<>();
+			private final String name;
+			private final PacketChannel channel;
+			private final Builder builder;
 
-			private ChannelBuilder()
+			private ChannelBuilder(String name, PacketChannel channel, Builder builder)
 			{
-
+				this.name = name;
+				this.channel = channel;
+				this.builder = builder;
 			}
 
-			public <T extends BasePacket> ChannelBuilder add(
+			public <T extends BasePacket> ChannelBuilder packet(
 					Class<T> packetClass,
 					Supplier<T> packetSupplier,
 					boolean shouldBeQueued
 			)
 			{
-				PACKETS.add(new Packet<>(packetClass, packetSupplier, shouldBeQueued));
+				packets.add(new Packet<>(packetClass, packetSupplier, shouldBeQueued));
 				return this;
 			}
 
-			public Channel build()
+			public Builder build()
 			{
-				return new Channel(this);
+				builder.channels.put(name, new Channel(this));
+				return builder;
 			}
 		}
 

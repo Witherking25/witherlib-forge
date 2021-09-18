@@ -18,8 +18,8 @@
 
 package com.withertech.witherlib.gui;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Created 1/26/2021 by SuperMartijn642
@@ -27,7 +27,7 @@ import net.minecraft.util.text.ITextComponent;
 public abstract class ItemBaseContainerScreen<T extends ObjectBaseContainer<ItemStack>>
 		extends ObjectBaseContainerScreen<ItemStack, T>
 {
-	public ItemBaseContainerScreen(T screenContainer, ITextComponent title)
+	public ItemBaseContainerScreen(T screenContainer, Component title)
 	{
 		super(screenContainer, title);
 	}

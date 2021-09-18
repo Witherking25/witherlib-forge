@@ -20,10 +20,10 @@ package com.withertech.witherlib.network;
 
 import com.withertech.witherlib.util.ClientUtils;
 import com.withertech.witherlib.util.CoreSide;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 /**
  * Created 5/30/2021 by SuperMartijn642
@@ -56,7 +56,7 @@ public class PacketContext
 				CoreSide.SERVER;
 	}
 
-	public PlayerEntity getSendingPlayer()
+	public Player getSendingPlayer()
 	{
 		return this.context.getSender();
 	}
@@ -64,7 +64,7 @@ public class PacketContext
 	/**
 	 * @return the client world if client-side, or the sending player's world if server-side
 	 */
-	public World getWorld()
+	public Level getWorld()
 	{
 		return this.getHandlingSide() == CoreSide.CLIENT ? ClientUtils.getWorld() : this.getSendingPlayer().level;
 	}

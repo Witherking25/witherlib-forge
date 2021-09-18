@@ -18,23 +18,23 @@
 
 package com.withertech.witherlib.registration;
 
-import net.minecraft.block.Block;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class BuilderTagRegistry
 {
-	private final Map<String, ITag.INamedTag<Block>> BLOCKS;
-	private final Map<String, ITag.INamedTag<Item>> ITEMS;
-	private final Map<String, ITag.INamedTag<Fluid>> FLUIDS;
+	private final Map<String, Tag.Named<Block>> BLOCKS;
+	private final Map<String, Tag.Named<Item>> ITEMS;
+	private final Map<String, Tag.Named<Fluid>> FLUIDS;
 
 	private BuilderTagRegistry(Builder builder)
 	{
@@ -63,17 +63,17 @@ public class BuilderTagRegistry
 		return FLUIDS.containsKey(key);
 	}
 
-	public ITag.INamedTag<Block> getBlock(String key)
+	public Tag.Named<Block> getBlock(String key)
 	{
 		return BLOCKS.get(key);
 	}
 
-	public ITag.INamedTag<Item> getItem(String key)
+	public Tag.Named<Item> getItem(String key)
 	{
 		return ITEMS.get(key);
 	}
 
-	public ITag.INamedTag<Fluid> getFluid(String key)
+	public Tag.Named<Fluid> getFluid(String key)
 	{
 		return FLUIDS.get(key);
 	}
@@ -82,9 +82,9 @@ public class BuilderTagRegistry
 	{
 		private final String MODID;
 
-		private final Map<String, ITag.INamedTag<Block>> BLOCKS = new HashMap<>();
-		private final Map<String, ITag.INamedTag<Item>> ITEMS = new HashMap<>();
-		private final Map<String, ITag.INamedTag<Fluid>> FLUIDS = new HashMap<>();
+		private final Map<String, Tag.Named<Block>> BLOCKS = new HashMap<>();
+		private final Map<String, Tag.Named<Item>> ITEMS = new HashMap<>();
+		private final Map<String, Tag.Named<Fluid>> FLUIDS = new HashMap<>();
 
 		private Builder(ModData mod)
 		{

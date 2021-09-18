@@ -16,29 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.nbt.wrappers;
+package com.withertech.witherlib.config;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
+import com.withertech.witherlib.util.EnergyFormat;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.config.ModConfig;
 
-public class BlockPosNBTWrapper extends AbstractNBTWrapper<BlockPos, CompoundTag>
+public class ClientConfig extends BaseConfig
 {
-
-	public BlockPosNBTWrapper(BlockPos value)
+	public final ForgeConfigSpec.EnumValue<EnergyFormat.EnergyType> energyType;
+	public ClientConfig(ForgeConfigSpec.Builder builder)
 	{
-		super(value);
+		super(builder);
+		builder.push("client");
+		energyType = builder.defineEnum("energyType", EnergyFormat.EnergyType.FE);
+		builder.pop();
 	}
 
 	@Override
-	public CompoundTag serializeNBT()
+	public ModConfig.Type getType()
 	{
-		return NbtUtils.writeBlockPos(get());
-	}
-
-	@Override
-	public void deserializeNBT(CompoundTag nbt)
-	{
-		set(NbtUtils.readBlockPos(nbt));
+		return ModConfig.Type.CLIENT;
 	}
 }

@@ -22,10 +22,10 @@ import com.withertech.witherlib.gui.TileEntityBaseContainer;
 import com.withertech.witherlib.registration.TypedRegKey;
 import com.withertech.witherlibtest.WitherLibTest;
 import com.withertech.witherlibtest.tiles.TestTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
@@ -34,14 +34,14 @@ public class TestContainer extends TileEntityBaseContainer<TestContainer, TestTi
 {
     private static final int SIZE = 54;
 
-    public TestContainer(int id, PlayerEntity player, BlockPos pos)
+    public TestContainer(int id, Player player, BlockPos pos)
     {
         super(WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.container("test_container", TestContainer.class)).get(), id, player, pos);
         addSlots();
     }
 
     @Override
-    protected void addSlots(PlayerEntity player, @Nonnull TestTile object)
+    protected void addSlots(Player player, @Nonnull TestTile object)
     {
         object.items.ifPresent(itemStackHandler ->
         {
@@ -59,12 +59,12 @@ public class TestContainer extends TileEntityBaseContainer<TestContainer, TestTi
 
     @Nonnull
     @Override
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index)
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index)
     {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
 
-        if (slot != null && slot.hasItem())
+        if (slot.hasItem())
         {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();

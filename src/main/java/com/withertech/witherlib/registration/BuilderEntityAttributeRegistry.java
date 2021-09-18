@@ -18,7 +18,7 @@
 
 package com.withertech.witherlib.registration;
 
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 
 public class BuilderEntityAttributeRegistry
 {
-	private final Map<String, Supplier<AttributeModifierMap.MutableAttribute>> ENTITIES;
+	private final Map<String, Supplier<AttributeSupplier.Builder>> ENTITIES;
 
 	private BuilderEntityAttributeRegistry(Builder builder)
 	{
@@ -38,7 +38,7 @@ public class BuilderEntityAttributeRegistry
 		return new Builder();
 	}
 
-	public AttributeModifierMap.MutableAttribute get(String key)
+	public AttributeSupplier.Builder get(String key)
 	{
 		return ENTITIES.get(key).get();
 	}
@@ -50,14 +50,14 @@ public class BuilderEntityAttributeRegistry
 
 	public static class Builder
 	{
-		private final Map<String, Supplier<AttributeModifierMap.MutableAttribute>> ENTITIES = new HashMap<>();
+		private final Map<String, Supplier<AttributeSupplier.Builder>> ENTITIES = new HashMap<>();
 
 		private Builder()
 		{
 
 		}
 
-		public Builder add(String name, Supplier<AttributeModifierMap.MutableAttribute> attributes)
+		public Builder add(String name, Supplier<AttributeSupplier.Builder> attributes)
 		{
 			ENTITIES.put(name, attributes);
 			return this;

@@ -18,15 +18,15 @@
 
 package com.withertech.witherlib.registration;
 
-import com.withertech.witherlib.render.ITileEntityRendererFactory;
 import com.withertech.witherlib.tile.BaseTileEntity;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class BuilderTileEntityRendererRegistry
 {
-	private final Map<String, ITileEntityRendererFactory<?>> TILES;
+	private final Map<String, BlockEntityRendererProvider<?>> TILES;
 
 	private BuilderTileEntityRendererRegistry(Builder builder)
 	{
@@ -38,7 +38,7 @@ public class BuilderTileEntityRendererRegistry
 		return new Builder();
 	}
 
-	public ITileEntityRendererFactory<?> get(String key)
+	public BlockEntityRendererProvider<?> get(String key)
 	{
 		return TILES.get(key);
 	}
@@ -50,13 +50,13 @@ public class BuilderTileEntityRendererRegistry
 
 	public static class Builder
 	{
-		private final Map<String, ITileEntityRendererFactory<?>> TILES = new HashMap<>();
+		private final Map<String, BlockEntityRendererProvider<?>> TILES = new HashMap<>();
 
 		private Builder()
 		{
 		}
 
-		public <T extends BaseTileEntity<T>> Builder add(String name, ITileEntityRendererFactory<T> renderer)
+		public <T extends BaseTileEntity<T>> Builder add(String name, BlockEntityRendererProvider<T> renderer)
 		{
 			TILES.put(name, renderer);
 			return this;

@@ -16,17 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.render;
+package com.withertech.witherlib.item;
 
-import com.withertech.witherlib.tile.BaseTileEntity;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
-import java.util.function.Function;
+import javax.annotation.Nonnull;
 
-@FunctionalInterface
-public interface ITileEntityRendererFactory<T extends BaseTileEntity<T>>
-		extends Function<TileEntityRendererDispatcher, TileEntityRenderer<T>>
+public interface IWrench
 {
-
+	void wrench(
+			@Nonnull BlockState state,
+			@Nonnull Level world,
+			@Nonnull BlockPos pos,
+			@Nonnull Player player,
+			@Nonnull InteractionHand hand,
+			@Nonnull BlockHitResult rayTraceResult
+	);
 }

@@ -20,7 +20,7 @@ package com.withertech.witherlib.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.withertech.witherlib.WitherLib;
-import com.withertech.witherlib.gui.ScreenUtils;
+import com.withertech.witherlib.util.ScreenUtils;
 import com.withertech.witherlib.util.TextComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

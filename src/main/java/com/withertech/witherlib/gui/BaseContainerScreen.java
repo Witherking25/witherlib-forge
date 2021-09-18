@@ -26,6 +26,7 @@ import com.withertech.witherlib.gui.widget.ITickableWidget;
 import com.withertech.witherlib.gui.widget.TextFieldWidget;
 import com.withertech.witherlib.gui.widget.Widget;
 import com.withertech.witherlib.util.ClientUtils;
+import com.withertech.witherlib.util.ScreenUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

@@ -22,7 +22,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
-import com.withertech.witherlib.gui.ScreenUtils;
+import com.withertech.witherlib.util.ScreenUtils;
 import com.withertech.witherlib.util.TextComponents;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;

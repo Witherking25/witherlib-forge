@@ -19,7 +19,7 @@
 package com.withertech.witherlib.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.withertech.witherlib.gui.ScreenUtils;
+import com.withertech.witherlib.util.ScreenUtils;
 import net.minecraft.network.chat.Component;
 
 import java.util.Collections;

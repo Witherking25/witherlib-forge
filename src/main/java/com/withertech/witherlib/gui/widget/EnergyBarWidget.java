@@ -21,7 +21,7 @@ package com.withertech.witherlib.gui.widget;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.withertech.witherlib.WitherLib;
-import com.withertech.witherlib.gui.ScreenUtils;
+import com.withertech.witherlib.util.ScreenUtils;
 import com.withertech.witherlib.util.EnergyFormat;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.withertech.witherlib.gui;
+package com.withertech.witherlib.util;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -500,17 +500,7 @@ public class ScreenUtils
 
 	public static void drawTexture(MatrixStack matrixStack, float x, float y, float width, float height)
 	{
-		drawTexture(matrixStack, x, y, width, height, 0, 0, 1, 1, new Color(255, 255, 255, 255));
-	}
-
-	public static void drawTexture(MatrixStack matrixStack, float x, float y, float width, float height, float tx, float ty, float twidth, float theight)
-	{
-		drawTexture(matrixStack, x, y, width, height, tx, ty, twidth, theight, new Color(255, 255, 255, 255));
-	}
-
-	public static void drawTexture(MatrixStack matrixStack, float x, float y, float width, float height, Color color)
-	{
-		drawTexture(matrixStack, x, y, width, height, 0, 0, 1, 1, color);
+		drawTexture(matrixStack, x, y, width, height, 0, 0, 1, 1);
 	}
 
 	public static void drawTexture(
@@ -522,12 +512,10 @@ public class ScreenUtils
 			float tx,
 			float ty,
 			float twidth,
-			float theight,
-			Color color
+			float theight
 	)
 	{
-		//noinspection deprecation
-		RenderSystem.color4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+		RenderSystem.color4f(1, 1, 1, 1);
 
 		Matrix4f matrix = matrixStack.last().pose();
 		Tessellator tessellator = Tessellator.getInstance();
@@ -538,9 +526,6 @@ public class ScreenUtils
 		buffer.vertex(matrix, x + width, y, 0).uv(tx + twidth, ty).endVertex();
 		buffer.vertex(matrix, x, y, 0).uv(tx, ty).endVertex();
 		tessellator.end();
-
-		//noinspection deprecation
-		RenderSystem.color4f(1, 1, 1, 1);
 	}
 
 	public static void fillRect(MatrixStack matrixStack, float x, float y, float width, float height, int color)

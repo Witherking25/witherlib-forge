@@ -18,6 +18,7 @@
 
 package com.withertech.witherlib.block;
 
+import com.withertech.witherlib.item.IWrench;
 import com.withertech.witherlib.tile.BaseTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -82,6 +83,25 @@ public abstract class BaseTileBlock<T extends BaseTileEntity<T>> extends Block
 			@Nonnull BlockRayTraceResult rayTraceResult
 	)
 	{
+		if (player.getItemInHand(hand).getItem() instanceof IWrench)
+		{
+			IWrench wrench = (IWrench) player.getItemInHand(hand).getItem();
+			wrench.wrench(state, world, pos, player, hand, rayTraceResult);
+			if (state.getBlock() instanceof IWrenchable)
+			{
+				IWrenchable wrenchable = (IWrenchable) state.getBlock();
+				wrenchable.wrench(state, world, pos, player, hand, rayTraceResult);
+			}
+			if (world.getBlockEntity(pos) instanceof IWrenchable)
+			{
+				IWrenchable wrenchable = (IWrenchable) world.getBlockEntity(pos);
+				if (wrenchable != null)
+				{
+					wrenchable.wrench(state, world, pos, player, hand, rayTraceResult);
+				}
+			}
+			return ActionResultType.CONSUME;
+		}
 		if (hasContainer())
 		{
 			if (!world.isClientSide())

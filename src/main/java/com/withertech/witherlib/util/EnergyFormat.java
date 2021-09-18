@@ -18,6 +18,10 @@
 
 package com.withertech.witherlib.util;
 
+import com.withertech.witherlib.WitherLib;
+import com.withertech.witherlib.config.ClientConfig;
+import com.withertech.witherlib.registration.TypedRegKey;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -27,7 +31,7 @@ import java.util.Locale;
 public class EnergyFormat
 {
 
-	private static EnergyType type = EnergyType.RF;
+	private static EnergyType type = WitherLib.INSTANCE.REGISTRY.getConfig(TypedRegKey.config("client", ClientConfig.class)).energyType.get();
 
 	public static EnergyType getType()
 	{
@@ -36,8 +40,8 @@ public class EnergyFormat
 
 	public static void cycleEnergyType(boolean forward)
 	{
-		type =
-				EnergyType.values()[(type.ordinal() + (forward ? 1 : EnergyType.values().length - 1)) % EnergyType.values().length];
+		WitherLib.INSTANCE.REGISTRY.getConfig(TypedRegKey.config("client", ClientConfig.class)).energyType.set(EnergyType.values()[(type.ordinal() + (forward ? 1 : EnergyType.values().length - 1)) % EnergyType.values().length]);
+		type = WitherLib.INSTANCE.REGISTRY.getConfig(TypedRegKey.config("client", ClientConfig.class)).energyType.get();
 	}
 
 	public static String formatEnergy(int energy)

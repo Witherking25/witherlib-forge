@@ -19,7 +19,7 @@
 package com.withertech.witherlib.gui.widget;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.withertech.witherlib.gui.ScreenUtils;
+import com.withertech.witherlib.util.ScreenUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 

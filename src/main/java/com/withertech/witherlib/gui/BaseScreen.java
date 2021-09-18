@@ -24,6 +24,7 @@ import com.withertech.witherlib.gui.widget.ITickableWidget;
 import com.withertech.witherlib.gui.widget.TextFieldWidget;
 import com.withertech.witherlib.gui.widget.Widget;
 import com.withertech.witherlib.util.ClientUtils;
+import com.withertech.witherlib.util.ScreenUtils;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.text.ITextComponent;

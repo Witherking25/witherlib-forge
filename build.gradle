@@ -34,7 +34,6 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
 //     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    def testModules = String.join(File.pathSeparator, "${mod_id}%%${project.name}.test")
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
     runs {
@@ -92,27 +91,6 @@ minecraft {
             }
         }
 
-        serverTest {
-            parent runs.server // This run config inherits settings from the server config
-            workingDirectory project.file('run')
-            main 'com.alcatrazescapee.mcjunitlib.DedicatedTestServerLauncher' // The main class which launches a customized server which then runs JUnit tests
-            ideaModule "${project.name}.test" // Tell IDEA to use the classpath of the test module
-            property 'forge.logging.console.level', 'unittest' // This logging level prevents any other server information messages and leaves only the test output
-            environment 'MOD_MODULES', testModules   // target specific named modules
-            environment 'target', 'fmltestserver' // This is a custom service used to launch with ModLauncher's transforming class loader
-            environment 'targetModId', "${mod_id}" // Pass the mod ID directly to mcjunitlib, to find integration test classes from the mod annotation scan data
-//            arg '--crashOnFailedTests' // Optional. Recommended when running in an automated environment. Without it, the server will continue running (and can be connected to via localhost) to inspect why tests failed.
-//            forceExit = false // Optional. Recommended when running in an automated environment, or via the console rather than run configurations. This will allow the task to pass successfully when all tests pass. Use if you see errors along the lines of 'Gradle daemon disappeared unexpectedly'.
-            mods {
-                witherlib {
-                    source sourceSets.main
-                }
-                witherlibtest {
-                    source sourceSets.test
-                }
-            }
-        }
-
         data {
             workingDirectory project.file('run')
 
@@ -159,8 +137,6 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.2'
 
-    testImplementation fg.deobf('com.github.alcatrazEscapee:mcjunitlib:1.4.4-1.16.5')
-
     runtime fg.deobf('curse.maven:mekanism-268560:3206392')
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -193,12 +169,6 @@ jar {
                 "Implementation-Vendor"   : "Witherking25",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
-    }
-}
-tasks.replace("test", Test).configure {
-    actions.clear()
-    doFirst {
-        runServerTest.exec()
     }
 }
 jar.finalizedBy('reobfJar')

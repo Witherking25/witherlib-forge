@@ -36,7 +36,7 @@ public class TestContainer extends TileEntityBaseContainer<TestContainer, TestTi
 
     public TestContainer(int id, PlayerEntity player, BlockPos pos)
     {
-        super(WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.container("test_container", TestContainer.class)).get(), id, player, pos);
+        super(WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.baseContainer("test_container", TestContainer.class)).get(), id, player, pos);
         addSlots();
     }
 

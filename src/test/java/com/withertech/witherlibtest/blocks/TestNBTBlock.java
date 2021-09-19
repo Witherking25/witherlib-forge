@@ -62,6 +62,6 @@ public class TestNBTBlock extends BaseTileBlock<TestNBTTile>
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world)
 	{
-		return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class)).get().create();
+		return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.baseTile("test_nbt_tile", TestNBTTile.class)).get().create();
 	}
 }

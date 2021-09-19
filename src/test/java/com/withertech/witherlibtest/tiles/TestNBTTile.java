@@ -49,6 +49,6 @@ public class TestNBTTile extends BaseTileEntity<TestNBTTile>
 
 	public TestNBTTile()
 	{
-		super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class)).get());
+		super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.baseTile("test_nbt_tile", TestNBTTile.class)).get());
 	}
 }

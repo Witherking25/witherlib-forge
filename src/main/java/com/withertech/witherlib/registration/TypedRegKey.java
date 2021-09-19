@@ -29,8 +29,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -78,18 +80,22 @@ public class TypedRegKey<X>
 		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
 	}
 
-	public static <X extends BaseTileEntity<X>> TypedRegKey<RegistryObject<TileEntityType<X>>> tile(
-			String id,
-			Class<X> type
-	)
+	public static <X extends TileEntity> TypedRegKey<RegistryObject<TileEntityType<X>>> tile(String id, Class<X> type)
 	{
 		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
 	}
 
-	public static <X extends TileEntityBaseContainer<X, ?>> TypedRegKey<RegistryObject<ContainerType<X>>> container(
-			String id,
-			Class<X> type
-	)
+	public static <X extends BaseTileEntity<X>> TypedRegKey<RegistryObject<TileEntityType<X>>> baseTile(String id, Class<X> type)
+	{
+		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
+	}
+
+	public static <X extends Container> TypedRegKey<RegistryObject<ContainerType<X>>> container(String id, Class<X> type)
+	{
+		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
+	}
+
+	public static <X extends TileEntityBaseContainer<X, ?>> TypedRegKey<RegistryObject<ContainerType<X>>> baseContainer(String id, Class<X> type)
 	{
 		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
 	}

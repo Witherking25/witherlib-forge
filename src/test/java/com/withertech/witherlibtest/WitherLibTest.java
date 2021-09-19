@@ -149,10 +149,10 @@ public class WitherLibTest extends BuilderMod
 	protected BuilderForgeRegistry<TileEntityType<?>> registerTiles()
 	{
 		return BuilderForgeRegistry.builder(MOD, ForgeRegistries.TILE_ENTITIES)
-				.add(TypedRegKey.tile("test_tile", TestTile.class), () -> TileEntityType.Builder.of(TestTile::new, getBlocks().get(TypedRegKey.block("test_tile_block", TestTileBlock.class)).get()).build(null))
-				.add(TypedRegKey.tile("test_energy_tile", TestEnergyTile.class), () -> TileEntityType.Builder.of(TestEnergyTile::new, getBlocks().get(TypedRegKey.block("test_energy_block", TestEnergyBlock.class)).get()).build(null))
-				.add(TypedRegKey.tile("test_progress_tile", TestProgressTile.class), () -> TileEntityType.Builder.of(TestProgressTile::new, getBlocks().get(TypedRegKey.block("test_progress_block", TestProgressBlock.class)).get()).build(null))
-				.add(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class), () -> TileEntityType.Builder.of(TestNBTTile::new, getBlocks().get(TypedRegKey.block("test_nbt_block", TestNBTBlock.class)).get()).build(null))
+				.add(TypedRegKey.baseTile("test_tile", TestTile.class), () -> TileEntityType.Builder.of(TestTile::new, getBlocks().get(TypedRegKey.block("test_tile_block", TestTileBlock.class)).get()).build(null))
+				.add(TypedRegKey.baseTile("test_energy_tile", TestEnergyTile.class), () -> TileEntityType.Builder.of(TestEnergyTile::new, getBlocks().get(TypedRegKey.block("test_energy_block", TestEnergyBlock.class)).get()).build(null))
+				.add(TypedRegKey.baseTile("test_progress_tile", TestProgressTile.class), () -> TileEntityType.Builder.of(TestProgressTile::new, getBlocks().get(TypedRegKey.block("test_progress_block", TestProgressBlock.class)).get()).build(null))
+				.add(TypedRegKey.baseTile("test_nbt_tile", TestNBTTile.class), () -> TileEntityType.Builder.of(TestNBTTile::new, getBlocks().get(TypedRegKey.block("test_nbt_block", TestNBTBlock.class)).get()).build(null))
 				.build();
 	}
 
@@ -160,9 +160,9 @@ public class WitherLibTest extends BuilderMod
 	protected BuilderForgeRegistry<ContainerType<?>> registerContainers()
 	{
 		return BuilderForgeRegistry.builder(MOD, ForgeRegistries.CONTAINERS)
-				.add(TypedRegKey.container("test_container", TestContainer.class), () -> IForgeContainerType.create((windowId, inv, data) -> new TestContainer(windowId, inv.player, data.readBlockPos())))
-				.add(TypedRegKey.container("test_energy_container", TestEnergyContainer.class), () -> IForgeContainerType.create((windowId, inv, data) -> new TestEnergyContainer(windowId, inv.player, data.readBlockPos())))
-				.add(TypedRegKey.container("test_progress_container", TestProgressContainer.class), () -> IForgeContainerType.create((windowId, inv, data) -> new TestProgressContainer(windowId, inv.player, data.readBlockPos())))
+				.add(TypedRegKey.baseContainer("test_container", TestContainer.class), () -> IForgeContainerType.create((windowId, inv, data) -> new TestContainer(windowId, inv.player, data.readBlockPos())))
+				.add(TypedRegKey.baseContainer("test_energy_container", TestEnergyContainer.class), () -> IForgeContainerType.create((windowId, inv, data) -> new TestEnergyContainer(windowId, inv.player, data.readBlockPos())))
+				.add(TypedRegKey.baseContainer("test_progress_container", TestProgressContainer.class), () -> IForgeContainerType.create((windowId, inv, data) -> new TestProgressContainer(windowId, inv.player, data.readBlockPos())))
 				.build();
 	}
 

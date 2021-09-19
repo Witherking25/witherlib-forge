@@ -30,7 +30,7 @@ public class TestProgressTile extends MachineTileEntity<TestProgressTile>
 
     public TestProgressTile()
     {
-        super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_progress_tile", TestProgressTile.class)).get());
+        super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.baseTile("test_progress_tile", TestProgressTile.class)).get());
     }
 
     public boolean isRunning()

@@ -49,7 +49,7 @@ public class TestEnergyTile extends BaseTileEntity<TestEnergyTile>
 
     public TestEnergyTile()
     {
-        super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_energy_tile", TestEnergyTile.class)).get());
+        super(WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.baseTile("test_energy_tile", TestEnergyTile.class)).get());
     }
 
     @Nonnull

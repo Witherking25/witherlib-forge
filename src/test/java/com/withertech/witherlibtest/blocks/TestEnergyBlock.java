@@ -47,6 +47,6 @@ public class TestEnergyBlock extends BaseTileBlock<TestEnergyTile>
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world)
     {
-        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_energy_tile", TestEnergyTile.class)).get().create();
+        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.baseTile("test_energy_tile", TestEnergyTile.class)).get().create();
     }
 }

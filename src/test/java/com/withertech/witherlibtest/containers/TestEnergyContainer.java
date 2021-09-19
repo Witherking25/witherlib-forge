@@ -5,7 +5,6 @@ import com.withertech.witherlib.registration.TypedRegKey;
 import com.withertech.witherlibtest.WitherLibTest;
 import com.withertech.witherlibtest.tiles.TestEnergyTile;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.ClickType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
@@ -15,7 +14,7 @@ public class TestEnergyContainer extends TileEntityBaseContainer<TestEnergyConta
 {
     public TestEnergyContainer(int id, PlayerEntity player, BlockPos pos)
     {
-        super(WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.container("test_energy_container", TestEnergyContainer.class)).get(), id, player, pos);
+        super(WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.baseContainer("test_energy_container", TestEnergyContainer.class)).get(), id, player, pos);
         addSlots();
     }
 

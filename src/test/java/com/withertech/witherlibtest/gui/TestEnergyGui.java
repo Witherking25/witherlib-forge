@@ -23,13 +23,13 @@ public class TestEnergyGui extends TileGui<TestEnergyBlock, TestEnergyTile, Test
     @Override
     protected RegistryObject<TileEntityType<TestEnergyTile>> registerTile()
     {
-        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_energy_tile", TestEnergyTile.class));
+        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.baseTile("test_energy_tile", TestEnergyTile.class));
     }
 
     @Override
     protected RegistryObject<ContainerType<TestEnergyContainer>> registerContainer()
     {
-        return WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.container("test_energy_container", TestEnergyContainer.class));
+        return WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.baseContainer("test_energy_container", TestEnergyContainer.class));
     }
 
     @Override

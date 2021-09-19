@@ -59,7 +59,7 @@ public class TestProgressBlock extends BaseTileBlock<TestProgressTile>
     @Override
     public BlockEntityType<TestProgressTile> getBlockEntityType()
     {
-        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_progress_tile", TestProgressTile.class)).get();
+        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.baseTile("test_progress_tile", TestProgressTile.class)).get();
     }
 
 }

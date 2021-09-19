@@ -57,6 +57,6 @@ public class TestNBTBlock extends BaseTileBlock<TestNBTTile>
 	@Override
 	public BlockEntityType<TestNBTTile> getBlockEntityType()
 	{
-		return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_nbt_tile", TestNBTTile.class)).get();
+		return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.baseTile("test_nbt_tile", TestNBTTile.class)).get();
 	}
 }

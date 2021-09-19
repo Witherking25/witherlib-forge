@@ -14,7 +14,7 @@ public class TestEnergyContainer extends TileEntityBaseContainer<TestEnergyConta
 {
     public TestEnergyContainer(int id, Player player, BlockPos pos)
     {
-        super(WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.container("test_energy_container", TestEnergyContainer.class)).get(), id, player, pos);
+        super(WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.baseContainer("test_energy_container", TestEnergyContainer.class)).get(), id, player, pos);
         addSlots();
     }
 

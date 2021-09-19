@@ -44,7 +44,7 @@ public class TestTile extends BaseTileEntity<TestTile>
 
     public TestTile(BlockPos pos, BlockState state)
     {
-        super(WitherLibTest.INSTANCE.REGISTRY.getTile((TypedRegKey.tile("test_tile", TestTile.class))).get(), pos, state);
+        super(WitherLibTest.INSTANCE.REGISTRY.getTile((TypedRegKey.baseTile("test_tile", TestTile.class))).get(), pos, state);
     }
 
     @OnlyIn(Dist.CLIENT)

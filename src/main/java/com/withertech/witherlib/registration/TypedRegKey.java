@@ -27,9 +27,11 @@ import com.withertech.witherlib.tile.BaseTileEntity;
 import com.withertech.witherlib.util.ClassUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fmllegacy.RegistryObject;
@@ -78,18 +80,22 @@ public class TypedRegKey<X>
 		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
 	}
 
-	public static <X extends BaseTileEntity<X>> TypedRegKey<RegistryObject<BlockEntityType<X>>> tile(
-			String id,
-			Class<X> type
-	)
+	public static <X extends BlockEntity> TypedRegKey<RegistryObject<BlockEntityType<X>>> tile(String id, Class<X> type)
 	{
 		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
 	}
 
-	public static <X extends TileEntityBaseContainer<X, ?>> TypedRegKey<RegistryObject<MenuType<X>>> container(
-			String id,
-			Class<X> type
-	)
+	public static <X extends BaseTileEntity<X>> TypedRegKey<RegistryObject<BlockEntityType<X>>> baseTile(String id, Class<X> type)
+	{
+		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
+	}
+
+	public static <X extends AbstractContainerMenu> TypedRegKey<RegistryObject<MenuType<X>>> container(String id, Class<X> type)
+	{
+		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
+	}
+
+	public static <X extends TileEntityBaseContainer<X, ?>> TypedRegKey<RegistryObject<MenuType<X>>> baseContainer(String id, Class<X> type)
 	{
 		return new TypedRegKey<>(id, ClassUtils.castClass(TypedRegKey.class));
 	}

@@ -41,13 +41,13 @@ public class TestTileGui extends TileGui<TestTileBlock, TestTile, TestContainer,
     @Override
     protected RegistryObject<BlockEntityType<TestTile>> registerTile()
     {
-        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_tile", TestTile.class));
+        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.baseTile("test_tile", TestTile.class));
     }
 
     @Override
     protected RegistryObject<MenuType<TestContainer>> registerContainer()
     {
-        return WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.container("test_container", TestContainer.class));
+        return WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.baseContainer("test_container", TestContainer.class));
     }
 
     @Override

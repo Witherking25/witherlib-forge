@@ -41,13 +41,13 @@ public class TestProgressGui extends TileGui<TestProgressBlock, TestProgressTile
     @Override
     protected RegistryObject<BlockEntityType<TestProgressTile>> registerTile()
     {
-        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_progress_tile", TestProgressTile.class));
+        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.baseTile("test_progress_tile", TestProgressTile.class));
     }
 
     @Override
     protected RegistryObject<MenuType<TestProgressContainer>> registerContainer()
     {
-        return WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.container("test_progress_container", TestProgressContainer.class));
+        return WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.baseContainer("test_progress_container", TestProgressContainer.class));
     }
 
     @Override

@@ -59,7 +59,7 @@ public class TestTileBlock extends BaseTileBlock<TestTile>
     @Override
     public BlockEntityType<TestTile> getBlockEntityType()
     {
-        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.tile("test_tile", TestTile.class)).get();
+        return WitherLibTest.INSTANCE.REGISTRY.getTile(TypedRegKey.baseTile("test_tile", TestTile.class)).get();
     }
 
     @Nonnull

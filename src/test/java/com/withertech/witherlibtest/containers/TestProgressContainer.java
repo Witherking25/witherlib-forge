@@ -32,7 +32,7 @@ public class TestProgressContainer extends TileEntityBaseContainer<TestProgressC
 {
     public TestProgressContainer(int id, Player player, BlockPos tilePos)
     {
-        super(WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.container("test_progress_container", TestProgressContainer.class)).get(), id, player, tilePos);
+        super(WitherLibTest.INSTANCE.REGISTRY.getContainer(TypedRegKey.baseContainer("test_progress_container", TestProgressContainer.class)).get(), id, player, tilePos);
         addSlots();
     }
 
